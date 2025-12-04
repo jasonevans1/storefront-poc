@@ -1,0 +1,5 @@
+{
+  "project": "Storefront POC Project",
+  "editUrlLabel": "Document Authoring",
+  "editUrlPattern": "https://da.live/edit#/jasonevans1/storefront-poc{{pathname}}"
+}
