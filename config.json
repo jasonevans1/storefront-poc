@@ -1,0 +1,25 @@
+{
+  "public": {
+    "default": {
+      "commerce-core-endpoint": "https://na1-sandbox.api.commerce.adobe.com/HtxMJZCyprWn4FS33yzJ3V/graphql",
+      "commerce-endpoint": "https://na1-sandbox.api.commerce.adobe.com/HtxMJZCyprWn4FS33yzJ3V/graphql",
+      "headers": {
+        "cs": {
+          "AC-Environment-Id": "HtxMJZCyprWn4FS33yzJ3V",
+          "AC-View-ID": "044d8264-477c-49f9-b28e-3866ec05a27d",
+          "AC-Price-Book-ID": "base",
+          "AC-Source-Locale": "en_US"
+        }
+      },
+      "commerce-assets-enabled": false,
+      "analytics": {
+        "base-currency-code": "YOUR_BASE_CURRENCY_CODE",
+        "environment": "Testing",
+        "environment-id": "HtxMJZCyprWn4FS33yzJ3V",
+        "store-url": "YOUR_STORE_URL",
+        "store-view-currency-code": "USD",
+        "view-id": "044d8264-477c-49f9-b28e-3866ec05a27d"
+      }
+    }
+  }
+}
