@@ -8,7 +8,9 @@
           "AC-Environment-Id": "HtxMJZCyprWn4FS33yzJ3V",
           "AC-View-ID": "044d8264-477c-49f9-b28e-3866ec05a27d",
           "AC-Price-Book-ID": "base",
-          "AC-Source-Locale": "en_US"
+          "AC-Source-Locale": "en_US",
+          "Magento-Store-Code": "main_website_store",
+          "Magento-Store-View-Code": "default"
         }
       },
       "commerce-assets-enabled": false,
