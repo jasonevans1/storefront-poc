@@ -1,15 +1,13 @@
 {
   "public": {
     "default": {
-      "commerce-core-endpoint": "https://na1-sandbox.api.commerce.adobe.com/HtxMJZCyprWn4FS33yzJ3V/graphql",
       "commerce-endpoint": "https://na1-sandbox.api.commerce.adobe.com/HtxMJZCyprWn4FS33yzJ3V/graphql",
       "headers": {
         "cs": {
           "AC-Environment-Id": "HtxMJZCyprWn4FS33yzJ3V",
           "AC-View-ID": "e3f6ed42-1444-472f-814a-3cc89b7ba7e2",
           "AC-Source-Locale": "en_US",
-          "Magento-Store-Code": "main_website_store",
-          "Magento-Store-View-Code": "default"
+          "AC-Policy-Brand": "Cruz"
         }
       },
       "commerce-assets-enabled": false,
@@ -20,6 +18,11 @@
         "store-url": "YOUR_STORE_URL",
         "store-view-currency-code": "USD",
         "view-id": "e3f6ed42-1444-472f-814a-3cc89b7ba7e2"
+      },
+      "plugins": {
+        "picker": {
+          "rootCategory": "YOUR_ROOT_CATEGORY_ID"
+        }
       }
     }
   }
