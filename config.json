@@ -5,9 +5,9 @@
       "headers": {
         "cs": {
           "AC-Environment-Id": "HtxMJZCyprWn4FS33yzJ3V",
-          "AC-View-ID": "e3f6ed42-1444-472f-814a-3cc89b7ba7e2",
-          "AC-Source-Locale": "en_US",
-          "AC-Policy-Brand": "Cruz"
+          "AC-View-ID": "256da545-2648-4c6a-a8be-a82d0e57a3aa",
+          "AC-Source-Locale": "en-US",
+          "ac-price-book-id": "east_coast_inc"
         }
       },
       "commerce-assets-enabled": false,
@@ -17,7 +17,7 @@
         "environment-id": "HtxMJZCyprWn4FS33yzJ3V",
         "store-url": "YOUR_STORE_URL",
         "store-view-currency-code": "USD",
-        "view-id": "e3f6ed42-1444-472f-814a-3cc89b7ba7e2"
+        "view-id": "256da545-2648-4c6a-a8be-a82d0e57a3aa"
       },
       "plugins": {
         "picker": {
