@@ -34,17 +34,7 @@ function updateActiveSlide(slide) {
   });
 }
 
-function goToRelativeSlide(block, direction) {
-  const slides = block.querySelectorAll('.carousel-slide');
-  if (slides.length < 2) return;
-
-  const currentIndex = parseInt(block.dataset.activeSlide || '0', 10);
-  const nextIndex = (currentIndex + direction + slides.length) % slides.length;
-
-  showSlide(block, nextIndex);
-}
-
-function showSlide(block, slideIndex = 0) {
+export function showSlide(block, slideIndex = 0) {
   const slides = block.querySelectorAll('.carousel-slide');
   let realSlideIndex = slideIndex < 0 ? slides.length - 1 : slideIndex;
   if (slideIndex >= slides.length) realSlideIndex = 0;
@@ -58,6 +48,16 @@ function showSlide(block, slideIndex = 0) {
     left: activeSlide.offsetLeft,
     behavior: 'smooth',
   });
+}
+
+function goToRelativeSlide(block, direction) {
+  const slides = block.querySelectorAll('.carousel-slide');
+  if (slides.length < 2) return;
+
+  const currentIndex = parseInt(block.dataset.activeSlide || '0', 10);
+  const nextIndex = (currentIndex + direction + slides.length) % slides.length;
+
+  showSlide(block, nextIndex);
 }
 
 function bindEvents(block) {

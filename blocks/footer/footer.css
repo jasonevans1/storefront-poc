@@ -66,8 +66,17 @@ footer .footer p {
     margin-bottom: var(--spacing-small);
 }
 
+.footer .default-content-wrapper {
+    text-align: center;
+}
+
 @media (min-width: 900px) {
     footer .footer > div {
         padding: 40px 32px 24px;
+    }
+
+    .footer .default-content-wrapper a {
+        margin-right: var(--spacing-small);
+        font-size: 1.2rem;
     }
 }

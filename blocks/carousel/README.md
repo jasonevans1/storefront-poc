@@ -6,7 +6,7 @@ The Carousel Block provides a responsive carousel/slider component for displayin
 
 ## Features
 
-- Auto-rotation with configurable interval
+- Auto-rotation with configurable interval (set to 0 to disable auto rotation)
 - Navigation controls (previous/next buttons)
 - Pagination indicators
 - Touch/swipe gesture support
@@ -19,8 +19,15 @@ The Carousel Block provides a responsive carousel/slider component for displayin
 
 The carousel block automatically initializes when added to a page. Structure your content in a table format:
 
-| carousel |
-|----------|
-| Slide 1  |
-| Slide 2  |
-| Slide 3  |
+| carousel              |
+|-----------------------|
+| Duration  | int (ms)  |
+|-----------------------|
+| Slide     | image     |
+|           | h1        |
+|           | body text |
+|-----------------------|
+| Slide     | image     |
+|           | h1        |
+|           | body text |
+|-----------------------|
