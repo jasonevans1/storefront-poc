@@ -12,12 +12,17 @@
 }
 
 .global-notice-wrapper {
-    background-color: rgb(0 0 0 / 10%);
+    background-color: var(--color-informational-200);
     border-bottom: 1px solid;
+    color: var(--color-informational-800);
 }
 
 .global-notice * {
     margin: 0;
+}
+
+.global-notice a {
+    color: var(--color-primary);
 }
 
 @media (min-width: 1024px) {

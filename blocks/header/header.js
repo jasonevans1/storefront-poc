@@ -4,7 +4,9 @@ import { events } from '@dropins/tools/event-bus.js';
 import { tryRenderAemAssetsImage } from '@dropins/tools/lib/aem/assets.js';
 import { getMetadata } from '../../scripts/aem.js';
 import { loadFragment } from '../fragment/fragment.js';
-import { fetchPlaceholders, getProductLink, rootLink } from '../../scripts/commerce.js';
+import {
+  fetchPlaceholders, checkIsAuthenticated, getProductLink, rootLink,
+} from '../../scripts/commerce.js';
 
 import renderAuthCombine from './renderAuthCombine.js';
 import { renderAuthDropdown } from './renderAuthDropdown.js';
@@ -165,7 +167,20 @@ export default async function decorate(block) {
   // decorate nav DOM
   block.textContent = '';
   const nav = document.createElement('nav');
+
   nav.id = 'nav';
+
+  let globalNotice;
+  const noticeCandidate = fragment.querySelector('.global-notice-wrapper');
+
+  if (noticeCandidate) {
+    const clonedNoticeContent = noticeCandidate.cloneNode(true);
+    globalNotice = document.createElement('section');
+    globalNotice.className = 'nav-notice';
+    globalNotice.append(clonedNoticeContent);
+    noticeCandidate.remove();
+  }
+
   while (fragment.firstElementChild) nav.append(fragment.firstElementChild);
 
   const classes = ['brand', 'sections', 'tools'];
@@ -211,23 +226,31 @@ export default async function decorate(block) {
   const navTools = nav.querySelector('.nav-tools');
 
   /** Wishlist */
-  const wishlist = document.createRange().createContextualFragment(`
-     <div class="wishlist-wrapper nav-tools-wrapper">
-       <button type="button" class="nav-wishlist-button" aria-label="Wishlist"></button>
-       <div class="wishlist-panel nav-tools-panel"></div>
-     </div>
-   `);
+  if (checkIsAuthenticated()) {
+    const wishlist = document.createRange().createContextualFragment(`
+      <div class="wishlist-wrapper nav-tools-wrapper">
+        <button
+          type="button"
+          class="nav-wishlist-button"
+          aria-label="Wishlist">
+        </button>
+        <div class="wishlist-panel nav-tools-panel"></div>
+      </div>
+    `);
 
-  navTools.append(wishlist);
+    navTools.append(wishlist);
 
-  const wishlistButton = navTools.querySelector('.nav-wishlist-button');
+    const wishlistButton = navTools.querySelector('.nav-wishlist-button');
 
-  const wishlistMeta = getMetadata('wishlist');
-  const wishlistPath = wishlistMeta ? new URL(wishlistMeta, window.location).pathname : '/wishlist';
+    const wishlistMeta = getMetadata('wishlist');
+    const wishlistPath = wishlistMeta
+      ? new URL(wishlistMeta, window.location).pathname
+      : '/wishlist';
 
-  wishlistButton.addEventListener('click', () => {
-    window.location.href = rootLink(wishlistPath);
-  });
+    wishlistButton.addEventListener('click', () => {
+      window.location.href = rootLink(wishlistPath);
+    });
+  }
 
   /** Mini Cart */
   const excludeMiniCartFromPaths = ['/checkout'];
@@ -505,6 +528,10 @@ export default async function decorate(block) {
     overlay.classList.remove('show');
     toggleMenu(nav, navSections, false);
   });
+
+  if (globalNotice) {
+    navWrapper.append(globalNotice);
+  }
 
   // hamburger for mobile
   const hamburger = document.createElement('div');

@@ -29,6 +29,7 @@ export default async function decorate(block) {
     hideButton.innerHTML = svgCloseButton;
     block.appendChild(hideButton);
   } else {
+    console.warn('Global Notice is disabled or missing content');
     block.remove();
   }
 }
