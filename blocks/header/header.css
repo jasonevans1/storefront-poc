@@ -1,7 +1,7 @@
 :root {
   --desktop-item-panel-max-width: 300px;
   --desktop-item-panel-min-width: 200px;
-  --desktop-large-panel-width: 900px;
+  --desktop-large-panel-width: 1024px;
   --desktop-panel-min-height: 200px;
   --desktop-panel-max-height: 600px;
 }
@@ -220,6 +220,10 @@ header nav .nav-sections ul > li:empty {
 }
 
 @media (min-width: 900px) {
+  header nav {
+    position: relative;
+  }
+
   header nav .nav-sections {
     display: block;
     visibility: visible;
@@ -266,15 +270,16 @@ header nav .nav-sections ul > li:empty {
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li[aria-expanded='true'] .submenu-wrapper {
-    background-color: var(--color-neutral-50);
+    background-color: var(--color-neutral-200);
     box-sizing: border-box;
     left: 0;
     max-height: var(--desktop-panel-max-height);
     min-height: var(--desktop-panel-min-height);
     padding: var(--spacing-xbig);
     position: absolute;
-    top: var(--spacing-large);
+    top: 64px;
     width: 100%;
+    z-index: 1;
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li .submenu-header {
