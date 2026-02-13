@@ -4,14 +4,14 @@ footer {
     letter-spacing: var(--type-body-2-default-letter-spacing);
 }
 
+footer .footer p {
+    margin: 0;
+}
+
 footer .footer > div {
     margin: auto;
     max-width: 1200px;
     padding: 40px 24px 24px;
-}
-
-footer .footer p {
-    margin: 0;
 }
 
 .storeview-switcher-button {
@@ -52,6 +52,29 @@ footer .footer p {
     display: none;
 }
 
+
+footer .columns ul {
+    list-style-position: inside;
+    padding: 0;
+}
+
+footer .footer-legal {
+    padding-top: var(--spacing-xsmall);
+    border-top: 1px solid var(--color-neutral-300);
+}
+
+footer .footer-legal ul {
+    list-style-type: none;
+    display: inline-flex;
+    gap: 1rem;
+    margin: 0;
+}
+
+footer .footer-legal ul a,
+footer .footer-legal p {
+    font-size: 1.2rem;
+}
+
 .storeview-multiple-stores[aria-expanded="true"] {
     list-style-image: url("../../icons/chevron-down.svg");
 }
@@ -65,29 +88,6 @@ footer .footer p {
     list-style-type: none;
     margin-bottom: var(--spacing-small);
 }
-
-footer .columns ul {
-    list-style-position: inside;
-    padding: 0;
-}
-
-.footer-legal {
-    padding-top: var(--spacing-xsmall);
-    border-top: 1px solid var(--color-neutral-300);
-}
-
-.footer-legal ul {
-    list-style-type: none;
-    display: inline-flex;
-    gap: 1rem;
-    margin: 0;
-}
-
-.footer-legal ul a,
-.footer-legal p {
-    font-size: 1.2rem;
-}
-
 
 @media (min-width: 900px) {
     footer .footer > div {
