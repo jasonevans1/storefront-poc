@@ -165,9 +165,10 @@ function createSlide(row, slideIndex, carouselId) {
         }
 
         const heading = contentColumn.querySelector('h2');
+        const bodyParagraphs = contentColumn.querySelectorAll('p:not(:has(> picture))');
         const buttonContainer = contentColumn.querySelector('.button-container');
 
-        if (heading || buttonContainer) {
+        if (heading || buttonContainer || bodyParagraphs.length) {
           const textWrapper = document.createElement('div');
           textWrapper.classList.add('carousel-slide-content_text');
           if (heading) {
@@ -175,6 +176,9 @@ function createSlide(row, slideIndex, carouselId) {
           }
           if (buttonContainer) {
             textWrapper.append(buttonContainer);
+          }
+          if (bodyParagraphs.length) {
+            bodyParagraphs.forEach((p) => textWrapper.append(p));
           }
           contentColumn.append(textWrapper);
         }
