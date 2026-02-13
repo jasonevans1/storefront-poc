@@ -3,6 +3,7 @@ import { getCookie } from '@dropins/tools/lib.js';
 import { events } from '@dropins/tools/event-bus.js';
 import { initializers } from '@dropins/tools/initializer.js';
 import { isAemAssetsEnabled } from '@dropins/tools/lib/aem/assets.js';
+import { getHeaders } from '@dropins/tools/lib/aem/configs.js';
 import { CORE_FETCH_GRAPHQL, CS_FETCH_GRAPHQL, fetchPlaceholders } from '../commerce.js';
 
 export const getUserTokenCookie = () => getCookie('auth_dropin_user_token');
@@ -17,6 +18,9 @@ const setAuthHeaders = (state) => {
 };
 
 const setCustomerGroupHeader = (customerGroupId) => {
+  const csHeaders = getHeaders('cs');
+  const isACO = Object.keys(csHeaders).some((key) => key.toLowerCase().startsWith('ac-'));
+  if (isACO) return;
   CS_FETCH_GRAPHQL.setFetchGraphQlHeader('Magento-Customer-Group', customerGroupId);
 };
 
