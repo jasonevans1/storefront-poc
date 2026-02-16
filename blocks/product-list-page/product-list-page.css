@@ -1,5 +1,6 @@
 .search__wrapper .dropin-design {
     --shape-border-radius-1: 0.75rem;
+    --type-details-caption-1-font: normal normal 400 1.6rem / 1.6rem var(--type-base-font-family);
 }
 
 .search__wrapper .dropin-checkbox {
@@ -8,6 +9,10 @@
 
 .search__wrapper .dropin-checkbox__checkbox-icon {
     font-size: 0;
+}
+
+.search__wrapper .dropin-picker label.dropin-picker__floatingLabel {
+    font-size: 1.2rem;
 }
 
 .search__wrapper .product-discovery-facet__header {
