@@ -13,10 +13,10 @@
 /* stylelint-disable no-empty-source */
 :root, .dropin-design {
   /* Adobe Commerce Dropin design tokens */
-  --color-brand-300: #6d6d6d;
-  --color-brand-500: #454545;
-  --color-brand-600: #383838;
-  --color-brand-700: #2b2b2b;
+  --color-brand-300: #e46868;
+  --color-brand-500: #b22d2d;
+  --color-brand-600: #844242;
+  --color-brand-700: #4b2a2a;
   --color-neutral-50: #fff;
   --color-neutral-100: #fafafa;
   --color-neutral-200: #f5f5f5;
@@ -41,7 +41,7 @@
   --color-alert-800: #c35050;
   --color-button-active: var(--color-brand-700);
   --color-button-focus: var(--color-neutral-400);
-  --color-button-hover: var(--color-brand-600);
+  --color-button-hover: var(--color-brand-300);
   --color-action-button-active: var(--color-neutral-50);
   --color-action-button-hover: var(--color-neutral-300);
   --color-opacity-16: rgb(255 255 255 / 16%);
