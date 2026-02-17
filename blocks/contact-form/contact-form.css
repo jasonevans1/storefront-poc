@@ -1,0 +1,84 @@
+.contact-form {
+  max-width: 600px;
+}
+
+.contact-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxsmall);
+  margin-bottom: var(--spacing-small);
+}
+
+.contact-form__label {
+  font: var(--type-body-2-strong-font);
+  letter-spacing: var(--type-body-2-strong-letter-spacing);
+  color: var(--color-neutral-800);
+}
+
+.contact-form__input,
+.contact-form__textarea {
+  box-sizing: border-box;
+  width: 100%;
+  padding: var(--spacing-xsmall) var(--spacing-small);
+  border: var(--shape-border-width-1) solid var(--color-neutral-400);
+  border-radius: var(--shape-border-radius-1);
+  font: var(--type-body-1-default-font);
+  letter-spacing: var(--type-body-1-default-letter-spacing);
+  color: var(--color-neutral-800);
+  background: var(--color-neutral-50);
+  transition: border-color 0.2s;
+}
+
+.contact-form__textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.contact-form__input:hover,
+.contact-form__textarea:hover {
+  border-color: var(--color-neutral-700);
+}
+
+.contact-form__input:focus,
+.contact-form__textarea:focus {
+  outline: none;
+  border-color: var(--color-brand-500);
+  box-shadow: 0 0 0 1px var(--color-brand-500);
+}
+
+.contact-form__input:invalid:not(:placeholder-shown),
+.contact-form__textarea:invalid:not(:placeholder-shown) {
+  border-color: var(--color-alert-800);
+}
+
+.contact-form__actions {
+  margin-top: var(--spacing-medium);
+}
+
+.contact-form__submit {
+  min-width: 160px;
+}
+
+.contact-form__submit:disabled {
+  background-color: var(--color-neutral-300);
+  cursor: not-allowed;
+}
+
+.contact-form__error {
+  padding: var(--spacing-small);
+  background-color: var(--color-alert-200);
+  color: var(--color-alert-800);
+  border-radius: var(--shape-border-radius-1);
+  font: var(--type-body-1-default-font);
+  letter-spacing: var(--type-body-1-default-letter-spacing);
+  margin-top: var(--spacing-small);
+}
+
+.contact-form__success {
+  padding: var(--spacing-medium);
+  background-color: var(--color-positive-200);
+  color: var(--color-positive-800);
+  border-radius: var(--shape-border-radius-1);
+  font: var(--type-body-1-default-font);
+  letter-spacing: var(--type-body-1-default-letter-spacing);
+}
