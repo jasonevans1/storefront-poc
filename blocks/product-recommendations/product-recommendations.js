@@ -17,6 +17,7 @@ import { publishRecsItemAddToCartClick } from '@dropins/storefront-recommendatio
 // Wishlist Dropin
 import { WishlistToggle } from '@dropins/storefront-wishlist/containers/WishlistToggle.js';
 import { render as wishlistRender } from '@dropins/storefront-wishlist/render.js';
+import { HeartNormal, HeartAdd } from '../../scripts/wishlist-icons.js';
 
 // Block-level
 import { readBlockConfig } from '../../scripts/aem.js';
@@ -202,6 +203,8 @@ export default async function decorate(block) {
               // Render Icon
               wishlistRender.render(WishlistToggle, {
                 product: ctx.item,
+                iconToWishlist: HeartNormal,
+                iconWishlisted: HeartAdd,
               })($wishlistToggle);
 
               // Append to Cart Item

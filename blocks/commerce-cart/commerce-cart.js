@@ -20,9 +20,8 @@ import { render as wishlistRender } from '@dropins/storefront-wishlist/render.js
 import { WishlistToggle } from '@dropins/storefront-wishlist/containers/WishlistToggle.js';
 import { WishlistAlert } from '@dropins/storefront-wishlist/containers/WishlistAlert.js';
 import { tryRenderAemAssetsImage } from '@dropins/tools/lib/aem/assets.js';
-
-// API
 import { publishShoppingCartViewEvent } from '@dropins/storefront-cart/api.js';
+import { HeartNormal, HeartAdd } from '../../scripts/wishlist-icons.js';
 
 // Modal and Mini PDP
 import createMiniPDP from '../../scripts/components/commerce-mini-pdp/commerce-mini-pdp.js';
@@ -224,6 +223,8 @@ export default async function decorate(block) {
           wishlistRender.render(WishlistToggle, {
             product: ctx.item,
             size: 'medium',
+            iconToWishlist: HeartAdd,
+            iconWishlisted: HeartNormal,
             labelToWishlist: placeholders?.Global?.CartMoveToWishlist,
             labelWishlisted: placeholders?.Global?.CartRemoveFromWishlist,
             removeProdFromCart: Cart.updateProductsFromCart,

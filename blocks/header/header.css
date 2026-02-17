@@ -387,7 +387,7 @@ header nav .nav-tools button.nav-cart-button[data-count]::after {
 }
 
 header nav .nav-tools button.nav-wishlist-button {
-  background-image: url('../../icons/heart.svg');
+  background-image: url('../../icons/heart-normal.svg');
   background-repeat: no-repeat;
   background-position: center;
   position: relative;

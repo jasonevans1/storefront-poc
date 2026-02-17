@@ -14,6 +14,7 @@ import * as cartApi from '@dropins/storefront-cart/api.js';
 import { tryRenderAemAssetsImage } from '@dropins/tools/lib/aem/assets.js';
 // Event Bus
 import { events } from '@dropins/tools/event-bus.js';
+import { HeartNormal, HeartAdd } from '../../scripts/wishlist-icons.js';
 // AEM
 import { readBlockConfig } from '../../scripts/aem.js';
 import { fetchPlaceholders, getProductLink } from '../../scripts/commerce.js';
@@ -171,6 +172,8 @@ export default async function decorate(block) {
           wishlistRender.render(WishlistToggle, {
             product: ctx.product,
             variant: 'tertiary',
+            iconToWishlist: HeartAdd,
+            iconWishlisted: HeartNormal,
           })($wishlistToggle);
           actionsWrapper.appendChild(addToCartBtn);
           actionsWrapper.appendChild($wishlistToggle);

@@ -24,6 +24,7 @@ import ProductDescription from '@dropins/storefront-pdp/containers/ProductDescri
 import ProductAttributes from '@dropins/storefront-pdp/containers/ProductAttributes.js';
 import ProductGallery from '@dropins/storefront-pdp/containers/ProductGallery.js';
 import ProductGiftCardOptions from '@dropins/storefront-pdp/containers/ProductGiftCardOptions.js';
+import { HeartNormal, HeartAdd } from '../../scripts/wishlist-icons.js';
 
 // Libs
 import {
@@ -222,6 +223,8 @@ export default async function decorate(block) {
     // Wishlist button - WishlistToggle Container
     wishlistRender.render(WishlistToggle, {
       product,
+      iconToWishlist: HeartAdd,
+      iconWishlisted: HeartNormal,
     })($wishlistToggleBtn),
   ]);
 
