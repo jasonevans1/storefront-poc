@@ -167,6 +167,7 @@ header {
 }
 
 main {
+  margin-top: 4rem;
   grid-row: 2;
 }
 
