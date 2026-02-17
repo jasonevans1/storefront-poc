@@ -38,8 +38,12 @@ function buildHeroBlock(main) {
     if (h1.closest('.hero') || picture.closest('.hero')) {
       return; // Don't create a duplicate hero block
     }
+    const originalSection = picture.closest('main > div');
     const section = document.createElement('div');
     section.append(buildBlock('hero', { elems: [picture, h1] }));
+    // Move section metadata into the new hero section so it gets decorated
+    const sectionMeta = originalSection?.querySelector('.section-metadata');
+    if (sectionMeta) section.append(sectionMeta);
     main.prepend(section);
   }
 }

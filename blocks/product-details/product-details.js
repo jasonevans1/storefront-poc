@@ -32,6 +32,7 @@ import {
   setJsonLd,
   fetchPlaceholders,
   getProductLink,
+  checkIsAuthenticated,
 } from '../../scripts/commerce.js';
 
 // Initializers
@@ -220,12 +221,12 @@ export default async function decorate(block) {
     // Attributes
     pdpRendered.render(ProductAttributes, {})($attributes),
 
-    // Wishlist button - WishlistToggle Container
-    wishlistRender.render(WishlistToggle, {
+    // Wishlist button - WishlistToggle Container (only for logged-in users)
+    ...(checkIsAuthenticated() ? [wishlistRender.render(WishlistToggle, {
       product,
       iconToWishlist: HeartAdd,
       iconWishlisted: HeartNormal,
-    })($wishlistToggleBtn),
+    })($wishlistToggleBtn)] : []),
   ]);
 
   // Configuration – Button - Add to Cart
