@@ -32,7 +32,9 @@ import '../../scripts/initializers/cart.js';
 import '../../scripts/initializers/wishlist.js';
 
 import { readBlockConfig } from '../../scripts/aem.js';
-import { fetchPlaceholders, rootLink, getProductLink } from '../../scripts/commerce.js';
+import {
+  fetchPlaceholders, rootLink, getProductLink, checkIsAuthenticated,
+} from '../../scripts/commerce.js';
 
 export default async function decorate(block) {
   // Configuration
@@ -216,21 +218,23 @@ export default async function decorate(block) {
             ctx.appendChild(editLink);
           }
 
-          // Wishlist Button (if product is not configurable)
-          const $wishlistToggle = document.createElement('div');
-          $wishlistToggle.classList.add('cart__action--wishlist-toggle');
+          // Wishlist Button (only for logged-in users)
+          if (checkIsAuthenticated()) {
+            const $wishlistToggle = document.createElement('div');
+            $wishlistToggle.classList.add('cart__action--wishlist-toggle');
 
-          wishlistRender.render(WishlistToggle, {
-            product: ctx.item,
-            size: 'medium',
-            iconToWishlist: HeartAdd,
-            iconWishlisted: HeartNormal,
-            labelToWishlist: placeholders?.Global?.CartMoveToWishlist,
-            labelWishlisted: placeholders?.Global?.CartRemoveFromWishlist,
-            removeProdFromCart: Cart.updateProductsFromCart,
-          })($wishlistToggle);
+            wishlistRender.render(WishlistToggle, {
+              product: ctx.item,
+              size: 'medium',
+              iconToWishlist: HeartAdd,
+              iconWishlisted: HeartNormal,
+              labelToWishlist: placeholders?.Global?.CartMoveToWishlist,
+              labelWishlisted: placeholders?.Global?.CartRemoveFromWishlist,
+              removeProdFromCart: Cart.updateProductsFromCart,
+            })($wishlistToggle);
 
-          ctx.appendChild($wishlistToggle);
+            ctx.appendChild($wishlistToggle);
+          }
 
           // Gift Options
           const giftOptions = document.createElement('div');

@@ -17,7 +17,7 @@ import { events } from '@dropins/tools/event-bus.js';
 import { HeartNormal, HeartAdd } from '../../scripts/wishlist-icons.js';
 // AEM
 import { readBlockConfig } from '../../scripts/aem.js';
-import { fetchPlaceholders, getProductLink } from '../../scripts/commerce.js';
+import { fetchPlaceholders, getProductLink, checkIsAuthenticated } from '../../scripts/commerce.js';
 
 // Initializers
 import '../../scripts/initializers/search.js';
@@ -140,7 +140,17 @@ export default async function decorate(block) {
     })($viewFacets),
 
     // Facets
-    provider.render(Facets, {})($facets),
+    provider.render(Facets, {
+      slots: {
+        FacetBucketLabel: (ctx) => {
+          if (!ctx.data.title) {
+            const label = document.createElement('span');
+            label.textContent = 'Not Defined';
+            ctx.replaceWith(label);
+          }
+        },
+      },
+    })($facets),
     // Product List
     provider.render(SearchResults, {
       routeProduct: (product) => getProductLink(product.urlKey, product.sku),
@@ -166,17 +176,19 @@ export default async function decorate(block) {
           // Add to Cart Button
           const addToCartBtn = getAddToCartButton(ctx.product);
           addToCartBtn.className = 'product-discovery-product-actions__add-to-cart';
-          // Wishlist Button
-          const $wishlistToggle = document.createElement('div');
-          $wishlistToggle.classList.add('product-discovery-product-actions__wishlist-toggle');
-          wishlistRender.render(WishlistToggle, {
-            product: ctx.product,
-            variant: 'tertiary',
-            iconToWishlist: HeartAdd,
-            iconWishlisted: HeartNormal,
-          })($wishlistToggle);
           actionsWrapper.appendChild(addToCartBtn);
-          actionsWrapper.appendChild($wishlistToggle);
+          // Wishlist Button (only for logged-in users)
+          if (checkIsAuthenticated()) {
+            const $wishlistToggle = document.createElement('div');
+            $wishlistToggle.classList.add('product-discovery-product-actions__wishlist-toggle');
+            wishlistRender.render(WishlistToggle, {
+              product: ctx.product,
+              variant: 'tertiary',
+              iconToWishlist: HeartAdd,
+              iconWishlisted: HeartNormal,
+            })($wishlistToggle);
+            actionsWrapper.appendChild($wishlistToggle);
+          }
           ctx.replaceWith(actionsWrapper);
         },
       },
