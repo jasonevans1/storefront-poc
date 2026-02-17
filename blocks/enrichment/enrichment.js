@@ -35,7 +35,7 @@ export default async function decorate(block) {
     const index = await fetchIndex('enrichment/enrichment');
     const matchingFragments = index.data
       .filter((fragment) => Object.keys(filters).every((filterKey) => {
-        const values = JSON.parse(fragment[filterKey]);
+        const values = fragment[filterKey];
         return values.includes(filters[filterKey]);
       }))
       .map((fragment) => fragment.path);
