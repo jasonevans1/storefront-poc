@@ -19,6 +19,10 @@
     font-weight: 600;
 }
 
+.search__wrapper .facet-bucket__count {
+  color: var(--color-neutral-500);
+}
+
 .block.product-list-page .search__wrapper {
     display: grid;
     margin-block: var(--spacing-small);

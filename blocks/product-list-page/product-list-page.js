@@ -143,11 +143,14 @@ export default async function decorate(block) {
     provider.render(Facets, {
       slots: {
         FacetBucketLabel: (ctx) => {
-          if (!ctx.data.title) {
-            const label = document.createElement('span');
-            label.textContent = 'Not Defined';
-            ctx.replaceWith(label);
-          }
+          const title = ctx.data.title || 'Not Defined';
+          const label = document.createElement('span');
+          label.textContent = title;
+          const count = document.createElement('span');
+          count.classList.add('facet-bucket__count');
+          count.textContent = ` (${ctx.data.count})`;
+          label.appendChild(count);
+          ctx.replaceWith(label);
         },
       },
     })($facets),
