@@ -253,6 +253,7 @@ export const renderLoginForm = async (container) => renderContainer(
       AuthProvider.render(AuthCombine, {
         signInFormConfig: {
           renderSignUpLink: true,
+          onSignUpLinkClick: () => { window.location.href = '/customer/create'; },
           initialEmailValue,
           // No onSuccessCallback needed - the 'authenticated' event will be fired automatically
         },

@@ -89,6 +89,10 @@ footer .footer-legal p {
     margin-bottom: var(--spacing-small);
 }
 
+.minimal-header-footer footer .footer .columns-container .columns-wrapper:first-child {
+    display: none;
+}
+
 @media (min-width: 900px) {
     footer .footer > div {
         padding: 40px 32px 24px;

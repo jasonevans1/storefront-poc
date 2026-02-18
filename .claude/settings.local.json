@@ -3,7 +3,8 @@
     "allow": [
       "Bash(grep:*)",
       "Bash(file:*)",
-      "Bash(npx eslint:*)"
+      "Bash(npx eslint:*)",
+      "Bash(tr:*)"
     ]
   }
 }

@@ -793,3 +793,11 @@ li
   max-width: 15rem;
   max-height: 15rem;
 }
+
+.minimal-header-footer header .nav-wrapper .nav-hamburger,
+.minimal-header-footer header .nav-wrapper .nav-sections,
+.minimal-header-footer header .nav-wrapper .wishlist-wrapper,
+.minimal-header-footer header .nav-wrapper .search-wrapper,
+.minimal-header-footer header .nav-wrapper .dropdown-wrapper {
+  display: none;
+}
