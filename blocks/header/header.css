@@ -208,6 +208,7 @@ header nav .nav-sections ul {
 header nav .nav-sections ul > li,
 header nav .nav-sections ul > li > a {
   font: var(--type-body-2-strong-font);
+  font-size: 1.8rem;
   letter-spacing: var(--type-body-2-strong-letter-spacing);
 }
 
