@@ -90,7 +90,6 @@ main > .section .carousel-wrapper {
 .carousel .carousel-arrow-button {
     background: transparent;
     border: none;
-    font-size: 30px;
     line-height: 1;
     cursor: pointer;
 }
@@ -130,8 +129,8 @@ main > .section .carousel-wrapper {
 
 .carousel .carousel-slide-indicator button {
     text-indent: -9999px;
-    width: 24px;
-    height: 24px;
+    width: 18px;
+    height: 18px;
     outline: 0;
     border: 0 none;
     border-radius: 50%;
