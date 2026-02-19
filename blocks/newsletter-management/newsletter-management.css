@@ -1,0 +1,47 @@
+.newsletter-management__card {
+  max-width: 600px;
+  padding: var(--spacing-medium);
+  border: var(--shape-border-width-1) solid var(--color-neutral-300);
+  border-radius: var(--shape-border-radius-2);
+}
+
+.newsletter-management__heading {
+  font: var(--type-headline-1-font);
+  letter-spacing: var(--type-headline-1-letter-spacing);
+  color: var(--color-neutral-900);
+  margin: 0 0 var(--spacing-small);
+}
+
+.newsletter-management__status {
+  font: var(--type-body-1-default-font);
+  letter-spacing: var(--type-body-1-default-letter-spacing);
+  color: var(--color-neutral-700);
+  margin: 0 0 var(--spacing-medium);
+}
+
+.newsletter-management__toggle {
+  min-width: 160px;
+}
+
+.newsletter-management__toggle:disabled {
+  background-color: var(--color-neutral-300);
+  cursor: not-allowed;
+}
+
+.newsletter-management__feedback {
+  margin-top: var(--spacing-small);
+  padding: var(--spacing-small);
+  border-radius: var(--shape-border-radius-1);
+  font: var(--type-body-1-default-font);
+  letter-spacing: var(--type-body-1-default-letter-spacing);
+}
+
+.newsletter-management__feedback--success {
+  background-color: var(--color-positive-200);
+  color: var(--color-positive-800);
+}
+
+.newsletter-management__feedback--error {
+  background-color: var(--color-alert-200);
+  color: var(--color-alert-800);
+}

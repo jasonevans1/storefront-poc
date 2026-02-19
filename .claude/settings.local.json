@@ -4,7 +4,9 @@
       "Bash(grep:*)",
       "Bash(file:*)",
       "Bash(npx eslint:*)",
-      "Bash(tr:*)"
+      "Bash(tr:*)",
+      "WebFetch(domain:localhost)",
+      "Bash(curl:*)"
     ]
   }
 }

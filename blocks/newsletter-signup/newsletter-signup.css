@@ -1,0 +1,84 @@
+main > .newsletter-signup-container {
+  background-color: var(--color-neutral-300);
+  margin: 0;
+  padding: var(--spacing-xbig);
+}
+
+.newsletter-signup {
+  max-width: 600px;
+}
+
+.newsletter-signup__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xsmall);
+  align-items: stretch;
+}
+
+.newsletter-signup__label {
+  font-weight: 600;
+  margin-bottom: var(--spacing-xsmall);
+}
+
+.newsletter-signup__input {
+  box-sizing: border-box;
+  flex: 1;
+  padding: var(--spacing-xsmall) var(--spacing-small);
+  border: var(--shape-border-width-1) solid var(--color-neutral-400);
+  border-radius: var(--shape-border-radius-1);
+  font: var(--type-body-1-default-font);
+  letter-spacing: var(--type-body-1-default-letter-spacing);
+  color: var(--color-neutral-800);
+  background: var(--color-neutral-50);
+  transition: border-color 0.2s;
+}
+
+.newsletter-signup__input:hover {
+  border-color: var(--color-neutral-700);
+}
+
+.newsletter-signup__input:focus {
+  outline: none;
+  border-color: var(--color-brand-500);
+  box-shadow: 0 0 0 1px var(--color-brand-500);
+}
+
+.newsletter-signup__error {
+  padding: var(--spacing-small);
+  background-color: var(--color-alert-200);
+  color: var(--color-alert-800);
+  border-radius: var(--shape-border-radius-1);
+  font: var(--type-body-1-default-font);
+  letter-spacing: var(--type-body-1-default-letter-spacing);
+  margin-top: var(--spacing-small);
+}
+
+.newsletter-signup__success {
+  padding: var(--spacing-medium);
+  background-color: var(--color-positive-200);
+  color: var(--color-positive-800);
+  border-radius: var(--shape-border-radius-1);
+  font: var(--type-body-1-default-font);
+  letter-spacing: var(--type-body-1-default-letter-spacing);
+}
+
+.newsletter-signup .newsletter-signup__submit {
+  min-width: 140px;
+  max-width: max-content;
+  white-space: nowrap;
+}
+
+.newsletter-signup .newsletter-signup__input:invalid:not(:placeholder-shown) {
+  border-color: var(--color-alert-800);
+}
+
+.newsletter-signup .newsletter-signup__submit:disabled {
+  background-color: var(--color-neutral-500);
+  cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+  .newsletter-signup__submit {
+    min-width: unset;
+  }
+}
