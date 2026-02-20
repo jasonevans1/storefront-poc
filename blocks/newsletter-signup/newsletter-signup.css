@@ -6,6 +6,7 @@ main > .newsletter-signup-container {
 
 .newsletter-signup {
   max-width: 600px;
+  margin: 0 auto;
 }
 
 .newsletter-signup__form {
