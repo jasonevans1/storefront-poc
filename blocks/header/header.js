@@ -6,9 +6,9 @@ import { getMetadata } from '../../scripts/aem.js';
 import { loadFragment } from '../fragment/fragment.js';
 import {
   fetchPlaceholders, checkIsAuthenticated, getProductLink, rootLink,
+  CS_FETCH_GRAPHQL,
 } from '../../scripts/commerce.js';
 
-import renderAuthCombine from './renderAuthCombine.js';
 import { renderAuthDropdown } from './renderAuthDropdown.js';
 
 // media query match that indicates mobile/tablet width
@@ -550,9 +550,22 @@ export default async function decorate(block) {
   toggleMenu(nav, navSections, isDesktop.matches);
   isDesktop.addEventListener('change', () => toggleMenu(nav, navSections, isDesktop.matches));
 
-  renderAuthCombine(
-    navSections,
-    () => !isDesktop.matches && toggleMenu(nav, navSections, false),
-  );
   renderAuthDropdown(navTools);
+
+  // Fetch and log categories from Adobe Commerce (ACaaS schema)
+  CS_FETCH_GRAPHQL.fetchGraphQl(`
+    query GetFullMenuNavigation {
+      navigation(family: "parts") {
+        slug
+        name
+        children {
+          slug
+          name
+        }
+      }
+    }
+  `).then((result) => {
+    // eslint-disable-next-line no-console
+    console.log('Commerce Categories (navigation):', result?.data?.navigation);
+  });
 }

@@ -6,7 +6,9 @@
       "Bash(npx eslint:*)",
       "Bash(tr:*)",
       "WebFetch(domain:localhost)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(python3:*)",
+      "WebFetch(domain:developer.adobe.com)"
     ]
   }
 }
