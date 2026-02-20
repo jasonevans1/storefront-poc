@@ -6,6 +6,8 @@ import {
   rootLink,
 } from '../../scripts/commerce.js';
 
+// GraphQL queries and mutations
+
 const CUSTOMER_SUBSCRIPTION_QUERY = `
   query {
     customer {

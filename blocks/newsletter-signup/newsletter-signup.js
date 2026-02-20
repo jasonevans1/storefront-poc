@@ -1,6 +1,8 @@
 import { readBlockConfig } from '../../scripts/aem.js';
 import { CORE_FETCH_GRAPHQL, fetchPlaceholders } from '../../scripts/commerce.js';
 
+// GraphQL mutations
+
 const SUBSCRIBE_MUTATION = `
   mutation SubscribeEmailToNewsletter($email: String!) {
     subscribeEmailToNewsletter(email: $email) {

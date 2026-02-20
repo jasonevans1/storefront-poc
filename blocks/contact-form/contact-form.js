@@ -33,7 +33,7 @@ export default async function decorate(block) {
   // Clear authored config rows
   block.textContent = '';
 
-  // Build form
+  // Build contact form
   const form = document.createElement('form');
   form.className = 'contact-form__form';
 
