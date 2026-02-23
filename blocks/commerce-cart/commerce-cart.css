@@ -62,6 +62,45 @@
     width: fit-content;
 }
 
+/* Reward Points Section */
+.cart__reward-points {
+  margin-top: var(--spacing-medium);
+}
+
+.cart__rewards-section {
+  border: 1px solid var(--color-neutral-300, #d4d4d4);
+  border-radius: var(--shape-border-radius-2, 4px);
+  padding: var(--spacing-medium);
+}
+
+.cart__rewards-header {
+  font: var(--type-body-1-strong-font);
+  font-weight: 700;
+  margin: 0 0 var(--spacing-xsmall) 0;
+}
+
+.cart__rewards-balance {
+  font: var(--type-body-1-font);
+  color: var(--color-neutral-700, #404040);
+  margin: 0 0 var(--spacing-xsmall) 0;
+}
+
+.cart__rewards-applied {
+  font: var(--type-body-1-font);
+  color: var(--color-positive-700, #15803d);
+  margin: 0 0 var(--spacing-small) 0;
+}
+
+.cart__rewards-error {
+  font: var(--type-body-2-font);
+  color: var(--color-alert-700, #b91c1c);
+  margin: 0 0 var(--spacing-small) 0;
+}
+
+.cart__rewards-action .dropin-button {
+  width: 100%;
+}
+
 @media (min-width: 768px) {
   .cart__wrapper {
     flex-direction: row;

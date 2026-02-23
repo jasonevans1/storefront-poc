@@ -51,6 +51,10 @@ import {
 import { events } from '@dropins/tools/event-bus.js';
 import { debounce } from '@dropins/tools/lib.js';
 import { tryRenderAemAssetsImage } from '@dropins/tools/lib/aem/assets.js';
+import { h } from '@dropins/tools/preact.js';
+
+// Reward Points
+import { getCartAppliedRewards } from '../../scripts/rewards.js';
 
 // Checkout Dropin Libs
 import {
@@ -464,13 +468,34 @@ export const renderCartGiftOptions = (ctx) => {
  */
 export const renderOrderSummary = async (container) => renderContainer(
   CONTAINERS.ORDER_SUMMARY,
-  async () => CartProvider.render(OrderSummary, {
-    slots: {
-      EstimateShipping: renderEstimateShipping,
-      Coupons: renderCartCoupons,
-      GiftCards: renderGiftCards,
-    },
-  })(container),
+  async () => {
+    const cartData = cartApi.getCartDataFromCache();
+    const appliedRewards = cartData?.id
+      ? await getCartAppliedRewards(cartData.id).catch(() => null)
+      : null;
+    const rewardLineState = { applied: appliedRewards?.points ? appliedRewards : null };
+
+    return CartProvider.render(OrderSummary, {
+      updateLineItems: (lineItems) => {
+        if (!rewardLineState.applied?.points) return lineItems;
+        const formatted = new Intl.NumberFormat(undefined, {
+          style: 'currency', currency: rewardLineState.applied.money.currency,
+        }).format(rewardLineState.applied.money.value);
+        return [...lineItems, {
+          key: 'rewardPointsDiscount',
+          sortOrder: 650,
+          content: h('div', { className: 'cart-order-summary__entry cart-order-summary__discount' },
+            h('span', { className: 'cart-order-summary__label' }, 'Reward Points'),
+            h('span', { className: 'cart-order-summary__price' }, `-${formatted}`)),
+        }];
+      },
+      slots: {
+        EstimateShipping: renderEstimateShipping,
+        Coupons: renderCartCoupons,
+        GiftCards: renderGiftCards,
+      },
+    })(container);
+  },
 );
 
 /**
