@@ -1,19 +1,19 @@
 import { readBlockConfig } from '../../scripts/aem.js';
-import { fetchPlaceholders } from '../../scripts/commerce.js';
+import { fetchPlaceholders, CORE_FETCH_GRAPHQL } from '../../scripts/commerce.js';
 
-/**
- * Stub for form submission. Replace with a real endpoint when available.
- * @param {Object} data - { name, email, message }
- * @returns {Promise<void>}
- */
-async function submitForm(data) {
-  // TODO: Replace with actual endpoint, e.g.:
-  // return fetch('/api/contact', { method: 'POST', body: JSON.stringify(data) });
-  // eslint-disable-next-line no-console
-  console.log('Form submitted with data:', data);
-  return new Promise((resolve) => {
-    setTimeout(resolve, 1000);
+async function submitForm({ name, email, message }) {
+  const { data, errors } = await CORE_FETCH_GRAPHQL.fetchGraphQl(`
+    mutation ContactUs($input: ContactUsInput!) {
+      contactUs(input: $input) {
+        status
+      }
+    }
+  `, {
+    method: 'POST',
+    variables: { input: { name, email, comment: message } },
   });
+  if (errors?.length) throw new Error(errors[0].message);
+  if (!data?.contactUs?.status) throw new Error('Submission failed');
 }
 
 export default async function decorate(block) {

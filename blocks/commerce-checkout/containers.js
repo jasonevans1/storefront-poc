@@ -54,15 +54,15 @@ import { tryRenderAemAssetsImage } from '@dropins/tools/lib/aem/assets.js';
 import { h } from '@dropins/tools/preact.js';
 
 // Reward Points
-import { getCartAppliedRewards } from '../../scripts/rewards.js';
-
-// Checkout Dropin Libs
 import {
   estimateShippingCost,
   setAddressOnCart,
   getCartAddress,
   transformCartAddressToFormValues,
 } from '@dropins/storefront-checkout/lib/utils.js';
+import { getCartAppliedRewards } from '../../scripts/rewards.js';
+
+// Checkout Dropin Libs
 
 import { showModal, swatchImageSlot } from './utils.js';
 
@@ -484,9 +484,12 @@ export const renderOrderSummary = async (container) => renderContainer(
         return [...lineItems, {
           key: 'rewardPointsDiscount',
           sortOrder: 650,
-          content: h('div', { className: 'cart-order-summary__entry cart-order-summary__discount' },
+          content: h(
+            'div',
+            { className: 'cart-order-summary__entry cart-order-summary__discount' },
             h('span', { className: 'cart-order-summary__label' }, 'Reward Points'),
-            h('span', { className: 'cart-order-summary__price' }, `-${formatted}`)),
+            h('span', { className: 'cart-order-summary__price' }, `-${formatted}`),
+          ),
         }];
       },
       slots: {

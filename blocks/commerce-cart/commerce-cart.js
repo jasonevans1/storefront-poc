@@ -253,9 +253,12 @@ export default async function decorate(block) {
         const rewardLine = {
           key: 'rewardPointsDiscount',
           sortOrder: 650,
-          content: h('div', { className: 'cart-order-summary__entry cart-order-summary__discount' },
+          content: h(
+            'div',
+            { className: 'cart-order-summary__entry cart-order-summary__discount' },
             h('span', { className: 'cart-order-summary__label' }, placeholders?.Global?.RewardsTitle || 'Reward Points'),
-            h('span', { className: 'cart-order-summary__price' }, `-${formatted}`)),
+            h('span', { className: 'cart-order-summary__price' }, `-${formatted}`),
+          ),
         };
         return [...lineItems, rewardLine];
       },
