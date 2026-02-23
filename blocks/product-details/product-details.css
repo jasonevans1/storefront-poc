@@ -19,6 +19,10 @@
   margin-bottom: var(--spacing-small);
 }
 
+.product-details__stock-status {
+  color: var(--color-neutral-600);
+}
+
 .product-details__alert:empty {
   display: none;
 }

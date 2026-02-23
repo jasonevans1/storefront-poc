@@ -75,6 +75,7 @@ function updateAddToCartButtonText(addToCartInstance, inCart, labels) {
 
 export default async function decorate(block) {
   const product = events.lastPayload('pdp/data') ?? null;
+  await fetchPlaceholders('placeholders/pdp.json');
   const labels = await fetchPlaceholders();
 
   // Read itemUid from URL
@@ -95,6 +96,7 @@ export default async function decorate(block) {
         <div class="product-details__header"></div>
         <div class="product-details__price"></div>
         <div class="product-details__gallery"></div>
+        <div class="product-details__stock-status"></div>
         <div class="product-details__short-description"></div>
         <div class="product-details__gift-card-options"></div>
         <div class="product-details__configuration">
@@ -122,6 +124,7 @@ export default async function decorate(block) {
   const $giftCardOptions = fragment.querySelector('.product-details__gift-card-options');
   const $addToCart = fragment.querySelector('.product-details__buttons__add-to-cart');
   const $wishlistToggleBtn = fragment.querySelector('.product-details__buttons__add-to-wishlist');
+  const $stockStatus = fragment.querySelector('.product-details__stock-status');
   const $description = fragment.querySelector('.product-details__description');
   const $attributes = fragment.querySelector('.product-details__attributes');
 
@@ -314,6 +317,14 @@ export default async function decorate(block) {
       }
     },
   })($addToCart);
+
+  // Stock Status
+  events.on('pdp/data', (data) => {
+    const label = labels.PDP?.StockStatus || 'In Stock';
+    $stockStatus.textContent = data?.inStock != null
+      ? `${label}: ${data.inStock ? 'Yes' : 'No'}`
+      : '';
+  }, { eager: true });
 
   // Lifecycle Events
   events.on('pdp/valid', (valid) => {
