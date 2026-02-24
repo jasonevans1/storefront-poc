@@ -706,7 +706,9 @@ function trackHistory() {
     return;
   }
   // Store product view history in session storage
-  const storeViewCode = getConfigValue('headers.cs.Magento-Store-View-Code');
+  const storeViewCode = getConfigValue('headers.cs.Magento-Store-View-Code')
+    || getConfigValue('headers.cs.AC-View-ID')
+    || 'default';
   window.adobeDataLayer.push((dl) => {
     dl.addEventListener('adobeDataLayer:change', (event) => {
       if (!event.productContext) {
