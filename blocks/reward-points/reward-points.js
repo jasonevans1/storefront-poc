@@ -35,6 +35,9 @@ export default async function decorate(block) {
 
       const balance = await fetchRewardPointsBalance();
 
+      // eslint-disable-next-line no-console
+      console.log('Reward points balance:', balance);
+
       if (!balance && balance.points !== 0) {
         $balance.textContent = errorText;
       } else {
