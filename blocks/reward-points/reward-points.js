@@ -7,6 +7,7 @@ export default async function decorate(block) {
 
   const titleText = placeholders?.Global?.RewardsTitle || 'Reward Points';
   const labelText = placeholders?.Global?.RewardsCurrentPointsLabel || 'Current Reward Points';
+  const errorText = placeholders?.Global?.RewardsError || 'Unable to load reward points balance';
 
   block.innerHTML = '';
 
@@ -35,11 +36,10 @@ export default async function decorate(block) {
       const balance = await fetchRewardPointsBalance();
 
       if (!balance && balance.points !== 0) {
-        $wrapper.setAttribute('hidden', '');
-        return;
+        $balance.textContent = errorText;
+      } else {
+        $balance.textContent = `${labelText}: ${Math.floor(balance.points).toLocaleString()}`;
       }
-
-      $balance.textContent = `${labelText}: ${Math.floor(balance.points).toLocaleString()}`;
       $wrapper.removeAttribute('hidden');
     },
     { eager: true },
