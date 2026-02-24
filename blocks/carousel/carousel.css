@@ -3,6 +3,10 @@ main > .section .carousel-wrapper {
     padding: 0;
 }
 
+main > .section.carousel-container {
+    margin-top: -4rem;
+}
+
 .carousel .carousel-slides-container {
     position: relative;
 }
