@@ -1,1 +1,6 @@
 /* stylelint-disable no-empty-source */
+
+.homepage-personalization-banner li a {
+    font-size: 1.75rem;
+    font-weight: 600;
+}
