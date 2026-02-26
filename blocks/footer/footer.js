@@ -166,7 +166,6 @@ export default async function decorate(block) {
       })($storeSwitcherBtn);
     }
   }
-
   while (fragment.firstElementChild) footer.append(fragment.firstElementChild);
 
   block.append(footer);

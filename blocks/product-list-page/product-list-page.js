@@ -28,7 +28,8 @@ export default async function decorate(block) {
 
   const config = readBlockConfig(block);
 
-  const fragment = document.createRange().createContextualFragment(`
+  const fragment = document.createRange()
+    .createContextualFragment(`
     <div class="search__wrapper">
       <div class="search__result-info"></div>
       <div class="search__view-facets"></div>
@@ -49,9 +50,10 @@ export default async function decorate(block) {
   block.innerHTML = '';
   block.appendChild(fragment);
 
-  // Add category url path to block for enrichment
+  // Add url path back to the block for enrichment, incase enrichment block is
+  // executed after the plp block and block config is not available
   if (config.urlpath) {
-    block.dataset.category = config.urlpath;
+    block.dataset.urlpath = config.urlpath;
   }
 
   // Get variables from the URL
@@ -64,37 +66,12 @@ export default async function decorate(block) {
     filter,
   } = Object.fromEntries(urlParams.entries());
 
-  // Request search based on the page type on block load
-  if (config.urlpath) {
-    // If it's a category page...
-    await search({
-      phrase: '', // search all products in the category
-      currentPage: page ? Number(page) : 1,
-      pageSize: 8,
-      sort: sort ? getSortFromParams(sort) : [{ attribute: 'position', direction: 'DESC' }],
-      filter: [
-        { attribute: 'categoryPath', eq: config.urlpath }, // Add category filter
-        { attribute: 'visibility', in: ['Search', 'Catalog, Search'] },
-        ...getFilterFromParams(filter),
-      ],
-    }).catch(() => {
-      console.error('Error searching for products');
-    });
-  } else {
-    // If it's a search page...
-    await search({
-      phrase: q || '',
-      currentPage: page ? Number(page) : 1,
-      pageSize: 8,
-      sort: getSortFromParams(sort),
-      filter: [
-        { attribute: 'visibility', in: ['Search', 'Catalog, Search'] },
-        ...getFilterFromParams(filter),
-      ],
-    }).catch(() => {
-      console.error('Error searching for products');
-    });
-  }
+  await performInitialSearch(config, {
+    q,
+    page,
+    sort,
+    filter,
+  });
 
   const getAddToCartButton = (product) => {
     if (product.typename === 'ComplexProductView') {
@@ -111,7 +88,10 @@ export default async function decorate(block) {
     UI.render(Button, {
       children: labels.Global?.AddProductToCart,
       icon: Icon({ source: 'Cart' }),
-      onClick: () => cartApi.addProductsToCart([{ sku: product.sku, quantity: 1 }]),
+      onClick: () => cartApi.addProductsToCart([{
+        sku: product.sku,
+        quantity: 1,
+      }]),
       variant: 'primary',
     })(button);
     return button;
@@ -125,7 +105,10 @@ export default async function decorate(block) {
     provider.render(Pagination, {
       onPageChange: () => {
         // scroll to the top of the page
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        });
       },
     })($pagination),
 
@@ -159,7 +142,10 @@ export default async function decorate(block) {
       routeProduct: (product) => getProductLink(product.urlKey, product.sku),
       slots: {
         ProductImage: (ctx) => {
-          const { product, defaultImageProps } = ctx;
+          const {
+            product,
+            defaultImageProps,
+          } = ctx;
           const anchorWrapper = document.createElement('a');
           anchorWrapper.href = getProductLink(product.urlKey, product.sku);
 
@@ -173,7 +159,7 @@ export default async function decorate(block) {
             },
           });
         },
-        ProductActions: (ctx) => {
+        ProductActions: async (ctx) => {
           const actionsWrapper = document.createElement('div');
           actionsWrapper.className = 'product-discovery-product-actions';
           // Add to Cart Button
@@ -192,6 +178,21 @@ export default async function decorate(block) {
             })($wishlistToggle);
             actionsWrapper.appendChild($wishlistToggle);
           }
+
+          // Conditionally load and render Requisition List Button
+          try {
+            const { initializeRequisitionList } = await import('./requisition-list.js');
+
+            const $reqListContainer = await initializeRequisitionList({
+              product: ctx.product,
+              labels,
+            });
+
+            actionsWrapper.appendChild($reqListContainer);
+          } catch (error) {
+            console.warn('Requisition list module not available:', error);
+          }
+
           ctx.replaceWith(actionsWrapper);
         },
       },
@@ -211,9 +212,11 @@ export default async function decorate(block) {
 
     // Update the view facets button with the number of filters
     if (payload.request.filter.length > 0) {
-      $viewFacets.querySelector('button').setAttribute('data-count', payload.request.filter.length);
+      $viewFacets.querySelector('button')
+        .setAttribute('data-count', payload.request.filter.length);
     } else {
-      $viewFacets.querySelector('button').removeAttribute('data-count');
+      $viewFacets.querySelector('button')
+        .removeAttribute('data-count');
     }
   }, { eager: true });
 
@@ -243,16 +246,61 @@ export default async function decorate(block) {
   }, { eager: false });
 }
 
+async function performInitialSearch(config, urlParams) {
+  const {
+    q,
+    page,
+    sort,
+    filter,
+  } = urlParams;
+  // Request search based on the page type on block load
+  if (config.urlpath) {
+    // If it's a category page...
+    await search({
+      phrase: '', // search all products in the category
+      currentPage: page ? Number(page) : 1,
+      pageSize: 8,
+      sort: sort ? getSortFromParams(sort) : [{ attribute: 'position', direction: 'DESC' }],
+      filter: [
+        { attribute: 'categoryPath', eq: config.urlpath }, // Add category filter
+        { attribute: 'visibility', in: ['Search', 'Catalog, Search'] },
+        ...getFilterFromParams(filter),
+      ],
+    }).catch(() => {
+      console.error('Error searching for products');
+    });
+  } else {
+    // If it's a search page...
+    await search({
+      phrase: q || '',
+      currentPage: page ? Number(page) : 1,
+      pageSize: 8,
+      sort: getSortFromParams(sort),
+      filter: [
+        { attribute: 'visibility', in: ['Search', 'Catalog, Search'] },
+        ...getFilterFromParams(filter),
+      ],
+    }).catch(() => {
+      console.error('Error searching for products');
+    });
+  }
+}
+
 function getSortFromParams(sortParam) {
   if (!sortParam) return [];
-  return sortParam.split(',').map((item) => {
-    const [attribute, direction] = item.split('_');
-    return { attribute, direction };
-  });
+  return sortParam.split(',')
+    .map((item) => {
+      const [attribute, direction] = item.split('_');
+      return {
+        attribute,
+        direction,
+      };
+    });
 }
 
 function getParamsFromSort(sort) {
-  return sort.map((item) => `${item.attribute}_${item.direction}`).join(',');
+  return sort.map((item) => `${item.attribute}_${item.direction}`)
+    .join(',');
 }
 
 function getFilterFromParams(filterParam) {
@@ -301,7 +349,11 @@ function getFilterFromParams(filterParam) {
 function getParamsFromFilter(filter) {
   if (!filter || filter.length === 0) return '';
 
-  return filter.map(({ attribute, in: inValues, range }) => {
+  return filter.map(({
+    attribute,
+    in: inValues,
+    range,
+  }) => {
     if (inValues) {
       return `${attribute}:${inValues.join(',')}`;
     }
@@ -311,5 +363,7 @@ function getParamsFromFilter(filter) {
     }
 
     return null;
-  }).filter(Boolean).join('|');
+  })
+    .filter(Boolean)
+    .join('|');
 }

@@ -1,0 +1,51 @@
+diff --git a/blocks/product-recommendations/product-recommendations.js b/blocks/product-recommendations/product-recommendations.js
+index 6266cc2f..d72b4b76 100644
+--- a/blocks/product-recommendations/product-recommendations.js
++++ b/blocks/product-recommendations/product-recommendations.js
+@@ -17,6 +17,7 @@ import { publishRecsItemAddToCartClick } from '@dropins/storefront-recommendatio
+ // Wishlist Dropin
+ import { WishlistToggle } from '@dropins/storefront-wishlist/containers/WishlistToggle.js';
+ import { render as wishlistRender } from '@dropins/storefront-wishlist/render.js';
++import { HeartNormal, HeartAdd } from '../../scripts/wishlist-icons.js';
+ 
+ // Block-level
+ import { readBlockConfig } from '../../scripts/aem.js';
+@@ -63,6 +64,12 @@ function getPurchaseHistory(storeViewCode) {
+ export default async function decorate(block) {
+   const labels = await fetchPlaceholders();
+ 
++  // Hide configuration rows if they exist
++  const children = [...block.children];
++  children.forEach((child) => {
++    child.style.display = 'none';
++  });
++
+   // Configuration
+   const { currentsku, recid } = readBlockConfig(block);
+ 
+@@ -74,6 +81,7 @@ export default async function decorate(block) {
+   `);
+ 
+   const $list = fragment.querySelector('.recommendations__list');
++  const $wrapper = fragment.querySelector('.recommendations__wrapper');
+ 
+   block.appendChild(fragment);
+ 
+@@ -195,6 +203,8 @@ export default async function decorate(block) {
+               // Render Icon
+               wishlistRender.render(WishlistToggle, {
+                 product: ctx.item,
++                iconToWishlist: HeartNormal,
++                iconWishlisted: HeartAdd,
+               })($wishlistToggle);
+ 
+               // Append to Cart Item
+@@ -220,7 +230,7 @@ export default async function decorate(block) {
+               });
+             },
+           },
+-        })(block),
++        })($wrapper),
+       ]);
+     } finally {
+       isLoading = false;

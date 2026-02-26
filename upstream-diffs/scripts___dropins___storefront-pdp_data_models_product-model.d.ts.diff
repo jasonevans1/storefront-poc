@@ -1,0 +1,13 @@
+diff --git a/scripts/__dropins__/storefront-pdp/data/models/product-model.d.ts b/scripts/__dropins__/storefront-pdp/data/models/product-model.d.ts
+index e1029b8d..7c97a3e8 100644
+--- a/scripts/__dropins__/storefront-pdp/data/models/product-model.d.ts
++++ b/scripts/__dropins__/storefront-pdp/data/models/product-model.d.ts
+@@ -67,6 +67,7 @@ interface Attribute {
+     id: string;
+     label: string;
+     value: string;
++    roles?: string[];
+ }
+ export {};
+ //# sourceMappingURL=product-model.d.ts.map
+\ No newline at end of file

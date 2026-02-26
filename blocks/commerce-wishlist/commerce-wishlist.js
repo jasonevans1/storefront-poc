@@ -73,20 +73,6 @@ export default async function decorate(block) {
     'start-shopping-url': startShoppingURL = '',
   } = readBlockConfig(block);
 
-  const fixHeadingCount = () => {
-    const el = block.querySelector('.wishlist-wishlist__heading-count');
-    if (!el) return;
-    const text = el.textContent;
-    if (/^\d+ Products?$/.test(text)) return;
-    const match = text.match(/^(\d+)\s/);
-    if (!match) return;
-    const count = parseInt(match[1], 10);
-    el.textContent = count === 1 ? '1 Product' : `${count} Products`;
-  };
-
-  const observer = new MutationObserver(fixHeadingCount);
-  observer.observe(block, { childList: true, subtree: true });
-
   await wishlistRenderer.render(Wishlist, {
     routeEmptyWishlistCTA: startShoppingURL ? () => rootLink(startShoppingURL) : undefined,
     moveProdToCart: cartApi.addProductsToCart,
@@ -108,6 +94,4 @@ export default async function decorate(block) {
       },
     },
   })(block);
-
-  fixHeadingCount();
 }

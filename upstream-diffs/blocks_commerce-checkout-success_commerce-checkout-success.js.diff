@@ -1,0 +1,32 @@
+diff --git a/blocks/commerce-checkout-success/commerce-checkout-success.js b/blocks/commerce-checkout-success/commerce-checkout-success.js
+index f9e4f54c..049e49e9 100644
+--- a/blocks/commerce-checkout-success/commerce-checkout-success.js
++++ b/blocks/commerce-checkout-success/commerce-checkout-success.js
+@@ -34,10 +34,15 @@ import {
+   rootLink,
+   SUPPORT_PATH,
+   authPrivacyPolicyConsentSlot,
++  CUSTOMER_LOGIN_PATH,
++  CUSTOMER_ACCOUNT_PATH,
+ } from '../../scripts/commerce.js';
+ 
+-// Ensure order drop-in initializer side effects are applied
++// Initialize dropins
+ import '../../scripts/initializers/order.js';
++import '../../scripts/initializers/checkout.js';
++import '../../scripts/initializers/cart.js';
++import '../../scripts/initializers/auth.js';
+ 
+ // Local modal helper
+ import createModal from '../modal/modal.js';
+@@ -134,8 +139,8 @@ async function renderOrderHeader(container, options = {}) {
+     AuthProvider.render(SignUp, {
+       inputsDefaultValueSet,
+       addressesData,
+-      routeSignIn: () => rootLink('/customer/login'),
+-      routeRedirectOnEmailConfirmationClose: () => rootLink('/customer/account'),
++      routeSignIn: () => rootLink(CUSTOMER_LOGIN_PATH),
++      routeRedirectOnEmailConfirmationClose: () => rootLink(CUSTOMER_ACCOUNT_PATH),
+       slots: { ...authPrivacyPolicyConsentSlot },
+     })(signUpForm);
+     signUpModal = await createModal([signUpForm]);

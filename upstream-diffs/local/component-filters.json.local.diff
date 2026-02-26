@@ -1,0 +1,65 @@
+diff --git a/component-filters.json b/component-filters.json
+new file mode 100644
+index 00000000..c7c19c41
+--- /dev/null
++++ b/component-filters.json
+@@ -0,0 +1,58 @@
++[
++  {
++    "id": "main",
++    "components": [
++      "section"
++    ]
++  },
++  {
++    "id": "section",
++    "components": [
++      "hero",
++      "accordion",
++      "cards",
++      "carousel",
++      "columns",
++      "fragment",
++      "image",
++      "text",
++      "targeted-block",
++      "product-recommendations"
++    ]
++  },
++  {
++    "id": "accordion",
++    "components": [
++      "accordion-item"
++    ]
++  },
++  {
++    "id": "cards",
++    "components": [
++      "card"
++    ]
++  },
++  {
++    "id": "carousel",
++    "components": [
++      "carousel-item"
++    ]
++  },
++  {
++    "id": "columns",
++    "components": [
++      "columns-row"
++    ]
++  },
++  {
++    "id": "columns-row",
++    "components": []
++  },
++  {
++    "id": "columns-cell",
++    "components": [
++      "text",
++      "image"
++    ]
++  }
++]
+\ No newline at end of file

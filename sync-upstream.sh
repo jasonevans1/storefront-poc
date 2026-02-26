@@ -5,7 +5,14 @@
 
 set -e
 
-UPSTREAM_BRANCH="upstream/main"
+AUTO_YES=false
+for arg in "$@"; do
+    case "$arg" in
+        --yes|-y) AUTO_YES=true ;;
+    esac
+done
+
+UPSTREAM_BRANCH="upstream/b2b"
 LOCAL_BRANCH="origin/main"
 TEMP_DIR=$(mktemp -d)
 
@@ -79,12 +86,16 @@ if [ ${#COPIED_FILES[@]} -eq 0 ]; then
     exit 0
 fi
 
-read -p "Copy ${#COPIED_FILES[@]} unmodified files from upstream? (y/n) " -n 1 -r
-echo
-if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-    echo "Aborted."
-    rm -rf "$TEMP_DIR"
-    exit 0
+if [ "$AUTO_YES" = false ]; then
+    read -p "Copy ${#COPIED_FILES[@]} unmodified files from upstream? (y/n) " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        echo "Aborted."
+        rm -rf "$TEMP_DIR"
+        exit 0
+    fi
+else
+    echo "Auto-confirming copy of ${#COPIED_FILES[@]} files (--yes flag)"
 fi
 
 # Copy files

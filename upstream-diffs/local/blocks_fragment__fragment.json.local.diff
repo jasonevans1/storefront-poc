@@ -1,0 +1,39 @@
+diff --git a/blocks/fragment/_fragment.json b/blocks/fragment/_fragment.json
+new file mode 100644
+index 00000000..1ee10c9d
+--- /dev/null
++++ b/blocks/fragment/_fragment.json
+@@ -0,0 +1,32 @@
++{
++  "definitions": [
++    {
++      "title": "Fragment",
++      "id": "fragment",
++      "plugins": {
++        "da": {
++          "unsafeHTML": "<div class=\"fragment\"><div><div><p><a href=\"\">Fragment URL</a></p></div></div></div>"
++        }
++      }
++    }
++  ],
++  "models": [
++    {
++      "id": "fragment",
++      "fields": [
++        {
++          "component": "text",
++          "name": "div:nth-child(1)>div:nth-child(1)>p:nth-child(1)>a:nth-child(1)[href]",
++          "label": "Fragment URL",
++          "required": true
++        },
++        {
++          "component": "text",
++          "name": "div:nth-child(1)>div:nth-child(1)>p:nth-child(1)>a:nth-child(1)",
++          "label": "Fragment URL Text"
++        }
++      ]
++    }
++  ],
++  "filters": []
++}
+\ No newline at end of file

@@ -1,0 +1,21 @@
+diff --git a/scripts/__dropins__/storefront-checkout/containers/PaymentMethods/handlers.d.ts b/scripts/__dropins__/storefront-checkout/containers/PaymentMethods/handlers.d.ts
+new file mode 100644
+index 00000000..c5c8496f
+--- /dev/null
++++ b/scripts/__dropins__/storefront-checkout/containers/PaymentMethods/handlers.d.ts
+@@ -0,0 +1,14 @@
++import { PaymentMethodConfig } from '..';
++
++export declare enum HandlerCode {
++    PaymentOnAccount = "companycredit",
++    PurchaseOrder = "purchaseorder"
++}
++export declare const handleRefNumberChange: (code: string, isRequired: boolean) => (this: any, ...args: any[]) => void;
++export declare const resetHandlersCache: () => void;
++export declare const createHandler: (code: HandlerCode) => PaymentMethodConfig;
++export declare const defaultHandlers: {
++    companycredit: PaymentMethodConfig;
++    purchaseorder: PaymentMethodConfig;
++};
++//# sourceMappingURL=handlers.d.ts.map
+\ No newline at end of file

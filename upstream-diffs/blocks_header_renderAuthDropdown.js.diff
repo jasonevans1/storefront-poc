@@ -1,0 +1,13 @@
+diff --git a/blocks/header/renderAuthDropdown.js b/blocks/header/renderAuthDropdown.js
+index dbc73fa1..fdcdbde1 100644
+--- a/blocks/header/renderAuthDropdown.js
++++ b/blocks/header/renderAuthDropdown.js
+@@ -24,8 +24,6 @@ function handleLogout(redirections) {
+ 
+ function renderSignIn(element) {
+   authRenderer.render(SignIn, {
+-    renderSignUpLink: true,
+-    onSignUpLinkClick: () => { window.location.href = rootLink('/customer/create'); },
+     onSuccessCallback: () => {
+       // reload the page
+       window.location.reload();

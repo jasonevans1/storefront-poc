@@ -1,0 +1,84 @@
+diff --git a/blocks/product-list-page/product-list-page.js b/blocks/product-list-page/product-list-page.js
+index dde01929..9663b56b 100644
+--- a/blocks/product-list-page/product-list-page.js
++++ b/blocks/product-list-page/product-list-page.js
+@@ -14,9 +14,10 @@ import * as cartApi from '@dropins/storefront-cart/api.js';
+ import { tryRenderAemAssetsImage } from '@dropins/tools/lib/aem/assets.js';
+ // Event Bus
+ import { events } from '@dropins/tools/event-bus.js';
++import { HeartNormal, HeartAdd } from '../../scripts/wishlist-icons.js';
+ // AEM
+ import { readBlockConfig } from '../../scripts/aem.js';
+-import { fetchPlaceholders, getProductLink } from '../../scripts/commerce.js';
++import { fetchPlaceholders, getProductLink, checkIsAuthenticated } from '../../scripts/commerce.js';
+ 
+ // Initializers
+ import '../../scripts/initializers/search.js';
+@@ -139,7 +140,20 @@ export default async function decorate(block) {
+     })($viewFacets),
+ 
+     // Facets
+-    provider.render(Facets, {})($facets),
++    provider.render(Facets, {
++      slots: {
++        FacetBucketLabel: (ctx) => {
++          const title = ctx.data.title || 'Not Defined';
++          const label = document.createElement('span');
++          label.textContent = title;
++          const count = document.createElement('span');
++          count.classList.add('facet-bucket__count');
++          count.textContent = ` (${ctx.data.count})`;
++          label.appendChild(count);
++          ctx.replaceWith(label);
++        },
++      },
++    })($facets),
+     // Product List
+     provider.render(SearchResults, {
+       routeProduct: (product) => getProductLink(product.urlKey, product.sku),
+@@ -165,15 +179,19 @@ export default async function decorate(block) {
+           // Add to Cart Button
+           const addToCartBtn = getAddToCartButton(ctx.product);
+           addToCartBtn.className = 'product-discovery-product-actions__add-to-cart';
+-          // Wishlist Button
+-          const $wishlistToggle = document.createElement('div');
+-          $wishlistToggle.classList.add('product-discovery-product-actions__wishlist-toggle');
+-          wishlistRender.render(WishlistToggle, {
+-            product: ctx.product,
+-            variant: 'tertiary',
+-          })($wishlistToggle);
+           actionsWrapper.appendChild(addToCartBtn);
+-          actionsWrapper.appendChild($wishlistToggle);
++          // Wishlist Button (only for logged-in users)
++          if (checkIsAuthenticated()) {
++            const $wishlistToggle = document.createElement('div');
++            $wishlistToggle.classList.add('product-discovery-product-actions__wishlist-toggle');
++            wishlistRender.render(WishlistToggle, {
++              product: ctx.product,
++              variant: 'tertiary',
++              iconToWishlist: HeartAdd,
++              iconWishlisted: HeartNormal,
++            })($wishlistToggle);
++            actionsWrapper.appendChild($wishlistToggle);
++          }
+           ctx.replaceWith(actionsWrapper);
+         },
+       },
+@@ -248,12 +266,14 @@ function getFilterFromParams(filterParam) {
+   filters.forEach((filter) => {
+     if (filter.includes(':')) {
+       const [attribute, value] = filter.split(':');
++      const commaRegex = /,(?!\s)/;
+ 
+-      if (value.includes(',')) {
+-        // Handle array values (like categories)
++      if (commaRegex.test(value)) {
++        // Handle array values like categories,
++        // but allow for commas within an array value (eg. "Catalog, Search")
+         results.push({
+           attribute,
+-          in: value.split(','),
++          in: value.split(commaRegex),
+         });
+       } else if (value.includes('-')) {
+         // Handle range values (like price)

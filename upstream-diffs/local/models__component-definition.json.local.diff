@@ -1,0 +1,67 @@
+diff --git a/models/_component-definition.json b/models/_component-definition.json
+new file mode 100644
+index 00000000..6a87e488
+--- /dev/null
++++ b/models/_component-definition.json
+@@ -0,0 +1,61 @@
++{
++  "groups": [
++    {
++      "title": "Default Content",
++      "id": "default",
++      "components": [
++        {
++          "...": "./_text.json#/definitions"
++        },
++        {
++          "...": "./_image.json#/definitions"
++        }
++      ]
++    },
++    {
++      "title": "Sections",
++      "id": "sections",
++      "components": [
++        {
++          "...": "./_section.json#/definitions"
++        }
++      ]
++    },
++    {
++      "title": "Blocks",
++      "id": "blocks",
++      "components": [
++        {
++          "...": "../blocks/accordion/_*.json#/definitions"
++        },
++        {
++          "...": "../blocks/cards/_*.json#/definitions"
++        },
++        {
++          "...": "../blocks/carousel/_*.json#/definitions"
++        },
++        {
++          "...": "../blocks/columns/_*.json#/definitions"
++        },
++        {
++          "...": "../blocks/fragment/_*.json#/definitions"
++        },
++        {
++          "...": "../blocks/hero/_*.json#/definitions"
++        },
++        {
++          "...": "../blocks/targeted-block/_*.json#/definitions"
++        }
++      ]
++    },
++    {
++      "title": "Product",
++      "id": "product",
++      "components": [
++        {
++          "...": "../blocks/product-*/_*.json#/definitions"
++        }
++      ]
++    }
++  ]
++}

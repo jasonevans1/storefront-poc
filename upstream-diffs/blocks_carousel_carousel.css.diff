@@ -1,0 +1,198 @@
+diff --git a/blocks/carousel/carousel.css b/blocks/carousel/carousel.css
+index 12c3f566..024d40cc 100644
+--- a/blocks/carousel/carousel.css
++++ b/blocks/carousel/carousel.css
+@@ -3,8 +3,9 @@ main > .section .carousel-wrapper {
+     padding: 0;
+ }
+ 
+-main > .section.carousel-container {
+-    margin-top: -4rem;
++.carousel-container h2, .carousel-container p {
++    padding: 0 var(--spacing-xxlarge);
++    text-align: center;
+ }
+ 
+ .carousel .carousel-slides-container {
+@@ -23,6 +24,7 @@ main > .section.carousel-container {
+     scroll-behavior: smooth;
+     scroll-snap-type: x mandatory;
+     overflow: scroll clip;
++    height: 40vw;
+ }
+ 
+ .carousel .carousel-slides::-webkit-scrollbar {
+@@ -38,7 +40,7 @@ main > .section.carousel-container {
+     justify-content: center;
+     position: relative;
+     width: 100%;
+-    min-height: 500px;
++    min-height: min(50vw, calc(100dvh - var(--header-height)));
+ }
+ 
+ .carousel .carousel-slide:has(.carousel-slide-content[data-align='center']) {
+@@ -49,12 +51,12 @@ main > .section.carousel-container {
+     align-items: flex-end;
+ }
+ 
+-.carousel .carousel-slide .carousel-slide-content picture {
++.carousel .carousel-slide .carousel-slide-image picture {
+     position: absolute;
+     inset: 0;
+ }
+ 
+-.carousel .carousel-slide .carousel-slide-content picture > img {
++.carousel .carousel-slide .carousel-slide-image picture > img {
+     height: 100%;
+     width: 100%;
+     object-fit: cover;
+@@ -62,88 +64,52 @@ main > .section.carousel-container {
+ 
+ .carousel .carousel-slide .carousel-slide-content {
+     z-index: 1;
++    margin: 68px;
++    padding: var(--spacing-small);
+     color: white;
+-    background-color: transparent;
+-    width: 100%;
+-}
+-
+-.carousel .carousel-slide-content_text {
+-    position: absolute;
+-    inset: 0;
+-    padding: 0 24px;
+-    max-width: 1248px;
+-    margin: 0 auto;
+-    display: flex;
+-    flex-direction: column;
+-    justify-content: center;
+-    align-items: flex-start;
+-    gap: var(--spacing-small);
+-    color: var(--color-brand-700);
++    background-color: rgb(19 19 19 / 75%);
++    position: relative;
++    width: var(--slide-content-width, auto);
+ }
+ 
+ .carousel nav {
+     position: relative;
+ }
+ 
+-.carousel .carousel-controls {
+-    display: flex;
+-    justify-content: center;
+-    align-items: center;
+-}
+-
+-.carousel .carousel-arrow-button {
+-    background: transparent;
+-    border: none;
+-    line-height: 1;
+-    cursor: pointer;
+-}
+-
+ .carousel .carousel-slide-indicators {
++    position: absolute;
++    bottom: var(--spacing-small);
+     text-align: center;
+-    font-size: 30px;
++    font-size: .25em;
+     font-weight: bold;
+     color: transparent;
++    z-index: 2;
+     width: 100%;
+     justify-content: center;
+-    align-items: center;
+     flex-wrap: wrap;
+     display: flex;
+     padding: 0;
+     line-height: 0;
+-    gap: var(--spacing-xsmall);
+ }
+ 
+ .carousel .carousel-slide-indicator {
+-    display: block;
++    display: inline-block;
++    margin: 0 var(--spacing-xsmall) 0 var(--spacing-xxsmall);
+     border-radius: var(--shape-border-radius-2);
+ }
+ 
+-.carousel .carousel-slide-content_text p {
+-    margin: var(--spacing-xsmall) 0;
+-}
+-
+-.carousel .carousel-slide-content_text .button-container a {
+-    margin: 0;
+-}
+-
+-.carousel .carousel-slide-content_text h2 {
+-    margin: 0;
+-    font-weight: 700;
+-}
+-
+ .carousel .carousel-slide-indicator button {
+     text-indent: -9999px;
+-    width: 18px;
+-    height: 18px;
++    width: 8px;
++    height: 8px;
+     outline: 0;
+     border: 0 none;
+     border-radius: 50%;
+     text-decoration: none;
+-    background-color: var(--color-brand-500);
++    background-color: var(--color-neutral-400);
+     margin: 0;
+     padding: 0;
+     transition: background-color 0.2s;
+-    cursor: pointer;
+ }
+ 
+ .carousel .carousel-slide-indicator button:disabled,
+@@ -188,38 +154,19 @@ main > .section.carousel-container {
+     left: calc(50% - 2px);
+ }
+ 
+-@media (max-width: 600px) {
+-    .carousel .carousel-slide-content_text {
+-        gap: var(--spacing-xsmall);
+-    }
+-
+-    .carousel .carousel-slide-content_text h2,
+-    .carousel .carousel-slide-content_text .button-container {
+-        margin: 0;
+-    }
+-
+-    .carousel .carousel-slide-content_text h2 {
+-        font-size: 3rem;
+-        line-height: 1.1;
+-    }
+-}
+-
+ @media (min-width: 600px) {
+     .carousel .carousel-navigation-buttons {
+         left: 24px;
+         right: 24px;
+     }
+-}
+ 
+-@media (min-width: 1024px) {
+-    .carousel .carousel-slide-content_text h2,
+-    .carousel .carousel-slide-content_text p {
+-        max-width: 400px;
++    .carousel .carousel-slide .carousel-slide-content {
++        --slide-content-width: calc((100% - 184px) / 2);
++
++        margin: 92px;
+     }
+-}
+ 
+-@media (min-width: 1248px) {
+-    .carousel .carousel-slide-content_text {
+-        padding: 0;
++    .carousel .carousel-slide .carousel-slide-content[data-align='justify'] {
++        --slide-content-width: auto;
+     }
+-}
+\ No newline at end of file
++}

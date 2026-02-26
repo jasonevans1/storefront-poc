@@ -2,6 +2,7 @@
 import { getCookie } from '@dropins/tools/lib.js';
 import { events } from '@dropins/tools/event-bus.js';
 import { initializers } from '@dropins/tools/initializer.js';
+import { getConfigValue } from '@dropins/tools/lib/aem/configs.js';
 import { isAemAssetsEnabled } from '@dropins/tools/lib/aem/assets.js';
 import { getHeaders } from '@dropins/tools/lib/aem/configs.js';
 import { CORE_FETCH_GRAPHQL, CS_FETCH_GRAPHQL, fetchPlaceholders } from '../commerce.js';
@@ -12,8 +13,12 @@ const setAuthHeaders = (state) => {
   if (state) {
     const token = getUserTokenCookie();
     CORE_FETCH_GRAPHQL.setFetchGraphQlHeader('Authorization', `Bearer ${token}`);
+    CS_FETCH_GRAPHQL.setFetchGraphQlHeader('Authorization', `Bearer ${token}`);
   } else {
+    sessionStorage.removeItem('DROPIN__COMPANYSWITCHER__COMPANY__CONTEXT');
+    sessionStorage.removeItem('DROPIN__COMPANYSWITCHER__GROUP__CONTEXT');
     CORE_FETCH_GRAPHQL.removeFetchGraphQlHeader('Authorization');
+    CS_FETCH_GRAPHQL.removeFetchGraphQlHeader('Authorization');
   }
 };
 
@@ -22,6 +27,14 @@ const setCustomerGroupHeader = (customerGroupId) => {
   const isACO = Object.keys(csHeaders).some((key) => key.toLowerCase().startsWith('ac-'));
   if (isACO) return;
   CS_FETCH_GRAPHQL.setFetchGraphQlHeader('Magento-Customer-Group', customerGroupId);
+};
+
+const setAdobeCommerceOptimizerHeader = (adobeCommerceOptimizer) => {
+  if (adobeCommerceOptimizer?.priceBookId) {
+    CS_FETCH_GRAPHQL.setFetchGraphQlHeader('AC-Price-Book-ID', adobeCommerceOptimizer.priceBookId);
+  } else {
+    CS_FETCH_GRAPHQL.removeFetchGraphQlHeader('AC-Price-Book-ID');
+  }
 };
 
 const persistCartDataInSession = (data) => {
@@ -49,7 +62,11 @@ const setupAemAssetsImageParams = () => {
 export default async function initializeDropins() {
   const init = async () => {
     // Set Customer-Group-ID header
-    events.on('auth/group-uid', setCustomerGroupHeader, { eager: true });
+    if (getConfigValue('adobe-commerce-optimizer')) {
+      events.on('auth/adobe-commerce-optimizer', setAdobeCommerceOptimizerHeader, { eager: true });
+    } else {
+      events.on('auth/group-uid', setCustomerGroupHeader, { eager: true });
+    }
 
     // Set auth headers on authenticated event
     events.on('authenticated', setAuthHeaders, { eager: true });
@@ -71,8 +88,25 @@ export default async function initializeDropins() {
     // Fetch global placeholders
     await fetchPlaceholders('placeholders/global.json');
 
+    /*
+     * Set the company context before initializing the auth drop-in
+     * This ensures proper permissions are retrieved, and the auth/permissions event includes
+     * the correct payload.
+     */
+    const companyContext = sessionStorage.getItem('DROPIN__COMPANYSWITCHER__COMPANY__CONTEXT');
+    if (companyContext) {
+      CORE_FETCH_GRAPHQL.setFetchGraphQlHeader('X-Adobe-Company', companyContext);
+    }
+
     // Initialize Global Drop-ins
     await import('./auth.js');
+
+    // Initialize Company Switcher
+    const authenticated = events.lastPayload('authenticated');
+
+    if (authenticated && getConfigValue('commerce-companies-enabled') === true) {
+      await import('./company-switcher.js');
+    }
 
     await import('./personalization.js');
 

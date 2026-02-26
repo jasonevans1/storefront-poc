@@ -1,0 +1,75 @@
+diff --git a/blocks/product-details/product-details.js b/blocks/product-details/product-details.js
+index a2d580fb..24192fbc 100644
+--- a/blocks/product-details/product-details.js
++++ b/blocks/product-details/product-details.js
+@@ -24,6 +24,7 @@ import ProductDescription from '@dropins/storefront-pdp/containers/ProductDescri
+ import ProductAttributes from '@dropins/storefront-pdp/containers/ProductAttributes.js';
+ import ProductGallery from '@dropins/storefront-pdp/containers/ProductGallery.js';
+ import ProductGiftCardOptions from '@dropins/storefront-pdp/containers/ProductGiftCardOptions.js';
++import { HeartNormal, HeartAdd } from '../../scripts/wishlist-icons.js';
+ 
+ // Libs
+ import {
+@@ -31,6 +32,7 @@ import {
+   setJsonLd,
+   fetchPlaceholders,
+   getProductLink,
++  checkIsAuthenticated,
+ } from '../../scripts/commerce.js';
+ 
+ // Initializers
+@@ -73,6 +75,7 @@ function updateAddToCartButtonText(addToCartInstance, inCart, labels) {
+ 
+ export default async function decorate(block) {
+   const product = events.lastPayload('pdp/data') ?? null;
++  await fetchPlaceholders('placeholders/pdp.json');
+   const labels = await fetchPlaceholders();
+ 
+   // Read itemUid from URL
+@@ -93,6 +96,7 @@ export default async function decorate(block) {
+         <div class="product-details__header"></div>
+         <div class="product-details__price"></div>
+         <div class="product-details__gallery"></div>
++        <div class="product-details__stock-status"></div>
+         <div class="product-details__short-description"></div>
+         <div class="product-details__gift-card-options"></div>
+         <div class="product-details__configuration">
+@@ -120,6 +124,7 @@ export default async function decorate(block) {
+   const $giftCardOptions = fragment.querySelector('.product-details__gift-card-options');
+   const $addToCart = fragment.querySelector('.product-details__buttons__add-to-cart');
+   const $wishlistToggleBtn = fragment.querySelector('.product-details__buttons__add-to-wishlist');
++  const $stockStatus = fragment.querySelector('.product-details__stock-status');
+   const $description = fragment.querySelector('.product-details__description');
+   const $attributes = fragment.querySelector('.product-details__attributes');
+ 
+@@ -219,10 +224,12 @@ export default async function decorate(block) {
+     // Attributes
+     pdpRendered.render(ProductAttributes, {})($attributes),
+ 
+-    // Wishlist button - WishlistToggle Container
+-    wishlistRender.render(WishlistToggle, {
++    // Wishlist button - WishlistToggle Container (only for logged-in users)
++    ...(checkIsAuthenticated() ? [wishlistRender.render(WishlistToggle, {
+       product,
+-    })($wishlistToggleBtn),
++      iconToWishlist: HeartAdd,
++      iconWishlisted: HeartNormal,
++    })($wishlistToggleBtn)] : []),
+   ]);
+ 
+   // Configuration – Button - Add to Cart
+@@ -311,6 +318,14 @@ export default async function decorate(block) {
+     },
+   })($addToCart);
+ 
++  // Stock Status
++  events.on('pdp/data', (data) => {
++    const label = labels.PDP?.StockStatus || 'In Stock';
++    $stockStatus.textContent = data?.inStock != null
++      ? `${label}: ${data.inStock ? 'Yes' : 'No'}`
++      : '';
++  }, { eager: true });
++
+   // Lifecycle Events
+   events.on('pdp/valid', (valid) => {
+     // update add to cart button disabled state based on product selection validity

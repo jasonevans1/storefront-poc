@@ -8,7 +8,8 @@
       "WebFetch(domain:localhost)",
       "Bash(curl:*)",
       "Bash(python3:*)",
-      "WebFetch(domain:developer.adobe.com)"
+      "WebFetch(domain:developer.adobe.com)",
+      "Bash(echo === $f ===:*)"
     ]
   }
 }

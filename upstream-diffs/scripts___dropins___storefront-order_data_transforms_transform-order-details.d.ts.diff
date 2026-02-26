@@ -1,0 +1,10 @@
+diff --git a/scripts/__dropins__/storefront-order/data/transforms/transform-order-details.d.ts b/scripts/__dropins__/storefront-order/data/transforms/transform-order-details.d.ts
+index 753b45b3..301cf98a 100644
+--- a/scripts/__dropins__/storefront-order/data/transforms/transform-order-details.d.ts
++++ b/scripts/__dropins__/storefront-order/data/transforms/transform-order-details.d.ts
+@@ -1,4 +1,4 @@
+-import { QueryType, ResponseData, OrderProps, OrderItemProps } from '../../types';
++import { OrderItemProps, OrderProps, QueryType, ResponseData } from '../../types';
+ import { OrderDataModel, OrderItemModel, TransformedData } from '../models';
+ 
+ export declare const transformConfigurableOptions: (item: OrderItemProps) => Record<string, string> | undefined;

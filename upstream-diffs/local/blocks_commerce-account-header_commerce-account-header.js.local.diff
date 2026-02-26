@@ -1,0 +1,13 @@
+diff --git a/blocks/commerce-account-header/commerce-account-header.js b/blocks/commerce-account-header/commerce-account-header.js
+index c0f04921..2ccd5c68 100644
+--- a/blocks/commerce-account-header/commerce-account-header.js
++++ b/blocks/commerce-account-header/commerce-account-header.js
+@@ -3,7 +3,7 @@ import { readBlockConfig } from '../../scripts/aem.js';
+ 
+ export default function decorate(block) {
+   const {
+-    title = 'My account',
++    title = 'My Account',
+   } = readBlockConfig(block);
+ 
+   block.innerHTML = '';

@@ -24,8 +24,6 @@ function handleLogout(redirections) {
 
 function renderSignIn(element) {
   authRenderer.render(SignIn, {
-    renderSignUpLink: true,
-    onSignUpLinkClick: () => { window.location.href = rootLink('/customer/create'); },
     onSuccessCallback: () => {
       // reload the page
       window.location.reload();

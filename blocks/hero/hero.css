@@ -16,10 +16,6 @@
   color: var(--background-color);
 }
 
-.hero-container.dark .hero h1 {
-  color: var(--color-neutral-900);
-}
-
 .hero picture {
   position: absolute;
   z-index: -1;
@@ -32,10 +28,6 @@
   object-fit: cover;
   width: 100%;
   height: 100%;
-}
-
-.hero-container.dark .hero picture {
-  opacity: 0.5;
 }
 
 @media (min-width: 900px) {

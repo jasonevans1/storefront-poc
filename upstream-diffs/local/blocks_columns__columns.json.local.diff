@@ -1,0 +1,80 @@
+diff --git a/blocks/columns/_columns.json b/blocks/columns/_columns.json
+new file mode 100644
+index 00000000..1475954e
+--- /dev/null
++++ b/blocks/columns/_columns.json
+@@ -0,0 +1,73 @@
++{
++  "definitions": [
++    {
++      "title": "Columns",
++      "id": "columns",
++      "plugins": {
++        "da": {
++          "name": "columns",
++          "rows": 1,
++          "columns": 2,
++          "behaviour": "columns"
++        }
++      }
++    },
++    {
++      "title": "Columns Row",
++      "id": "columns-row",
++      "plugins": {
++        "da": {
++          "name": "columns-row",
++          "behaviour": "columns-row"
++        }
++      }
++    },
++    {
++      "title": "Columns Cell",
++      "id": "columns-cell",
++      "plugins": {
++        "da": {
++          "unsafeHTML": "<div></div>",
++          "behaviour": "columns-cell"
++        }
++      }
++    }
++  ],
++  "models": [
++    {
++      "id": "columns",
++      "fields": [
++        {
++          "component": "number",
++          "valueType": "number",
++          "name": "columns",
++          "label": "Number of Columns",
++          "value": 2,
++          "validation": {
++            "numberMin": 1,
++            "numberMax": 6
++          }
++        }
++      ]
++    }
++  ],
++  "filters": [
++    {
++      "id": "columns",
++      "components": [
++        "columns-row"
++      ]
++    },
++    {
++      "id": "columns-row",
++      "components": []
++    },
++    {
++      "id": "columns-cell",
++      "components": [
++        "text",
++        "image"
++      ]
++    }
++  ]
++}
+\ No newline at end of file

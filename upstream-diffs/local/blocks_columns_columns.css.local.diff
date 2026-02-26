@@ -1,0 +1,28 @@
+diff --git a/blocks/columns/columns.css b/blocks/columns/columns.css
+index 0d1ff3f6..cc1b6510 100644
+--- a/blocks/columns/columns.css
++++ b/blocks/columns/columns.css
+@@ -19,6 +19,10 @@
+   display: block;
+ }
+ 
++.extra-space-top.align-top {
++  margin-top: var(--spacing-xlarge);
++}
++
+ @media (min-width: 900px) {
+   .columns > div {
+     align-items: center;
+@@ -30,4 +34,12 @@
+     flex: 1;
+     order: unset;
+   }
++
++  .columns.align-top > div {
++    align-items: flex-start;
++  }
++
++  .columns.align-bottom > div {
++    align-items: flex-end;
++  }
+ }

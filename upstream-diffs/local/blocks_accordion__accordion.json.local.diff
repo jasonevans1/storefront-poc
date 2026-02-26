@@ -1,0 +1,64 @@
+diff --git a/blocks/accordion/_accordion.json b/blocks/accordion/_accordion.json
+new file mode 100644
+index 00000000..519ab0c3
+--- /dev/null
++++ b/blocks/accordion/_accordion.json
+@@ -0,0 +1,57 @@
++{
++  "definitions": [
++    {
++      "title": "Accordion",
++      "id": "accordion",
++      "plugins": {
++        "da": {
++          "name": "accordion",
++          "rows": 1,
++          "columns": 2
++        }
++      }
++    },
++    {
++      "title": "Accordion Item",
++      "id": "accordion-item",
++      "plugins": {
++        "da": {
++          "name": "accordion-item",
++          "rows": 2,
++          "columns": 0
++        }
++      }
++    }
++  ],
++  "models": [
++    {
++      "id": "accordion-item",
++      "fields": [
++        {
++          "component": "richtext",
++          "valueType": "string",
++          "name": "div:nth-child(1)",
++          "value": "",
++          "label": "Summary",
++          "required": true
++        },
++        {
++          "component": "richtext",
++          "name": "div:nth-child(2)",
++          "value": "",
++          "label": "Text",
++          "valueType": "string",
++          "required": true
++        }
++      ]
++    }
++  ],
++  "filters": [
++    {
++      "id": "accordion",
++      "components": [
++        "accordion-item"
++      ]
++    }
++  ]
++}
+\ No newline at end of file

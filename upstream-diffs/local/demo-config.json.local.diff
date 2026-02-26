@@ -1,0 +1,27 @@
+diff --git a/demo-config.json b/demo-config.json
+index fe45f13a..87a65d17 100644
+--- a/demo-config.json
++++ b/demo-config.json
+@@ -17,6 +17,8 @@
+         }
+       },
+       "analytics": {
++        "aep-ims-org-id": null,
++        "aep-datastream-id": null,
+         "base-currency-code": "USD",
+         "environment": "Testing",
+         "environment-id": "f38a0de0-764b-41fa-bd2c-5bc2f3c7b39a",
+@@ -33,9 +35,9 @@
+       },
+       "plugins": {
+         "picker": {
+-           "rootCategory": "YOUR_ROOT_CATEGORY_ID"
+-         }
++          "rootCategory": "YOUR_ROOT_CATEGORY_ID"
++        }
+       }
+     }
+   }
+-}
++}
+\ No newline at end of file

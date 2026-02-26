@@ -1,0 +1,151 @@
+diff --git a/styles/styles.css b/styles/styles.css
+index d3d2ea2a..f87325c3 100644
+--- a/styles/styles.css
++++ b/styles/styles.css
+@@ -13,10 +13,10 @@
+ /* stylelint-disable no-empty-source */
+ :root, .dropin-design {
+   /* Adobe Commerce Dropin design tokens */
+-  --color-brand-300: #6d6d6d;
+-  --color-brand-500: #454545;
+-  --color-brand-600: #383838;
+-  --color-brand-700: #2b2b2b;
++  --color-brand-300: #e46868;
++  --color-brand-500: #b22d2d;
++  --color-brand-600: #844242;
++  --color-brand-700: #4b2a2a;
+   --color-neutral-50: #fff;
+   --color-neutral-100: #fafafa;
+   --color-neutral-200: #f5f5f5;
+@@ -41,7 +41,7 @@
+   --color-alert-800: #c35050;
+   --color-button-active: var(--color-brand-700);
+   --color-button-focus: var(--color-neutral-400);
+-  --color-button-hover: var(--color-brand-600);
++  --color-button-hover: var(--color-brand-300);
+   --color-action-button-active: var(--color-neutral-50);
+   --color-action-button-hover: var(--color-neutral-300);
+   --color-opacity-16: rgb(255 255 255 / 16%);
+@@ -167,6 +167,7 @@ header {
+ }
+ 
+ main {
++  margin-top: 4rem;
+   grid-row: 2;
+ }
+ 
+@@ -339,6 +340,19 @@ button.button.secondary:hover {
+   color: var(--color-brand-600);
+ }
+ 
++.button.button--ghost {
++  background-color: transparent;
++  border: 0;
++  padding: 0;
++  margin: 0;
++  color: var(--color-error-500);
++}
++
++.button.button--ghost:hover {
++  background-color: transparent;
++  color: #000;
++}
++
+ main input:hover {
+   border: var(--shape-border-width-1) solid var(--color-neutral-700);
+ }
+@@ -402,7 +416,7 @@ main > .section:first-of-type {
+   }
+ }
+ 
+-/* section metadata */
++/* section metadata - styles - start */
+ main .section.light,
+ main .section.highlight {
+   background-color: var(--color-neutral-100);
+@@ -410,6 +424,85 @@ main .section.highlight {
+   padding: var(--spacing-xbig) 0;
+ }
+ 
++main .section[data-padding="default"] {
++    padding: var(--spacing-xxsmall) 0;
++}
++
++main .section[data-padding="small"] {
++    padding: var(--spacing-xsmall) 0;
++}
++
++main .section[data-padding="medium"] {
++    padding: var(--spacing-small) 0;
++}
++
++main .section[data-padding="large"] {
++    padding: var(--spacing-medium) 0;
++}
++
++main .section[data-padding="big"] {
++    padding: var(--spacing-big) 0;
++}
++
++main .section[data-padding="xbig"] {
++    padding: var(--spacing-xbig) 0;
++}
++
++main .section[data-padding="xxbig"] {
++    padding: var(--spacing-xxbig) 0;
++}
++
++main .section[data-padding="huge"] {
++    padding: var(--spacing-huge) 0;
++}
++
++main .section[data-padding="xhuge"] {
++    padding: var(--spacing-xhuge) 0;
++}
++
++main .section[data-padding="xxhuge"] {
++    padding: var(--spacing-xxhuge) 0;
++}
++
++
++main .section[data-margin="small"] {
++    margin: var(--spacing-xsmall) 0;
++}
++
++main .section[data-margin="medium"] {
++    margin: var(--spacing-small) 0;
++}
++
++main .section[data-margin="large"] {
++    margin: var(--spacing-medium) 0;
++}
++
++main .section[data-margin="big"] {
++    margin: var(--spacing-big) 0;
++}
++
++main .section[data-margin="xbig"] {
++    margin: var(--spacing-xbig) 0;
++}
++
++main .section[data-margin="xxbig"] {
++    margin: var(--spacing-xxbig) 0;
++}
++
++main .section[data-margin="huge"] {
++    margin: var(--spacing-huge) 0;
++}
++
++main .section[data-margin="xhuge"] {
++    margin: var(--spacing-xhuge) 0;
++}
++
++main .section[data-margin="xxhuge"] {
++    margin: var(--spacing-xxhuge) 0;
++}
++
++/* section metadata - styles - end */
++
+ /* Base Design System Tokens */
+ .dropin-design.dropin-design {
+   --background-none: none 0 0% no-repeat padding-box;

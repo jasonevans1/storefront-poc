@@ -1,0 +1,12 @@
+diff --git a/blocks/footer/footer.js b/blocks/footer/footer.js
+index e7b87537..6d54e47e 100644
+--- a/blocks/footer/footer.js
++++ b/blocks/footer/footer.js
+@@ -166,6 +166,7 @@ export default async function decorate(block) {
+       })($storeSwitcherBtn);
+     }
+   }
++
+   while (fragment.firstElementChild) footer.append(fragment.firstElementChild);
+ 
+   block.append(footer);

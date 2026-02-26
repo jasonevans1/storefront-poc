@@ -1,0 +1,11 @@
+diff --git a/scripts/__dropins__/storefront-pdp/components/index.d.ts b/scripts/__dropins__/storefront-pdp/components/index.d.ts
+index 213b7cf3..a8dba67b 100644
+--- a/scripts/__dropins__/storefront-pdp/components/index.d.ts
++++ b/scripts/__dropins__/storefront-pdp/components/index.d.ts
+@@ -24,4 +24,5 @@ export * from './Header';
+ export * from './Price';
+ export * from './PriceTiers';
+ export * from './GiftCardOptions';
++export * from './DownloadableOptions';
+ //# sourceMappingURL=index.d.ts.map
+\ No newline at end of file

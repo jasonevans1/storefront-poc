@@ -1,0 +1,19 @@
+diff --git a/demo-config.json b/demo-config.json
+index 87a65d17..f9f8470e 100644
+--- a/demo-config.json
++++ b/demo-config.json
+@@ -35,9 +35,10 @@
+       },
+       "plugins": {
+         "picker": {
+-          "rootCategory": "YOUR_ROOT_CATEGORY_ID"
+-        }
+-      }
++           "rootCategory": "YOUR_ROOT_CATEGORY_ID"
++         }
++      },
++      "commerce-companies-enabled": false
+     }
+   }
+ }
+\ No newline at end of file

@@ -4,10 +4,6 @@
     padding-bottom: 1rem;
 }
 
-.product-recommendations .dropin-content-grid {
-    overflow: auto;
-}
-
 .product-recommendations .product-grid {
     display: inline-flex;
     flex-wrap: nowrap;

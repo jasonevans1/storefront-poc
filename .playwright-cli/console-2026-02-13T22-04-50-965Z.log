@@ -1,0 +1,70 @@
+[     535ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/enrichment/enrichment.json?limit=500&offset=0:0
+[     535ms] [ERROR] SyntaxError: Failed to execute 'json' on 'Response': Unexpected end of JSON input
+    at handleIndex (http://localhost:3000/scripts/commerce.js:219:29)
+    at async fetchIndex (http://localhost:3000/scripts/commerce.js:250:20)
+    at async Module.decorate (http://localhost:3000/blocks/enrichment/enrichment.js:35:19)
+    at async http://localhost:3000/scripts/aem.js:562:15 @ http://localhost:3000/blocks/enrichment/enrichment.js:63
+[     647ms] [WARNING] getConsent not implemented @ http://localhost:3000/scripts/commerce.js:815
+[     648ms] [WARNING] Property headers.cs.Magento-Store-View-Code does not exist in the object @ http://localhost:3000/scripts/__dropins__/tools/chunks/get-path-value.js:2
+[     950ms] [WARNING] Property headers.cs.Magento-Store-View-Code does not exist in the object @ http://localhost:3000/scripts/__dropins__/tools/chunks/get-path-value.js:2
+[     951ms] [WARNING] ProductList: recId is missing. Please provide a valid recId to display product recommendations. @ http://localhost:3000/scripts/__dropins__/storefront-recommendations/containers/ProductList.js:2
+[     951ms] [WARNING] ProductList: currentSku is missing. Please provide a valid currentSku to display product recommendations. @ http://localhost:3000/scripts/__dropins__/storefront-recommendations/containers/ProductList.js:2
+[    3626ms] [WARNING] getConsent not implemented @ http://localhost:3000/scripts/commerce.js:815
+[    3638ms] [WARNING] Adobe Client Data Layer v3.0.1 has already been imported/initialized on this page. You may be erroneously loading it a second time. @ http://localhost:3000/scripts/commerce-events-sdk.js:1
+[   21434ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/enrichment/enrichment.json?limit=500&offset=0:0
+[   21434ms] [ERROR] SyntaxError: Failed to execute 'json' on 'Response': Unexpected end of JSON input
+    at handleIndex (http://localhost:3000/scripts/commerce.js:219:29)
+    at async fetchIndex (http://localhost:3000/scripts/commerce.js:250:20)
+    at async Module.decorate (http://localhost:3000/blocks/enrichment/enrichment.js:35:19)
+    at async http://localhost:3000/scripts/aem.js:562:15 @ http://localhost:3000/blocks/enrichment/enrichment.js:63
+[   21438ms] [WARNING] getConsent not implemented @ http://localhost:3000/scripts/commerce.js:815
+[   21438ms] [WARNING] Property headers.cs.Magento-Store-View-Code does not exist in the object @ http://localhost:3000/scripts/__dropins__/tools/chunks/get-path-value.js:2
+[   21739ms] [WARNING] Property headers.cs.Magento-Store-View-Code does not exist in the object @ http://localhost:3000/scripts/__dropins__/tools/chunks/get-path-value.js:2
+[   21741ms] [WARNING] ProductList: recId is missing. Please provide a valid recId to display product recommendations. @ http://localhost:3000/scripts/__dropins__/storefront-recommendations/containers/ProductList.js:2
+[   21741ms] [WARNING] ProductList: currentSku is missing. Please provide a valid currentSku to display product recommendations. @ http://localhost:3000/scripts/__dropins__/storefront-recommendations/containers/ProductList.js:2
+[   24439ms] [WARNING] getConsent not implemented @ http://localhost:3000/scripts/commerce.js:815
+[   24444ms] [WARNING] Adobe Client Data Layer v3.0.1 has already been imported/initialized on this page. You may be erroneously loading it a second time. @ http://localhost:3000/scripts/commerce-events-sdk.js:1
+[   32350ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/enrichment/enrichment.json?limit=500&offset=0:0
+[   32350ms] [ERROR] SyntaxError: Failed to execute 'json' on 'Response': Unexpected end of JSON input
+    at handleIndex (http://localhost:3000/scripts/commerce.js:219:29)
+    at async fetchIndex (http://localhost:3000/scripts/commerce.js:250:20)
+    at async Module.decorate (http://localhost:3000/blocks/enrichment/enrichment.js:35:19)
+    at async http://localhost:3000/scripts/aem.js:562:15 @ http://localhost:3000/blocks/enrichment/enrichment.js:63
+[   32353ms] [WARNING] getConsent not implemented @ http://localhost:3000/scripts/commerce.js:815
+[   32353ms] [WARNING] Property headers.cs.Magento-Store-View-Code does not exist in the object @ http://localhost:3000/scripts/__dropins__/tools/chunks/get-path-value.js:2
+[   32653ms] [WARNING] Property headers.cs.Magento-Store-View-Code does not exist in the object @ http://localhost:3000/scripts/__dropins__/tools/chunks/get-path-value.js:2
+[   32656ms] [WARNING] ProductList: recId is missing. Please provide a valid recId to display product recommendations. @ http://localhost:3000/scripts/__dropins__/storefront-recommendations/containers/ProductList.js:2
+[   32656ms] [WARNING] ProductList: currentSku is missing. Please provide a valid currentSku to display product recommendations. @ http://localhost:3000/scripts/__dropins__/storefront-recommendations/containers/ProductList.js:2
+[   35360ms] [WARNING] getConsent not implemented @ http://localhost:3000/scripts/commerce.js:815
+[   35362ms] [WARNING] Adobe Client Data Layer v3.0.1 has already been imported/initialized on this page. You may be erroneously loading it a second time. @ http://localhost:3000/scripts/commerce-events-sdk.js:1
+[  273255ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/enrichment/enrichment.json?limit=500&offset=0:0
+[  273255ms] [ERROR] SyntaxError: Failed to execute 'json' on 'Response': Unexpected end of JSON input
+    at handleIndex (http://localhost:3000/scripts/commerce.js:219:29)
+    at async fetchIndex (http://localhost:3000/scripts/commerce.js:250:20)
+    at async Module.decorate (http://localhost:3000/blocks/enrichment/enrichment.js:35:19)
+    at async http://localhost:3000/scripts/aem.js:562:15 @ http://localhost:3000/blocks/enrichment/enrichment.js:63
+[  273267ms] [WARNING] getConsent not implemented @ http://localhost:3000/scripts/commerce.js:815
+[  273267ms] [WARNING] Property headers.cs.Magento-Store-View-Code does not exist in the object @ http://localhost:3000/scripts/__dropins__/tools/chunks/get-path-value.js:2
+[  273567ms] [WARNING] Property headers.cs.Magento-Store-View-Code does not exist in the object @ http://localhost:3000/scripts/__dropins__/tools/chunks/get-path-value.js:2
+[  273571ms] [WARNING] ProductList: recId is missing. Please provide a valid recId to display product recommendations. @ http://localhost:3000/scripts/__dropins__/storefront-recommendations/containers/ProductList.js:2
+[  273571ms] [WARNING] ProductList: currentSku is missing. Please provide a valid currentSku to display product recommendations. @ http://localhost:3000/scripts/__dropins__/storefront-recommendations/containers/ProductList.js:2
+[  276264ms] [WARNING] getConsent not implemented @ http://localhost:3000/scripts/commerce.js:815
+[  276279ms] [WARNING] Adobe Client Data Layer v3.0.1 has already been imported/initialized on this page. You may be erroneously loading it a second time. @ http://localhost:3000/scripts/commerce-events-sdk.js:1
+[  277281ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/enrichment/enrichment.json?limit=500&offset=0:0
+[  277281ms] [ERROR] SyntaxError: Failed to execute 'json' on 'Response': Unexpected end of JSON input
+    at handleIndex (http://localhost:3000/scripts/commerce.js:219:29)
+    at async fetchIndex (http://localhost:3000/scripts/commerce.js:250:20)
+    at async Module.decorate (http://localhost:3000/blocks/enrichment/enrichment.js:35:19)
+    at async http://localhost:3000/scripts/aem.js:562:15 @ http://localhost:3000/blocks/enrichment/enrichment.js:63
+[  277290ms] [WARNING] getConsent not implemented @ http://localhost:3000/scripts/commerce.js:815
+[  277290ms] [WARNING] Property headers.cs.Magento-Store-View-Code does not exist in the object @ http://localhost:3000/scripts/__dropins__/tools/chunks/get-path-value.js:2
+[  277592ms] [WARNING] Property headers.cs.Magento-Store-View-Code does not exist in the object @ http://localhost:3000/scripts/__dropins__/tools/chunks/get-path-value.js:2
+[  277592ms] [WARNING] ProductList: recId is missing. Please provide a valid recId to display product recommendations. @ http://localhost:3000/scripts/__dropins__/storefront-recommendations/containers/ProductList.js:2
+[  277592ms] [WARNING] ProductList: currentSku is missing. Please provide a valid currentSku to display product recommendations. @ http://localhost:3000/scripts/__dropins__/storefront-recommendations/containers/ProductList.js:2
+[  280293ms] [WARNING] getConsent not implemented @ http://localhost:3000/scripts/commerce.js:815
+[  280302ms] [WARNING] Adobe Client Data Layer v3.0.1 has already been imported/initialized on this page. You may be erroneously loading it a second time. @ http://localhost:3000/scripts/commerce-events-sdk.js:1
+[  331045ms] [ERROR] WebSocket connection to 'ws://localhost:3000/livereload' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/__internal__/livereload.js:2332
+[  333047ms] [ERROR] WebSocket connection to 'ws://localhost:3000/livereload' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/__internal__/livereload.js:2332
+[  337052ms] [ERROR] WebSocket connection to 'ws://localhost:3000/livereload' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/__internal__/livereload.js:2332
+[  345055ms] [ERROR] WebSocket connection to 'ws://localhost:3000/livereload' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/__internal__/livereload.js:2332
+[  361067ms] [ERROR] WebSocket connection to 'ws://localhost:3000/livereload' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/__internal__/livereload.js:2332

@@ -19,10 +19,6 @@
   display: block;
 }
 
-.extra-space-top.align-top {
-  margin-top: var(--spacing-xlarge);
-}
-
 @media (min-width: 900px) {
   .columns > div {
     align-items: center;
@@ -33,13 +29,5 @@
   .columns > div > div {
     flex: 1;
     order: unset;
-  }
-
-  .columns.align-top > div {
-    align-items: flex-start;
-  }
-
-  .columns.align-bottom > div {
-    align-items: flex-end;
   }
 }

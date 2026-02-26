@@ -1,0 +1,19 @@
+diff --git a/scripts/__dropins__/storefront-pdp/data/models/product-model.d.ts b/scripts/__dropins__/storefront-pdp/data/models/product-model.d.ts
+index 1b78ff05..e1029b8d 100644
+--- a/scripts/__dropins__/storefront-pdp/data/models/product-model.d.ts
++++ b/scripts/__dropins__/storefront-pdp/data/models/product-model.d.ts
+@@ -36,9 +36,14 @@ interface Price {
+     minimumAmount?: number;
+     variant?: 'default' | 'strikethrough';
+ }
++export interface Tier {
++    tier: Price;
++    quantity: number;
++}
+ interface Prices {
+     regular: Price;
+     final: Price;
++    tiers: Tier[];
+     visible: boolean;
+ }
+ export interface Option {
