@@ -1,1 +1,5 @@
 /* add global styles that can be loaded post LCP here */
+
+.wishlist-wishlist__content.wishlist-wishlist__content--empty {
+    --spacing-xxbig:  0;
+}
