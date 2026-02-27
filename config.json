@@ -26,7 +26,8 @@
           "rootCategory": "2"
         }
       },
-      "commerce-companies-enabled": true
+      "commerce-companies-enabled": true,
+      "commerce-b2b-enabled": true
     }
   }
 }
