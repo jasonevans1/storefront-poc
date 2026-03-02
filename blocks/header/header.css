@@ -284,7 +284,7 @@ header nav .nav-sections ul>li:empty {
     min-height: var(--desktop-panel-min-height);
     padding: var(--spacing-xbig);
     position: absolute;
-    top: 64px;
+    top: 100%;
     width: 100%;
     z-index: 1;
   }
