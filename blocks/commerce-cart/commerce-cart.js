@@ -43,7 +43,14 @@ import {
   getProductLink,
   checkIsAuthenticated,
   ACCEPTED_FILE_TYPES,
+  fetchPlaceholders, rootLink, getProductLink,
 } from '../../scripts/commerce.js';
+import {
+  fetchRewardPointsBalance,
+  getCartAppliedRewards,
+  applyRewardPoints,
+  removeRewardPoints,
+} from '../../scripts/rewards.js';
 
 export default async function decorate(block) {
   // Configuration
@@ -67,6 +74,9 @@ export default async function decorate(block) {
   let minimumTotalForQuoteRequest = 0;
   let minimumTotalForQuoteRequestMessage = placeholders?.NegotiableQuote?.Request?.Button?.insufficientTotalMessage || '';
 
+  // Shared state so the OrderSummary updateLineItems callback can read current reward state
+  const rewardLineState = { applied: null };
+
   // Modal state
   let currentModal = null;
   let currentNotification = null;
@@ -80,6 +90,7 @@ export default async function decorate(block) {
       </div>
       <div class="cart__right-column">
         <div class="cart__order-summary"></div>
+        <div class="cart__reward-points" hidden></div>
         <div class="cart__gift-options"></div>
       </div>
     </div>
@@ -94,6 +105,7 @@ export default async function decorate(block) {
   const $emptyCart = fragment.querySelector('.cart__empty-cart');
   const $giftOptions = fragment.querySelector('.cart__gift-options');
   const $rightColumn = fragment.querySelector('.cart__right-column');
+  const $rewards = fragment.querySelector('.cart__reward-points');
 
   block.innerHTML = '';
   block.appendChild(fragment);
@@ -354,6 +366,23 @@ export default async function decorate(block) {
     provider.render(OrderSummary, {
       routeProduct: createProductLink,
       routeCheckout: checkoutURL ? () => rootLink(checkoutURL) : undefined,
+      updateLineItems: (lineItems) => {
+        if (!rewardLineState.applied?.points) return lineItems;
+        const formatted = new Intl.NumberFormat(undefined, {
+          style: 'currency', currency: rewardLineState.applied.money.currency,
+        }).format(rewardLineState.applied.money.value);
+        const rewardLine = {
+          key: 'rewardPointsDiscount',
+          sortOrder: 650,
+          content: h(
+            'div',
+            { className: 'cart-order-summary__entry cart-order-summary__discount' },
+            h('span', { className: 'cart-order-summary__label' }, placeholders?.Global?.RewardsTitle || 'Reward Points'),
+            h('span', { className: 'cart-order-summary__price' }, `-${formatted}`),
+          ),
+        };
+        return [...lineItems, rewardLine];
+      },
       slots: {
         EstimateShipping: async (ctx) => {
           if (enableEstimateShipping === 'true') {
@@ -391,6 +420,134 @@ export default async function decorate(block) {
       },
     })($giftOptions),
   ]);
+
+  // Rewards Section
+  async function initRewardsSection($container) {
+    const cartData = Cart.getCartDataFromCache();
+    const cartId = cartData?.id;
+    if (!cartId) return;
+
+    const [balance, appliedRewards] = await Promise.all([
+      fetchRewardPointsBalance(),
+      getCartAppliedRewards(cartId),
+    ]);
+
+    if (!balance || balance.points === 0) {
+      $container.setAttribute('hidden', '');
+      return;
+    }
+
+    let isApplied = !!(appliedRewards?.points);
+
+    // Sync OrderSummary line on initial load
+    rewardLineState.applied = isApplied ? appliedRewards : null;
+    if (isApplied) {
+      // Re-emit cached cart data so updateLineItems runs with the correct state
+      events.emit('cart/data', cartData);
+    }
+
+    $container.innerHTML = '';
+    const $section = document.createElement('div');
+    $section.className = 'cart__rewards-section';
+
+    const $header = document.createElement('p');
+    $header.className = 'cart__rewards-header';
+    $header.textContent = placeholders?.Global?.RewardsTitle || 'Reward Points';
+
+    const formatted = new Intl.NumberFormat(undefined, {
+      style: 'currency', currency: balance.money.currency,
+    }).format(balance.money.value);
+    const $balance = document.createElement('p');
+    $balance.className = 'cart__rewards-balance';
+    $balance.textContent = `${Math.floor(balance.points).toLocaleString()} points available (${formatted})`;
+
+    const $applied = document.createElement('p');
+    $applied.className = 'cart__rewards-applied';
+    $applied.hidden = true;
+
+    const $error = document.createElement('p');
+    $error.className = 'cart__rewards-error';
+    $error.hidden = true;
+
+    const $buttonWrapper = document.createElement('div');
+    $buttonWrapper.className = 'cart__rewards-action';
+
+    $section.append($header, $balance, $applied, $error, $buttonWrapper);
+    $container.appendChild($section);
+    $container.removeAttribute('hidden');
+
+    function updateAppliedDisplay(rewardData) {
+      if (rewardData?.points) {
+        const appliedFormatted = new Intl.NumberFormat(undefined, {
+          style: 'currency', currency: rewardData.money.currency,
+        }).format(rewardData.money.value);
+        $applied.textContent = `${placeholders?.Global?.RewardsAppliedLabel || 'Applied'}: -${appliedFormatted} (${Math.floor(rewardData.points)} pts)`;
+        $applied.hidden = false;
+      } else {
+        $applied.hidden = true;
+      }
+    }
+
+    // Show initial applied state
+    if (isApplied && appliedRewards) {
+      updateAppliedDisplay(appliedRewards);
+    }
+
+    let buttonInstance = null;
+    async function renderButton(applied, loading = false) {
+      const label = applied
+        ? (placeholders?.Global?.RewardsRemoveButton || 'Remove Reward Points')
+        : (placeholders?.Global?.RewardsApplyButton || 'Apply Reward Points');
+
+      if (buttonInstance) {
+        buttonInstance.setProps((prev) => ({ ...prev, children: label, disabled: loading }));
+      } else {
+        buttonInstance = await UI.render(Button, {
+          children: label,
+          variant: 'secondary',
+          disabled: loading,
+          onClick: async () => {
+            $error.hidden = true;
+            renderButton(isApplied, true);
+            try {
+              if (isApplied) {
+                await removeRewardPoints(cartId);
+                isApplied = false;
+                rewardLineState.applied = null;
+                updateAppliedDisplay(null);
+              } else {
+                const result = await applyRewardPoints(cartId);
+                isApplied = true;
+                rewardLineState.applied = result;
+                updateAppliedDisplay(result);
+              }
+              renderButton(isApplied, false);
+              await Cart.refreshCart();
+            } catch (err) {
+              $error.textContent = err.message || (placeholders?.Global?.RewardsError || 'Something went wrong. Please try again.');
+              $error.hidden = false;
+              renderButton(isApplied, false);
+            }
+          },
+        })($buttonWrapper);
+      }
+    }
+
+    await renderButton(isApplied);
+  }
+
+  events.on(
+    'authenticated',
+    (isAuthenticated) => {
+      if (isAuthenticated) {
+        initRewardsSection($rewards);
+      } else {
+        $rewards.setAttribute('hidden', '');
+        $rewards.innerHTML = '';
+      }
+    },
+    { eager: true },
+  );
 
   let cartViewEventPublished = false;
   // Events

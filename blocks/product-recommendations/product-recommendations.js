@@ -117,7 +117,9 @@ export default async function decorate(block) {
       container.innerHTML = '';
     }
 
-    const storeViewCode = getConfigValue('headers.cs.Magento-Store-View-Code');
+    const storeViewCode = getConfigValue('headers.cs.Magento-Store-View-Code')
+      || getConfigValue('headers.cs.AC-View-ID')
+      || 'default';
     const createProductLink = (item) => getProductLink(item.urlKey, item.sku);
 
     // Get product view history
@@ -321,5 +323,7 @@ export default async function decorate(block) {
       });
     });
     inViewObserver.observe(section);
+  } else {
+    debouncedLoadRecommendation(false);
   }
 }

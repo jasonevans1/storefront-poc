@@ -9,8 +9,8 @@
       "Bash(curl:*)",
       "Bash(python3:*)",
       "WebFetch(domain:developer.adobe.com)",
-      "Bash(echo === $f ===:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Skill(playwright-cli)"
     ]
   }
 }
