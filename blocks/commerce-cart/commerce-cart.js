@@ -43,7 +43,6 @@ import {
   getProductLink,
   checkIsAuthenticated,
   ACCEPTED_FILE_TYPES,
-  fetchPlaceholders, rootLink, getProductLink,
 } from '../../scripts/commerce.js';
 import {
   fetchRewardPointsBalance,
