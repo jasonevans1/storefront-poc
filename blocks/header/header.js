@@ -198,6 +198,19 @@ export default async function decorate(block) {
 
   const navSections = nav.querySelector('.nav-sections');
   if (navSections) {
+    if (!checkIsAuthenticated()) {
+      const navSectionsList = navSections.querySelector('.default-content-wrapper > ul');
+      if (navSectionsList) {
+        const createAccountItem = document.createElement('li');
+        createAccountItem.innerHTML = `<a href="${rootLink('/customer/create')}">${labels.Global?.CreateAccount ?? 'Create an Account'}</a>`;
+
+        const registerCompanyItem = document.createElement('li');
+        registerCompanyItem.innerHTML = `<a href="${rootLink('/customer/company/create')}">${labels.Global?.RegisterCompany ?? 'Register a Company'}</a>`;
+
+        navSectionsList.append(createAccountItem, registerCompanyItem);
+      }
+    }
+
     navSections
       .querySelectorAll(':scope .default-content-wrapper > ul > li')
       .forEach((navSection) => {
