@@ -274,6 +274,10 @@ button {
   font: inherit;
 }
 
+strong {
+  font-weight: 700;
+}
+
 /* links */
 a:not(.dropin-design a) {
   color: var(--color-brand-500);

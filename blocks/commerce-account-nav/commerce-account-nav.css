@@ -57,3 +57,7 @@
 .commerce-account-nav__item--active {
     background-color: var(--color-neutral-200);
 }
+
+.commerce-account-nav:empty {
+    display: none;
+}
