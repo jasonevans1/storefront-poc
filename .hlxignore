@@ -1,7 +1,9 @@
 .*
+!.well-known
 *.md
 *.d.ts
 *.map
+!scripts/__dropins__/**/*.map
 karma.config.js
 LICENSE
 package.json

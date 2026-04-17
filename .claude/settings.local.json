@@ -10,7 +10,13 @@
       "Bash(python3:*)",
       "WebFetch(domain:developer.adobe.com)",
       "Bash(ls:*)",
-      "Skill(playwright-cli)"
+      "Skill(playwright-cli)",
+      "Bash(gh pr *)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(npm install *)",
+      "WebFetch(domain:main--storefront-poc--jasonevans1.aem.live)",
+      "WebFetch(domain:main--storefront-poc--jasonevans1.aem.page)"
     ]
   }
 }

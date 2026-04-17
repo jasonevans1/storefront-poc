@@ -11,7 +11,7 @@ export default async function decorate(block) {
       throw new Error('No type found in enrichment block configuration');
     }
 
-    if (type === 'product') {
+    if (type.toLowerCase() === 'product') {
       const productSku = getProductSku();
       if (!productSku) {
         throw new Error('No product SKU found in URL');
@@ -19,7 +19,7 @@ export default async function decorate(block) {
       filters.products = productSku;
     }
 
-    if (type === 'category') {
+    if (type.toLowerCase() === 'category') {
       // Look for PLP block using "product-list-page" block selector
       const plpBlock = document.querySelector('.product-list-page');
       if (!plpBlock) {
@@ -40,7 +40,20 @@ export default async function decorate(block) {
     const index = await fetchIndex('enrichment/enrichment');
     const matchingFragments = index.data
       .filter((fragment) => Object.keys(filters).every((filterKey) => {
-        const values = JSON.parse(fragment[filterKey]);
+        const raw = fragment[filterKey];
+        let values;
+        if (Array.isArray(raw)) {
+          values = raw.map((v) => (typeof v === 'string' ? v.trim() : v));
+        } else {
+          const str = String(raw ?? '');
+          try {
+            values = JSON.parse(str);
+          } catch {
+            values = str.split(',').map((v) => v.trim()).filter(Boolean);
+          }
+          if (!Array.isArray(values)) values = [values];
+        }
+        if (values.length === 0) return filterKey === 'positions';
         return values.includes(filters[filterKey]);
       }))
       .map((fragment) => fragment.path);
