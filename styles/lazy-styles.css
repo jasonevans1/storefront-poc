@@ -3,3 +3,13 @@
 .wishlist-wishlist__content.wishlist-wishlist__content--empty {
     --spacing-xxbig:  0;
 }
+
+.dropin-pagination_list-item button,
+.dropin-pagination_list-item a {
+    font-size: 2rem;
+}
+
+.dropin-pagination_list-item--active {
+    width: 24px;
+    height: 24px;
+}

@@ -16,7 +16,8 @@
       "WebFetch(domain:raw.githubusercontent.com)",
       "Bash(npm install *)",
       "WebFetch(domain:main--storefront-poc--jasonevans1.aem.live)",
-      "WebFetch(domain:main--storefront-poc--jasonevans1.aem.page)"
+      "WebFetch(domain:main--storefront-poc--jasonevans1.aem.page)",
+      "WebFetch(domain:experienceleague.adobe.com)"
     ]
   }
 }
