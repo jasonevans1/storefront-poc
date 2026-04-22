@@ -61,6 +61,7 @@ import {
   transformCartAddressToFormValues,
 } from '@dropins/storefront-checkout/lib/utils.js';
 import { getCartAppliedRewards } from '../../scripts/rewards.js';
+import { fetchDeliveryFee, getDeliveryFeeParams } from '../../scripts/delivery-fee.js';
 
 // Checkout Dropin Libs
 
@@ -252,7 +253,7 @@ export const renderLoginForm = async (container) => renderContainer(
   async () => CheckoutProvider.render(LoginForm, {
     name: LOGIN_FORM_NAME,
     onSignInClick: async (initialEmailValue) => {
-      const signInForm = document.createElement('div');
+      const $signInForm = document.createElement('div');
 
       AuthProvider.render(AuthCombine, {
         signInFormConfig: {
@@ -266,9 +267,9 @@ export const renderLoginForm = async (container) => renderContainer(
           },
         },
         resetPasswordFormConfig: {},
-      })(signInForm);
+      })($signInForm);
 
-      await showModal(signInForm);
+      await showModal($signInForm);
     },
     onSignOutClick: () => {
       authApi.revokeCustomerToken();
@@ -405,9 +406,9 @@ export const renderTermsAndConditions = async (container) => renderContainer(
  * @returns {void}
  */
 export const renderEstimateShipping = (ctx) => {
-  const estimateShippingForm = document.createElement('div');
-  CheckoutProvider.render(EstimateShipping)(estimateShippingForm);
-  ctx.appendChild(estimateShippingForm);
+  const $estimateShippingForm = document.createElement('div');
+  CheckoutProvider.render(EstimateShipping)($estimateShippingForm);
+  ctx.appendChild($estimateShippingForm);
 };
 
 /**
@@ -416,9 +417,9 @@ export const renderEstimateShipping = (ctx) => {
  * @returns {void}
  */
 export const renderCartCoupons = (ctx) => {
-  const coupons = document.createElement('div');
-  CartProvider.render(Coupons)(coupons);
-  ctx.appendChild(coupons);
+  const $coupons = document.createElement('div');
+  CartProvider.render(Coupons)($coupons);
+  ctx.appendChild($coupons);
 };
 
 /**
@@ -427,9 +428,9 @@ export const renderCartCoupons = (ctx) => {
  * @returns {void}
  */
 export const renderGiftCards = (ctx) => {
-  const giftCards = document.createElement('div');
-  CartProvider.render(GiftCards)(giftCards);
-  ctx.appendChild(giftCards);
+  const $giftCards = document.createElement('div');
+  CartProvider.render(GiftCards)($giftCards);
+  ctx.appendChild($giftCards);
 };
 
 /**
@@ -438,7 +439,7 @@ export const renderGiftCards = (ctx) => {
  * @returns {void}
  */
 export const renderCartGiftOptions = (ctx) => {
-  const giftOptions = document.createElement('div');
+  const $giftOptions = document.createElement('div');
 
   CartProvider.render(GiftOptions, {
     item: ctx.item,
@@ -451,14 +452,21 @@ export const renderCartGiftOptions = (ctx) => {
     slots: {
       SwatchImage: swatchImageSlot,
     },
-  })(giftOptions);
+  })($giftOptions);
 
-  ctx.appendChild(giftOptions);
+  ctx.appendChild($giftOptions);
 };
 
 // ============================================================================
 // SUMMARY CONTAINERS
 // ============================================================================
+
+/**
+ * Mutable state reference for the delivery fee line item.
+ * Exported so task 006 can update it externally when the shipping address changes.
+ * @type {{ fee: {amount: number, label: string, currency: string}|null }}
+ */
+export const deliveryFeeState = { fee: null };
 
 /**
  * Renders order summary with estimate shipping, coupons, and gift cards slots
@@ -474,22 +482,59 @@ export const renderOrderSummary = async (container) => renderContainer(
       : null;
     const rewardLineState = { applied: appliedRewards?.points ? appliedRewards : null };
 
+    // Fetch initial delivery fee if shipping address is known
+    const feeParams = getDeliveryFeeParams(cartData);
+    if (feeParams) {
+      deliveryFeeState.fee = await fetchDeliveryFee(feeParams).catch(() => null);
+    }
+
     return CartProvider.render(OrderSummary, {
       updateLineItems: (lineItems) => {
-        if (!rewardLineState.applied?.points) return lineItems;
-        const formatted = new Intl.NumberFormat(undefined, {
-          style: 'currency', currency: rewardLineState.applied.money.currency,
-        }).format(rewardLineState.applied.money.value);
-        return [...lineItems, {
-          key: 'rewardPointsDiscount',
-          sortOrder: 650,
-          content: h(
-            'div',
-            { className: 'cart-order-summary__entry cart-order-summary__discount' },
-            h('span', { className: 'cart-order-summary__label' }, 'Reward Points'),
-            h('span', { className: 'cart-order-summary__price' }, `-${formatted}`),
-          ),
-        }];
+        let result = lineItems;
+
+        // Add delivery fee line item if present (sortOrder 600 — before reward points at 650)
+        if (deliveryFeeState.fee) {
+          const formatted = new Intl.NumberFormat(undefined, {
+            style: 'currency',
+            currency: deliveryFeeState.fee.currency || 'USD',
+          }).format(deliveryFeeState.fee.amount);
+          result = [
+            ...result,
+            {
+              key: 'deliveryFee',
+              sortOrder: 600,
+              content: h(
+                'div',
+                { className: 'cart-order-summary__entry cart-order-summary__surcharge' },
+                h('span', { className: 'cart-order-summary__label' }, deliveryFeeState.fee.label),
+                h('span', { className: 'cart-order-summary__price' }, formatted),
+              ),
+            },
+          ];
+        }
+
+        // Existing reward points injection
+        if (rewardLineState.applied?.points) {
+          const rewardFormatted = new Intl.NumberFormat(undefined, {
+            style: 'currency',
+            currency: rewardLineState.applied.money.currency,
+          }).format(rewardLineState.applied.money.value);
+          result = [
+            ...result,
+            {
+              key: 'rewardPointsDiscount',
+              sortOrder: 650,
+              content: h(
+                'div',
+                { className: 'cart-order-summary__entry cart-order-summary__discount' },
+                h('span', { className: 'cart-order-summary__label' }, 'Reward Points'),
+                h('span', { className: 'cart-order-summary__price' }, `-${rewardFormatted}`),
+              ),
+            },
+          ];
+        }
+
+        return result;
       },
       slots: {
         EstimateShipping: renderEstimateShipping,
@@ -516,30 +561,30 @@ export const renderCartSummaryList = async (container) => renderContainer(
         Heading: (headingCtx) => {
           const title = placeholders?.Checkout?.Summary?.heading;
 
-          const cartSummaryListHeading = document.createElement('div');
-          cartSummaryListHeading.classList.add('cart-summary-list__heading');
+          const $cartSummaryListHeading = document.createElement('div');
+          $cartSummaryListHeading.classList.add('cart-summary-list__heading');
 
-          const cartSummaryListHeadingText = document.createElement('div');
-          cartSummaryListHeadingText.classList.add(
+          const $cartSummaryListHeadingText = document.createElement('div');
+          $cartSummaryListHeadingText.classList.add(
             'cart-summary-list__heading-text',
           );
 
-          cartSummaryListHeadingText.innerText = title?.replace(
+          $cartSummaryListHeadingText.innerText = title?.replace(
             '({count})',
             headingCtx.count ? `(${headingCtx.count})` : '',
           );
-          const editCartLink = document.createElement('a');
-          editCartLink.classList.add('cart-summary-list__edit');
-          editCartLink.href = rootLink('/cart');
-          editCartLink.rel = 'noreferrer';
-          editCartLink.innerText = placeholders?.Checkout?.Summary?.Edit;
+          const $editCartLink = document.createElement('a');
+          $editCartLink.classList.add('cart-summary-list__edit');
+          $editCartLink.href = rootLink('/cart');
+          $editCartLink.rel = 'noreferrer';
+          $editCartLink.innerText = placeholders?.Checkout?.Summary?.Edit;
 
-          cartSummaryListHeading.appendChild(cartSummaryListHeadingText);
-          cartSummaryListHeading.appendChild(editCartLink);
-          headingCtx.appendChild(cartSummaryListHeading);
+          $cartSummaryListHeading.appendChild($cartSummaryListHeadingText);
+          $cartSummaryListHeading.appendChild($editCartLink);
+          headingCtx.appendChild($cartSummaryListHeading);
 
           headingCtx.onChange((nextHeadingCtx) => {
-            cartSummaryListHeadingText.innerText = title?.replace(
+            $cartSummaryListHeadingText.innerText = title?.replace(
               '({count})',
               nextHeadingCtx.count ? `(${nextHeadingCtx.count})` : '',
             );
@@ -579,9 +624,9 @@ export const renderPlaceOrder = async (container, options = {}) => renderContain
     handlePlaceOrder: options.handlePlaceOrder,
     slots: {
       Content: (placeOrderCtx) => {
-        const spanElement = document.createElement('span');
-        spanElement.innerText = options.b2bIsPoEnabled ? 'Place Purchase Order' : 'Place Order';
-        placeOrderCtx.replaceWith(spanElement);
+        const $spanElement = document.createElement('span');
+        $spanElement.innerText = options.b2bIsPoEnabled ? 'Place Purchase Order' : 'Place Order';
+        placeOrderCtx.replaceWith($spanElement);
       },
     },
   })(container),

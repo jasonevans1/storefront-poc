@@ -38,7 +38,8 @@
            "rootCategory": "YOUR_ROOT_CATEGORY_ID"
          }
       },
-      "commerce-companies-enabled": true
+      "commerce-companies-enabled": true,
+      "delivery-fee-calculate-url": "https://{OW_NAMESPACE}.adobeioruntime.net/api/v1/web/{PACKAGE}/delivery-fee/calculate"
     }
   }
 }
