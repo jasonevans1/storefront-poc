@@ -4,6 +4,26 @@ globs:
 alwaysApply: true
 ---
 
+# Adobe Commerce Storefront POC
+
+Storefront for Adobe Commerce on Edge Delivery Services. Uses EDS blocks + Adobe Commerce Dropins (`@dropins/`).
+
+## Commands
+```bash
+npm start       # Start dev server (aem up)
+npm run lint    # Lint JS + CSS
+npm run lint:fix  # Auto-fix lint issues
+```
+
+## Detailed Configuration
+- `.claude/project-overview.md` — project identity and tech stack
+- `.claude/architecture.md` — directory structure and patterns
+- `.claude/testing.md` — validation approach
+- `.claude/code-standards.md` — ESLint rules and naming conventions
+
+---
+
+
 # Dropins, Containers, and Slots - Comprehensive Rules
 
 ## Dropins Overview
@@ -24,7 +44,7 @@ alwaysApply: true
 - **MANDATORY: Never assume slot names** - always check documentation first
 - **MANDATORY: Use container props and interface if possible before using CSS** by using the documented interface, like Slots or container arguments, before using CSS
 - A dropin must be first initialized before use. This is done in the `scripts/initializers` folder, usually once per dropin.
-- Use the Chrome MCP to validate changes to frontend code such as that in `blocks/`.
+- Use the playwright-cli skill (`/playwright-cli`) to validate changes to frontend code such as that in `blocks/`.
 
 ## Documentation Access
 
