@@ -61,7 +61,6 @@ import {
   transformCartAddressToFormValues,
 } from '@dropins/storefront-checkout/lib/utils.js';
 import { getCartAppliedRewards } from '../../scripts/rewards.js';
-import { fetchDeliveryFee, getDeliveryFeeParams } from '../../scripts/delivery-fee.js';
 
 // Checkout Dropin Libs
 
@@ -462,13 +461,6 @@ export const renderCartGiftOptions = (ctx) => {
 // ============================================================================
 
 /**
- * Mutable state reference for the delivery fee line item.
- * Exported so task 006 can update it externally when the shipping address changes.
- * @type {{ fee: {amount: number, label: string, currency: string}|null }}
- */
-export const deliveryFeeState = { fee: null };
-
-/**
  * Renders order summary with estimate shipping, coupons, and gift cards slots
  * @param {HTMLElement} container - DOM element to render order summary in
  * @returns {Promise<Object>} - The rendered order summary component
@@ -482,36 +474,9 @@ export const renderOrderSummary = async (container) => renderContainer(
       : null;
     const rewardLineState = { applied: appliedRewards?.points ? appliedRewards : null };
 
-    // Fetch initial delivery fee if shipping address is known
-    const feeParams = getDeliveryFeeParams(cartData);
-    if (feeParams) {
-      deliveryFeeState.fee = await fetchDeliveryFee(feeParams).catch(() => null);
-    }
-
     return CartProvider.render(OrderSummary, {
       updateLineItems: (lineItems) => {
         let result = lineItems;
-
-        // Add delivery fee line item if present (sortOrder 600 — before reward points at 650)
-        if (deliveryFeeState.fee) {
-          const formatted = new Intl.NumberFormat(undefined, {
-            style: 'currency',
-            currency: deliveryFeeState.fee.currency || 'USD',
-          }).format(deliveryFeeState.fee.amount);
-          result = [
-            ...result,
-            {
-              key: 'deliveryFee',
-              sortOrder: 600,
-              content: h(
-                'div',
-                { className: 'cart-order-summary__entry cart-order-summary__surcharge' },
-                h('span', { className: 'cart-order-summary__label' }, deliveryFeeState.fee.label),
-                h('span', { className: 'cart-order-summary__price' }, formatted),
-              ),
-            },
-          ];
-        }
 
         // Existing reward points injection
         if (rewardLineState.applied?.points) {

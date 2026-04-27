@@ -38,8 +38,7 @@
            "rootCategory": "YOUR_ROOT_CATEGORY_ID"
          }
       },
-      "commerce-companies-enabled": true,
-      "delivery-fee-calculate-url": "https://291222-516bronzepike-stage.adobeioruntime.net/api/v1/web/delivery-fee/calculate"
+      "commerce-companies-enabled": true
     }
   }
 }
