@@ -27,8 +27,7 @@
         }
       },
       "commerce-companies-enabled": true,
-      "commerce-b2b-enabled": true,
-      "delivery-fee-calculate-url": "https://291222-516bronzepike-stage.adobeioruntime.net/api/v1/web/delivery-fee/calculate"
+      "commerce-b2b-enabled": true
     }
   }
 }

@@ -8,9 +8,6 @@ import { initReCaptcha } from '@dropins/tools/recaptcha.js';
 // Order Dropin Modules
 import * as orderApi from '@dropins/storefront-order/api.js';
 
-// Cart Dropin API
-import * as cartApi from '@dropins/storefront-cart/api.js';
-
 // Checkout Dropin Libraries
 import {
   createScopedSelector,
@@ -31,7 +28,6 @@ import { createCheckoutFragment, selectors } from './fragments.js';
 
 // Container functions
 import {
-  deliveryFeeState,
   renderAddressForm,
   renderBillingAddressFormSkeleton,
   renderBillToShippingAddress,
@@ -51,9 +47,6 @@ import {
   renderShippingMethods,
   renderTermsAndConditions,
 } from './containers.js';
-
-// Delivery fee
-import { fetchDeliveryFee } from '../../scripts/delivery-fee.js';
 
 // Constants
 import {
@@ -77,58 +70,6 @@ import '../../scripts/initializers/payment-services.js';
 import { renderCheckoutSuccess, preloadCheckoutSuccess } from '../commerce-checkout-success/commerce-checkout-success.js';
 
 preloadCheckoutSuccess();
-
-// Track previous shipping address for change detection to avoid unnecessary API calls
-let lastFeeAddressKey = null;
-
-/**
- * Refreshes the delivery fee when the shipping address changes during checkout.
- * Extracts address from the checkout Cart model (shippingAddresses[0].country.code / region.code),
- * which differs from the cart CartModel that uses addresses.shipping[0].countryCode.
- *
- * @param {Object} checkoutData - Cart object from checkout/updated or checkout/initialized event
- */
-async function refreshDeliveryFee(checkoutData) {
-  const addr = checkoutData?.shippingAddresses?.[0];
-  const country = addr?.country?.code;
-  const region = addr?.region?.code ?? '';
-  const feeKey = country ? `${country}:${region}` : null;
-
-  // Skip if address country+region have not changed
-  if (feeKey === lastFeeAddressKey) return;
-  lastFeeAddressKey = feeKey;
-
-  if (!feeKey) {
-    deliveryFeeState.fee = null;
-    return;
-  }
-
-  const cartData = cartApi.getCartDataFromCache();
-  const subtotal = cartData?.subtotal?.excludingTax?.value ?? 0;
-  const currency = cartData?.subtotal?.excludingTax?.currency ?? 'USD';
-
-  if (subtotal <= 0) {
-    deliveryFeeState.fee = null;
-    return;
-  }
-
-  try {
-    deliveryFeeState.fee = await fetchDeliveryFee({
-      country,
-      region,
-      subtotal,
-      currency,
-    });
-  } catch {
-    deliveryFeeState.fee = null;
-  }
-
-  // Trigger OrderSummary to re-render by refreshing cart data.
-  // The updateLineItems callback in renderOrderSummary reads deliveryFeeState.fee,
-  // so refreshing the cart causes OrderSummary to re-invoke updateLineItems with
-  // the updated fee value.
-  await cartApi.refreshCart();
-}
 
 function redirectToCartIfEmpty(cartData) {
   const isOrderPlaced = events.lastPayload('order/placed') !== undefined;
@@ -358,7 +299,6 @@ export default async function decorate(block) {
   async function handleCheckoutUpdated(data) {
     if (!data) return;
     await initializeCheckout(data);
-    await refreshDeliveryFee(data);
   }
 
   function handleAuthenticated(authenticated) {
