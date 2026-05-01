@@ -55,6 +55,26 @@ function initCarouselFades(block) {
     // ResizeObserver: fires when the scroller's own dimensions change (container/viewport resize).
     new ResizeObserver(updateFades).observe(scroller);
 
+    // Nav buttons for desktop (touch devices use drag scroll).
+    const prevBtn = document.createElement('button');
+    prevBtn.type = 'button';
+    prevBtn.className = 'recommendations__nav recommendations__nav--prev';
+    prevBtn.setAttribute('aria-label', 'Previous products');
+
+    const nextBtn = document.createElement('button');
+    nextBtn.type = 'button';
+    nextBtn.className = 'recommendations__nav recommendations__nav--next';
+    nextBtn.setAttribute('aria-label', 'Next products');
+
+    prevBtn.addEventListener('click', () => {
+      scroller.scrollBy({ left: -(scroller.clientWidth * 0.75), behavior: 'smooth' });
+    });
+    nextBtn.addEventListener('click', () => {
+      scroller.scrollBy({ left: scroller.clientWidth * 0.75, behavior: 'smooth' });
+    });
+
+    grid.append(prevBtn, nextBtn);
+
     return true;
   }
 

@@ -20,7 +20,8 @@
       "WebFetch(domain:experienceleague.adobe.com)",
       "Bash(./node_modules/.bin/playwright-cli open *)",
       "Bash(npx playwright-cli *)",
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "Bash(node *)"
     ]
   }
 }

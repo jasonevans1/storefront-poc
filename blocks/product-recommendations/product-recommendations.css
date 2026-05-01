@@ -24,7 +24,7 @@
   color: var(--color-neutral-900);
 }
 
-/* ── Scroll container: hide scrollbar, keep scroll ── */
+/* ── Scroll containers: constrain grid + hide all scrollbars ── */
 .product-recommendations .dropin-content-grid__content {
   overflow-x: auto;
   scrollbar-width: none; /* Firefox */
@@ -33,6 +33,75 @@
 
 .product-recommendations .dropin-content-grid__content::-webkit-scrollbar {
   display: none;
+}
+
+.product-recommendations .recommendations-carousel__content {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+  margin-left: 0; /* cancel dropin's negative bleed margin */
+}
+
+.product-recommendations .recommendations-carousel__content::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Desktop nav arrows ── */
+.product-recommendations .recommendations__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  display: none;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 50%;
+  border: var(--shape-border-width-1) solid var(--color-neutral-300);
+  background: var(--background-color, #fff);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 12%);
+}
+
+.product-recommendations .recommendations__nav--prev {
+  left: 0;
+}
+
+.product-recommendations .recommendations__nav--next {
+  right: 0;
+}
+
+.product-recommendations .recommendations__nav::before {
+  content: '';
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-top: 2px solid var(--color-neutral-700);
+  border-right: 2px solid var(--color-neutral-700);
+}
+
+.product-recommendations .recommendations__nav--prev::before {
+  transform: rotate(-135deg) translate(-1px, 1px);
+}
+
+.product-recommendations .recommendations__nav--next::before {
+  transform: rotate(45deg) translate(-1px, 1px);
+}
+
+.product-recommendations .dropin-content-grid[data-fade-left] .recommendations__nav--prev {
+  display: flex;
+}
+
+.product-recommendations .dropin-content-grid[data-fade-right] .recommendations__nav--next {
+  display: flex;
+}
+
+/* Hide on touch — drag scroll is sufficient */
+@media (hover: none) {
+  .product-recommendations .recommendations__nav {
+    display: none !important;
+  }
 }
 
 /* ── Edge fade: left + right overflow indicators ── */
@@ -70,14 +139,6 @@
 
 .product-recommendations .dropin-content-grid[data-fade-right]::after {
   opacity: 1;
-}
-
-/* ── Carousel row ── */
-.product-recommendations .recommendations-carousel__content {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: var(--spacing-medium);
-  padding-bottom: var(--spacing-small);
 }
 
 /* ── Individual card ── */
@@ -194,9 +255,9 @@
   color: var(--color-brand-500);
 }
 
-/* ── Responsive: narrower cards on small screens ── */
-@media (max-width: 599px) {
+/* ── Responsive: card fills dropin's 80vw slot on small screens ── */
+@media (max-width: 767px) {
   .product-recommendations .dropin-product-item-card {
-    width: 180px;
+    width: 100%;
   }
 }
