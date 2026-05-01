@@ -70,8 +70,7 @@
   padding: 0;
   margin: 0;
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-flow: row wrap;
   gap: var(--spacing-small);
 }
 
@@ -101,17 +100,29 @@
   text-decoration: none;
 }
 
-/* ── Shared: first CTA uses the site's primary button style ── */
+/* ── First CTA: primary style (logged-out) / secondary style (logged-in) ── */
 .homepage-personalization-banner li:first-child a {
   background-color: var(--color-brand-500);
   border-color: var(--color-brand-500);
   color: var(--color-neutral-50);
 }
 
+/* Logged-in: all 3 CTAs are equal weight — no filled primary */
+.homepage-personalization-banner-logged-in li:first-child a {
+  background-color: transparent;
+  color: var(--color-brand-500);
+}
+
 .homepage-personalization-banner li:first-child a:hover {
   background-color: var(--color-brand-600);
   border-color: var(--color-brand-600);
   color: var(--color-neutral-50);
+}
+
+.homepage-personalization-banner-logged-in li:first-child a:hover {
+  background-color: transparent;
+  border-color: var(--color-brand-600);
+  color: var(--color-brand-600);
 }
 
 /* ── Responsive: single column on small screens ── */
@@ -128,19 +139,4 @@
   .homepage-personalization-banner .columns > div > div:not(.columns-img-col) {
     padding: var(--spacing-xbig) var(--spacing-medium);
   }
-}
-
-/* ── Logged-in: 3 CTAs — secondary style for all, no filled primary ──────
-   The welcome-back banner has 3 links (Shop Brakes, Shop Suspension,
-   View Account) — none is more primary than the others, so all are outlined.
-──────────────────────────────────────────────────────────────────────────── */
-.homepage-personalization-banner-logged-in li:first-child a {
-  background-color: transparent;
-  color: var(--color-brand-500);
-}
-
-.homepage-personalization-banner-logged-in li:first-child a:hover {
-  background-color: transparent;
-  color: var(--color-brand-600);
-  border-color: var(--color-brand-600);
 }
