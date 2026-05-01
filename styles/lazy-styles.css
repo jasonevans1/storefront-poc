@@ -13,3 +13,7 @@
     width: 24px;
     height: 24px;
 }
+
+.recommendations-product-list__content {
+    overflow: auto;
+}

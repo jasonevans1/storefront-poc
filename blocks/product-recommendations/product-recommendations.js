@@ -29,6 +29,43 @@ import '../../scripts/initializers/wishlist.js';
 
 const isMobile = window.matchMedia('only screen and (max-width: 900px)').matches;
 
+function initCarouselFades(block) {
+  if (block.dataset.fadesInit) return;
+
+  function setup() {
+    const grid = block.querySelector('.dropin-content-grid');
+    const scroller = block.querySelector('.recommendations-carousel__content');
+    if (!grid || !scroller) return false;
+
+    block.dataset.fadesInit = '1';
+
+    function updateFades() {
+      const atStart = scroller.scrollLeft <= 2;
+      const atEnd = scroller.scrollLeft + scroller.clientWidth >= scroller.scrollWidth - 2;
+      grid.toggleAttribute('data-fade-left', !atStart);
+      grid.toggleAttribute('data-fade-right', !atEnd);
+    }
+
+    scroller.addEventListener('scroll', updateFades, { passive: true });
+    window.addEventListener('resize', updateFades, { passive: true });
+
+    // MutationObserver: fires when product items are added, changing scrollWidth.
+    new MutationObserver(updateFades).observe(scroller, { childList: true });
+
+    // ResizeObserver: fires when the scroller's own dimensions change (container/viewport resize).
+    new ResizeObserver(updateFades).observe(scroller);
+
+    return true;
+  }
+
+  if (setup()) return;
+
+  // Preact commits the DOM asynchronously after the render promise resolves.
+  // Watch for the grid element to appear before wiring up listeners.
+  const mo = new MutationObserver(() => { if (setup()) mo.disconnect(); });
+  mo.observe(block, { childList: true, subtree: true });
+}
+
 /**
  * Gets product view history from localStorage
  * @param {string} storeViewCode - The store view code
@@ -236,6 +273,7 @@ export default async function decorate(block) {
       ]);
     } finally {
       isLoading = false;
+      initCarouselFades(block);
     }
   }
 

@@ -6,7 +6,6 @@ import { getMetadata } from '../../scripts/aem.js';
 import { loadFragment } from '../fragment/fragment.js';
 import {
   fetchPlaceholders, checkIsAuthenticated, getProductLink, rootLink,
-  CS_FETCH_GRAPHQL,
 } from '../../scripts/commerce.js';
 
 import { renderAuthDropdown } from './renderAuthDropdown.js';
@@ -564,21 +563,4 @@ export default async function decorate(block) {
   isDesktop.addEventListener('change', () => toggleMenu(nav, navSections, isDesktop.matches));
 
   renderAuthDropdown(navTools);
-
-  // Fetch and log categories from Adobe Commerce (ACaaS schema)
-  CS_FETCH_GRAPHQL.fetchGraphQl(`
-    query GetFullMenuNavigation {
-      navigation(family: "parts") {
-        slug
-        name
-        children {
-          slug
-          name
-        }
-      }
-    }
-  `).then((result) => {
-    // eslint-disable-next-line no-console
-    console.log('Commerce Categories (navigation):', result?.data?.navigation);
-  });
 }

@@ -1,63 +1,202 @@
-.product-recommendations .scrollable {
-    overflow-x: scroll;
-    scroll-snap-type: x mandatory;
-    padding-bottom: 1rem;
+/* stylelint-disable no-empty-source */
+
+.product-recommendations {
+  margin-bottom: var(--spacing-xxbig);
 }
 
-.product-recommendations .product-grid {
-    display: inline-flex;
-    flex-wrap: nowrap;
-    gap: 2rem;
-    margin: 0;
+/* ─── Product Recommendations Block ────────────────────────────────────────
+   Targets the dropin-rendered DOM inside .product-recommendations.
+   The dropin owns its own --dropin-* design tokens; we override only
+   layout, spacing, and visual presentation here.
+──────────────────────────────────────────────────────────────────────────── */
+
+/* ── Section heading ── */
+
+.product-recommendations .recommendations-product-list__heading {
+  padding: 0 0 var(--spacing-medium);
+  border-bottom: var(--shape-border-width-1) solid var(--color-neutral-300);
+  margin-bottom: var(--spacing-medium);
 }
 
-.product-recommendations .product-grid-item img {
-    width: 100%;
+.product-recommendations .recommendations-product-list__heading [data-testid="default-product-list-heading"] {
+  font: var(--type-headline-2-strong-font);
+  letter-spacing: var(--type-headline-2-strong-letter-spacing);
+  color: var(--color-neutral-900);
 }
 
-.product-recommendations .product-grid .product-grid-item a {
-    text-decoration: none;
+/* ── Scroll container: hide scrollbar, keep scroll ── */
+.product-recommendations .dropin-content-grid__content {
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
 }
 
-.product-recommendations .product-grid .product-grid-item a span {
-    overflow: hidden;
-    box-sizing: border-box;
-    margin: 0;
-    padding: .5rem 1rem 0 0;
-    display: inline-block;
+.product-recommendations .dropin-content-grid__content::-webkit-scrollbar {
+  display: none;
 }
 
-.product-recommendations .product-grid picture {
-    background: none;
-    display: block;
-    width: 300px;
-    aspect-ratio: 1 / 1.25;
+/* ── Edge fade: left + right overflow indicators ── */
+.product-recommendations .dropin-content-grid {
+  position: relative;
 }
 
-.product-recommendations .product-grid img {
-    display: inline-block;
-    vertical-align: middle;
-    width: 100%;
-    object-fit: contain;
-    background: none;
+.product-recommendations .dropin-content-grid::before,
+.product-recommendations .dropin-content-grid::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 48px;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.2s ease;
 }
 
-.product-recommendations .product-grid .placeholder {
-    background-color: var(--color-neutral-500);
-    scroll-snap-align: start;
+.product-recommendations .dropin-content-grid::before {
+  left: 0;
+  background: linear-gradient(to right, var(--background-color, #fff), transparent);
 }
 
-.product-recommendations .product-grid .placeholder img {
-    display: none;
+.product-recommendations .dropin-content-grid::after {
+  right: 0;
+  background: linear-gradient(to left, var(--background-color, #fff), transparent);
 }
 
-.product-recommendations .product-grid-item {
-    margin: 0;
-    scroll-snap-align: start;
+/* Fades shown via JS scroll tracking */
+.product-recommendations .dropin-content-grid[data-fade-left]::before {
+  opacity: 1;
+}
+
+.product-recommendations .dropin-content-grid[data-fade-right]::after {
+  opacity: 1;
+}
+
+/* ── Carousel row ── */
+.product-recommendations .recommendations-carousel__content {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: var(--spacing-medium);
+  padding-bottom: var(--spacing-small);
+}
+
+/* ── Individual card ── */
+.product-recommendations .dropin-product-item-card {
+  display: flex;
+  flex-direction: column;
+  width: 244px;
+  flex-shrink: 0;
+  border: var(--shape-border-width-1) solid var(--color-neutral-300);
+  scroll-snap-align: start;
+  background: var(--color-neutral-50);
+}
+
+/* ── Image container: square crop ── */
+.product-recommendations .dropin-product-item-card__image-container {
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+  background: var(--color-neutral-100);
+}
+
+.product-recommendations .dropin-product-item-card__image-container a,
+.product-recommendations .dropin-product-item-card__image-container picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.product-recommendations .dropin-product-item-card__image-container img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  padding: var(--spacing-small);
+  box-sizing: border-box;
+}
+
+/* ── Card content area ── */
+.product-recommendations .dropin-product-item-card__content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: var(--spacing-small);
+  gap: var(--spacing-xsmall);
+}
+
+/* ── Title ── */
+.product-recommendations .dropin-product-item-card__title a {
+  font: var(--type-body-2-strong-font);
+  letter-spacing: var(--type-body-2-strong-letter-spacing);
+  color: var(--color-neutral-900);
+  text-decoration: none;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.product-recommendations .dropin-product-item-card__title a:hover {
+  color: var(--color-brand-500);
+  text-decoration: none;
+}
+
+/* ── SKU — hide, it's noise for end users ── */
+.product-recommendations .dropin-product-item-card__sku {
+  display: none;
+}
+
+/* ── Price ── */
+.product-recommendations .dropin-product-item-card__price {
+  margin-top: auto;
+}
+
+.product-recommendations .dropin-price {
+  font: var(--type-body-2-strong-font);
+  letter-spacing: var(--type-body-2-strong-letter-spacing);
+  color: var(--color-neutral-800);
+}
+
+/* ── Footer: Add to Cart + Wishlist ── */
+.product-recommendations .dropin-product-item-card__action {
+  padding: var(--spacing-xsmall) 0;
+  border-top: var(--shape-border-width-1) solid var(--color-neutral-300);
+  margin-top: var(--spacing-xsmall);
 }
 
 .footer__wrapper {
-    display: flex;
-    gap: 10px;
-    align-items: center;
+  display: flex;
+  gap: var(--spacing-xsmall);
+  align-items: center;
+}
+
+/* ── Add to Cart button: full width, lighter weight ── */
+.footer__button--add-to-cart {
+  flex: 1;
+}
+
+.footer__button--add-to-cart .dropin-button--primary {
+  width: 100%;
+  justify-content: center;
+  font: var(--type-body-2-strong-font);
+  letter-spacing: var(--type-button-2-letter-spacing);
+  padding: 0.6rem var(--spacing-small);
+  border-radius: var(--shape-border-radius-3);
+}
+
+/* ── Wishlist icon button: subtler ── */
+.footer__button--wishlist-toggle .dropin-iconButton {
+  color: var(--color-neutral-500);
+  flex-shrink: 0;
+}
+
+.footer__button--wishlist-toggle .dropin-iconButton:hover {
+  color: var(--color-brand-500);
+}
+
+/* ── Responsive: narrower cards on small screens ── */
+@media (max-width: 599px) {
+  .product-recommendations .dropin-product-item-card {
+    width: 180px;
+  }
 }
