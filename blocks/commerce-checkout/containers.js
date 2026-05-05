@@ -501,26 +501,6 @@ export const renderOrderSummary = async (container) => renderContainer(
           ];
         }
 
-        if (deliveryFeeState.fee > 0) {
-          const feeFormatted = new Intl.NumberFormat(undefined, {
-            style: 'currency',
-            currency: deliveryFeeState.currency,
-          }).format(deliveryFeeState.fee);
-          result = [
-            ...result,
-            {
-              key: 'deliveryFee',
-              sortOrder: 600,
-              content: h(
-                'div',
-                { className: 'cart-order-summary__entry' },
-                h('span', { className: 'cart-order-summary__label' }, deliveryFeeState.name ?? 'Delivery Fee'),
-                h('span', { className: 'cart-order-summary__price' }, feeFormatted),
-              ),
-            },
-          ];
-        }
-
         const currentCartData = cartApi.getCartDataFromCache();
         const totalTax = currentCartData?.totalTax?.value ?? 0;
         const taxCurrency = currentCartData?.totalTax?.currency ?? deliveryFeeState.currency;
