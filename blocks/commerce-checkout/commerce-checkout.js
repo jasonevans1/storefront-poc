@@ -7,7 +7,6 @@ import { initReCaptcha } from '@dropins/tools/recaptcha.js';
 
 // Order Dropin Modules
 import * as orderApi from '@dropins/storefront-order/api.js';
-import * as cartApi from '@dropins/storefront-cart/api.js';
 
 // Checkout Dropin Libraries
 import {
@@ -47,10 +46,7 @@ import {
   renderShippingAddressFormSkeleton,
   renderShippingMethods,
   renderTermsAndConditions,
-  deliveryFeeState,
 } from './containers.js';
-
-import { fetchDeliveryFee } from '../../scripts/delivery-fee.js';
 
 // Constants
 import {
@@ -84,12 +80,6 @@ function redirectToCartIfEmpty(cartData) {
 }
 
 export default async function decorate(block) {
-  deliveryFeeState.fee = 0;
-  deliveryFeeState.name = null;
-  deliveryFeeState.currency = 'USD';
-
-  let lastFeeKey = null;
-
   const isB2BEnabled = getConfigValue('commerce-b2b-enabled');
   const permissions = events.lastPayload('auth/permissions');
 
@@ -309,34 +299,6 @@ export default async function decorate(block) {
   async function handleCheckoutUpdated(data) {
     if (!data) return;
     await initializeCheckout(data);
-
-    const addr = data?.shippingAddresses?.[0];
-    if (!addr?.country?.code) return;
-
-    const country = addr.country.code;
-    const region = addr.region?.code ?? '';
-
-    const currentCart = cartApi.getCartDataFromCache();
-    const subtotal = currentCart?.subtotal?.excludingTax?.value ?? 0;
-    const currency = currentCart?.subtotal?.excludingTax?.currency ?? 'USD';
-
-    const feeKey = `${country}:${region}:${subtotal}`;
-    if (feeKey === lastFeeKey) return;
-    lastFeeKey = feeKey;
-
-    const previousFee = deliveryFeeState.fee;
-    const { fee, name } = await fetchDeliveryFee(country, region, subtotal, currency);
-    deliveryFeeState.fee = fee;
-    deliveryFeeState.name = name;
-    deliveryFeeState.currency = currency;
-
-    if (previousFee === 0 && fee === 0) return;
-
-    if (typeof cartApi.refreshCart === 'function') {
-      await cartApi.refreshCart();
-    } else {
-      events.emit('cart/data', cartApi.getCartDataFromCache());
-    }
   }
 
   function handleAuthenticated(authenticated) {
