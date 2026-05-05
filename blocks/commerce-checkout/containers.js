@@ -86,6 +86,8 @@ import {
   SHIPPING_FORM_NAME,
 } from './constants.js';
 
+export const deliveryFeeState = { fee: 0, name: null, currency: 'USD' };
+
 /**
  * Container IDs for registry management
  * @enum {string}
@@ -494,6 +496,79 @@ export const renderOrderSummary = async (container) => renderContainer(
                 { className: 'cart-order-summary__entry cart-order-summary__discount' },
                 h('span', { className: 'cart-order-summary__label' }, 'Reward Points'),
                 h('span', { className: 'cart-order-summary__price' }, `-${rewardFormatted}`),
+              ),
+            },
+          ];
+        }
+
+        if (deliveryFeeState.fee > 0) {
+          const feeFormatted = new Intl.NumberFormat(undefined, {
+            style: 'currency',
+            currency: deliveryFeeState.currency,
+          }).format(deliveryFeeState.fee);
+          result = [
+            ...result,
+            {
+              key: 'deliveryFee',
+              sortOrder: 600,
+              content: h(
+                'div',
+                { className: 'cart-order-summary__entry' },
+                h('span', { className: 'cart-order-summary__label' }, deliveryFeeState.name ?? 'Delivery Fee'),
+                h('span', { className: 'cart-order-summary__price' }, feeFormatted),
+              ),
+            },
+          ];
+        }
+
+        const currentCartData = cartApi.getCartDataFromCache();
+        const totalTax = currentCartData?.totalTax?.value ?? 0;
+        const taxCurrency = currentCartData?.totalTax?.currency ?? deliveryFeeState.currency;
+
+        if (deliveryFeeState.fee > 0 && totalTax > 0) {
+          const flatTaxAmount = Math.max(
+            0,
+            Math.round((totalTax - deliveryFeeState.fee) * 100) / 100,
+          );
+          const feeFormatted = new Intl.NumberFormat(undefined, {
+            style: 'currency',
+            currency: deliveryFeeState.currency,
+          }).format(deliveryFeeState.fee);
+
+          const taxItem = result.find((i) => /tax/i.test(i.key));
+          const taxBase = taxItem?.sortOrder ?? 700;
+
+          if (flatTaxAmount > 0) {
+            const taxFormatted = new Intl.NumberFormat(undefined, {
+              style: 'currency',
+              currency: taxCurrency,
+            // TODO: source tax rate from a config or calculate response
+            }).format(flatTaxAmount);
+            result = [
+              ...result,
+              {
+                key: 'taxBreakdown',
+                sortOrder: taxBase + 1,
+                content: h(
+                  'div',
+                  { className: 'cart-order-summary__entry cart-order-summary__sub-entry' },
+                  h('span', { className: 'cart-order-summary__label' }, 'Tax (10%)'),
+                  h('span', { className: 'cart-order-summary__price' }, taxFormatted),
+                ),
+              },
+            ];
+          }
+
+          result = [
+            ...result,
+            {
+              key: 'deliveryFeeBreakdown',
+              sortOrder: taxBase + 2,
+              content: h(
+                'div',
+                { className: 'cart-order-summary__entry cart-order-summary__sub-entry' },
+                h('span', { className: 'cart-order-summary__label' }, deliveryFeeState.name ?? 'Delivery Fee'),
+                h('span', { className: 'cart-order-summary__price' }, feeFormatted),
               ),
             },
           ];
