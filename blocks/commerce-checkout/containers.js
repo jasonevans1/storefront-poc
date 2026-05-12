@@ -86,7 +86,6 @@ import {
   SHIPPING_FORM_NAME,
 } from './constants.js';
 
-
 /**
  * Container IDs for registry management
  * @enum {string}
