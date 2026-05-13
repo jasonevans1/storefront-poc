@@ -218,6 +218,58 @@
     display: none;
 }
 
+.cart-order-summary__subTotal {
+    order: 0;
+}
+
+.cart-order-summary__shipping {
+    order: 1;
+}
+
+.cart-order-summary__discount {
+    order: 2;
+}
+
+.cart-order-summary__discount .cart-order-summary__label,
+.cart-order-summary__discount .cart-order-summary__price,
+.cart-order-summary__applied-gift-cards .cart-order-summary__price {
+    --color-warning-800: var(--color-positive-800);
+}
+
+.cart-order-summary__sub-entry--california-delivery-fee {
+    color: var(--color-warning-800);
+    order: 3;
+}
+
+.cart-order-summary__sub-entry--flat-rate-tax {
+    border-bottom: var(--shape-border-width-1) solid var(--color-neutral-400);
+    padding-bottom: var(--spacing-xsmall);
+    order: 4;
+    margin-top: calc(var(--spacing-xsmall) * -1);
+}
+
+.cart-order-summary__sub-entry--california-delivery-fee,
+.cart-order-summary__sub-entry--flat-rate-tax {
+    padding: var(--spacing-xsmall);
+    background: var(--color-neutral-50);
+}
+
+.cart-order-summary__taxTotal {
+    order: 5;
+}
+
+.cart-order-summary__total {
+    order: 10;
+}
+
+.cart-order-summary__coupons {
+    order: 20;
+}
+
+.cart-order-summary__gift-cards {
+    order: 30;
+}
+
 @media only screen and (min-width: 320px) and (max-width: 768px) {
     .checkout__main,
     .checkout__aside {

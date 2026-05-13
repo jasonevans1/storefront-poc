@@ -518,7 +518,7 @@ export const renderOrderSummary = async (container) => renderContainer(
                 sortOrder: taxBase + 1 + idx,
                 content: h(
                   'div',
-                  { className: 'cart-order-summary__entry cart-order-summary__sub-entry' },
+                  { className: `cart-order-summary__entry cart-order-summary__sub-entry cart-order-summary__sub-entry--${(tax.label ?? 'tax').toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}` },
                   h('span', { className: 'cart-order-summary__label' }, tax.label ?? 'Tax'),
                   h('span', { className: 'cart-order-summary__price' }, formatted),
                 ),
