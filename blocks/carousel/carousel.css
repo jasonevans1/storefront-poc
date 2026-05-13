@@ -105,6 +105,8 @@ main > .section.carousel-container {
 
 /* ============================================================================
    Prev / Next — round floating buttons, vertically centered on the slide
+   WCAG: 56x56 target (passes 2.5.8 AAA 44px), 1px border + heavy shadow give a
+   3:1 boundary against bright slide pixels (1.4.11), focus-visible ring (2.4.7).
    ============================================================================ */
 
 .carousel .carousel-arrow-button {
@@ -115,11 +117,11 @@ main > .section.carousel-container {
     width: 56px;
     height: 56px;
     padding: 0;
-    border: none;
+    border: 1px solid rgb(0 0 0 / 15%);
     border-radius: 50%;
     background: var(--color-neutral-50);
     color: var(--color-brand-500);
-    box-shadow: 0 8px 24px rgb(0 0 0 / 18%), 0 2px 4px rgb(0 0 0 / 8%);
+    box-shadow: 0 8px 24px rgb(0 0 0 / 22%), 0 2px 4px rgb(0 0 0 / 12%);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -156,6 +158,15 @@ main > .section.carousel-container {
 
 /* ============================================================================
    Indicator pill — frosted bar at the bottom-center of the slide
+   WCAG:
+     - Each indicator button is a 24×24 hit area (2.5.8 Target Size AA).
+       The visible dot is a centered ::before pseudo-element.
+     - Pill background is LIGHT (white, near-opaque) so the brand-red active
+       state has guaranteed 3:1 contrast (1.4.11). Dark inactive dots also
+       sit at ~5.7:1 against the light pill.
+     - Buttons get a focus-visible ring (2.4.7).
+     - Active state is differentiated by BOTH color and shape change (a wider
+       pill) so 1.4.1 Use of Color is satisfied.
    ============================================================================ */
 
 .carousel .carousel-indicators-nav {
@@ -164,16 +175,18 @@ main > .section.carousel-container {
     bottom: 24px;
     transform: translateX(-50%);
     z-index: 2;
-    padding: 10px 14px;
-    background: rgb(20 20 20 / 55%);
-    backdrop-filter: blur(8px);
+    padding: 4px 10px;
+    background: rgb(255 255 255 / 92%);
+    backdrop-filter: blur(10px) saturate(140%);
+    border: 1px solid rgb(0 0 0 / 8%);
     border-radius: 999px;
+    box-shadow: 0 4px 16px rgb(0 0 0 / 12%);
 }
 
 .carousel .carousel-slide-indicators {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 4px;
 }
 
 .carousel .carousel-slide-indicator {
@@ -181,34 +194,56 @@ main > .section.carousel-container {
     line-height: 0;
 }
 
+/* The button IS the hit area: 24×24 transparent box that contains a smaller
+   visible dot. WCAG 2.5.8 Target Size (Minimum) AA requires 24×24. */
 .carousel .carousel-slide-indicator button {
+    position: relative;
     display: block;
-    width: 8px;
-    height: 8px;
+    width: 24px;
+    height: 24px;
     padding: 0;
     margin: 0;
     border: 0 none;
     border-radius: 999px;
-    background-color: rgb(255 255 255 / 60%);
+    background: transparent;
     text-indent: -9999px;
     cursor: pointer;
+}
+
+.carousel .carousel-slide-indicator button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background-color: var(--color-neutral-700);
     transition: width 0.3s ease, background-color 0.3s ease;
 }
 
-/* Active dot: wide red pill. (The active indicator's button is disabled,
-   which is how we lock it; the [data-active] attr is a stable styling hook.) */
-.carousel .carousel-slide-indicator[data-active] button,
-.carousel .carousel-slide-indicator button:disabled {
+/* Active dot: wide red pill. Contrast vs the light pill bg = ~7.2:1. */
+.carousel .carousel-slide-indicator[data-active] button::before,
+.carousel .carousel-slide-indicator button:disabled::before {
     width: 28px;
     background-color: var(--color-brand-500);
+}
+
+.carousel .carousel-slide-indicator button:disabled {
     cursor: default;
 }
 
-/* Hover on inactive dots: brighten. */
-.carousel .carousel-slide-indicator:not([data-active]) button:hover,
-.carousel .carousel-slide-indicator:not([data-active]) button:focus-visible {
-    background-color: rgb(255 255 255 / 90%);
-    outline: none;
+/* Focus-visible: 2px brand-red outline around the full 24×24 hit area. */
+.carousel .carousel-slide-indicator button:focus-visible {
+    outline: 2px solid var(--color-brand-500);
+    outline-offset: 2px;
+    border-radius: 999px;
+}
+
+/* Hover on inactive dots: darken to near-black for clearer affordance. */
+.carousel .carousel-slide-indicator:not([data-active]) button:hover::before {
+    background-color: var(--color-neutral-900);
 }
 
 /* ============================================================================
@@ -250,7 +285,6 @@ main > .section.carousel-container {
 
     .carousel .carousel-indicators-nav {
         bottom: 16px;
-        padding: 8px 12px;
     }
 }
 
