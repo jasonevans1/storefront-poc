@@ -1,8 +1,8 @@
 import { fetchPlaceholders } from '../../scripts/commerce.js';
 import { createOptimizedPicture } from '../../scripts/aem.js';
 
-const svgArrowLeft = '<svg width="30" height="30" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.69914 7.29289C9.08967 6.90237 9.72268 6.90237 10.1132 7.29289C10.5037 7.68342 10.5037 8.31643 10.1132 8.70696L7.82024 10.9999H19.4062C19.9585 10.9999 20.4062 11.4476 20.4062 11.9999C20.4062 12.5522 19.9585 12.9999 19.4062 12.9999H7.82024L10.1132 15.2929L10.1816 15.3691C10.5019 15.7618 10.4793 16.3408 10.1132 16.707C9.74709 17.0731 9.16809 17.0957 8.77532 16.7753L8.69914 16.707L4.69914 12.707C4.30862 12.3164 4.30862 11.6834 4.69914 11.2929L8.69914 7.29289Z" fill="currentColor" /></svg>';
-const svgArrowRight = '<svg width="30" height="30" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.6992 7.29289C15.0897 6.90237 15.7228 6.90237 16.1133 7.29289L20.1133 11.2929C20.5038 11.6834 20.5038 12.3164 20.1133 12.707L16.1133 16.707C15.7228 17.0975 15.0897 17.0975 14.6992 16.707C14.3087 16.3164 14.3087 15.6834 14.6992 15.2929L16.9922 12.9999H5.40625C4.85397 12.9999 4.40625 12.5522 4.40625 11.9999C4.40625 11.4476 4.85397 10.9999 5.40625 10.9999H16.9922L14.6992 8.70696L14.6309 8.63078C14.3105 8.23801 14.3331 7.65901 14.6992 7.29289Z" fill="currentColor"/></svg>';
+const svgArrowLeft = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const svgArrowRight = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
 let duration = 6000;
 
@@ -26,10 +26,13 @@ function updateActiveSlide(slide) {
 
   const indicators = block.querySelectorAll('.carousel-slide-indicator');
   indicators.forEach((indicator, idx) => {
+    const btn = indicator.querySelector('button');
     if (idx !== slideIndex) {
-      indicator.querySelector('button').removeAttribute('disabled');
+      btn.removeAttribute('disabled');
+      indicator.removeAttribute('data-active');
     } else {
-      indicator.querySelector('button').setAttribute('disabled', 'true');
+      btn.setAttribute('disabled', 'true');
+      indicator.setAttribute('data-active', 'true');
     }
   });
 }
@@ -220,13 +223,9 @@ export default async function decorate(block) {
   block.prepend(slidesWrapper);
 
   let slideIndicators;
-  let controls;
 
   if (!isSingleSlide) {
-    controls = document.createElement('div');
-    controls.classList.add('carousel-controls');
-
-    // Previous button
+    // Previous button — lives inside the slides container, vertically centered on the left
     const prevButton = document.createElement('button');
     prevButton.type = 'button';
     prevButton.classList.add('carousel-prev', 'carousel-arrow-button');
@@ -236,18 +235,7 @@ export default async function decorate(block) {
     );
     prevButton.innerHTML = svgArrowLeft;
 
-    // Indicators
-    const slideIndicatorsNav = document.createElement('nav');
-    slideIndicatorsNav.setAttribute(
-      'aria-label',
-      placeholders.carouselSlideControls || 'Carousel Slide Controls',
-    );
-
-    slideIndicators = document.createElement('ol');
-    slideIndicators.classList.add('carousel-slide-indicators');
-    slideIndicatorsNav.append(slideIndicators);
-
-    // Next button
+    // Next button — lives inside the slides container, vertically centered on the right
     const nextButton = document.createElement('button');
     nextButton.type = 'button';
     nextButton.classList.add('carousel-next', 'carousel-arrow-button');
@@ -257,12 +245,23 @@ export default async function decorate(block) {
     );
     nextButton.innerHTML = svgArrowRight;
 
-    // Order matters here
-    controls.append(prevButton);
-    controls.append(slideIndicatorsNav);
-    controls.append(nextButton);
+    // Indicator pill — lives inside the slides container, bottom-center
+    const slideIndicatorsNav = document.createElement('nav');
+    slideIndicatorsNav.classList.add('carousel-indicators-nav');
+    slideIndicatorsNav.setAttribute(
+      'aria-label',
+      placeholders.carouselSlideControls || 'Carousel Slide Controls',
+    );
 
-    block.append(controls);
+    slideIndicators = document.createElement('ol');
+    slideIndicators.classList.add('carousel-slide-indicators');
+    slideIndicatorsNav.append(slideIndicators);
+
+    // Append controls AS SIBLINGS of the slides UL, inside the slides container.
+    // This lets them sit on top of the slide image via absolute positioning.
+    container.append(prevButton);
+    container.append(nextButton);
+    container.append(slideIndicatorsNav);
   }
 
   let slideCount = 0;
@@ -288,14 +287,15 @@ export default async function decorate(block) {
       const indicator = document.createElement('li');
       indicator.classList.add('carousel-slide-indicator');
       indicator.dataset.targetSlide = idx;
+      if (idx === 0) indicator.setAttribute('data-active', 'true');
       indicator.innerHTML = `<button type="button" aria-label="${
         placeholders.showSlide || 'Show Slide'
-      } ${idx + 1} ${placeholders.of || 'of'} ${slides.length}"></button>`;
+      } ${idx + 1} ${placeholders.of || 'of'} ${slides.length}"${idx === 0 ? ' disabled="true"' : ''}></button>`;
       slideIndicators.append(indicator);
     }
   });
 
-  container.append(slidesWrapper);
+  container.prepend(slidesWrapper);
   block.prepend(container);
   if (!isSingleSlide) {
     bindEvents(block);
