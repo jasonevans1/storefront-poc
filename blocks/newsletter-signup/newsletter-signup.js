@@ -11,7 +11,14 @@ const SUBSCRIBE_MUTATION = `
   }
 `;
 
+let blockInstanceId = 0;
+
 export default async function decorate(block) {
+  blockInstanceId += 1;
+  const headingId = `newsletter-signup-heading-${blockInstanceId}`;
+  const inputId = `newsletter-signup-input-${blockInstanceId}`;
+  const errorId = `newsletter-signup-error-${blockInstanceId}`;
+
   const config = readBlockConfig(block);
   const placeholders = await fetchPlaceholders('placeholders/newsletter.json');
 
@@ -26,22 +33,37 @@ export default async function decorate(block) {
 
   block.textContent = '';
 
+  // Section title — same authored text as before, now rendered as an <h2>.
+  // The input gets the same text as its accessible name via aria-labelledby,
+  // so we don't duplicate any authored strings on the page.
+  const heading = document.createElement('h2');
+  heading.id = headingId;
+  heading.className = 'newsletter-signup__heading';
+  heading.textContent = emailLabel;
+
   const form = document.createElement('form');
   form.className = 'newsletter-signup__form';
+  // Render our own inline error instead of the browser's native tooltip
+  // (WCAG 3.3.1 Error Identification — the native bubble is not reliably
+  // styled or accessible).
+  form.noValidate = true;
   form.innerHTML = `
-    <label for="newsletter-signup-input" class="newsletter-signup__label">${emailLabel}</label>
     <input
       class="newsletter-signup__input"
       type="email"
+      name="email"
+      id="${inputId}"
       placeholder="${emailPlaceholder}"
-      id="newsletter-signup-input"
+      autocomplete="email"
       required
-      aria-label="${emailPlaceholder}"
+      aria-labelledby="${headingId}"
+      aria-describedby="${errorId}"
     />
     <button class="newsletter-signup__submit button" type="submit">${submitLabel}</button>
   `;
 
   const errorBanner = document.createElement('div');
+  errorBanner.id = errorId;
   errorBanner.className = 'newsletter-signup__error';
   errorBanner.setAttribute('role', 'alert');
   errorBanner.hidden = true;
@@ -52,40 +74,60 @@ export default async function decorate(block) {
   successBanner.hidden = true;
   successBanner.textContent = successMessage;
 
+  const input = form.querySelector('.newsletter-signup__input');
+  const submitBtn = form.querySelector('.newsletter-signup__submit');
+
+  const setError = (message) => {
+    errorBanner.textContent = message;
+    errorBanner.hidden = false;
+    input.setAttribute('aria-invalid', 'true');
+  };
+
+  const clearError = () => {
+    if (errorBanner.hidden) return;
+    errorBanner.hidden = true;
+    errorBanner.textContent = '';
+    input.removeAttribute('aria-invalid');
+  };
+
+  // Clear the error as soon as the user starts correcting the input.
+  input.addEventListener('input', clearError);
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    errorBanner.hidden = true;
+    clearError();
 
-    const submitBtn = form.querySelector('.newsletter-signup__submit');
+    // Surface the browser-localized validation message inline (empty field
+    // or malformed email) rather than letting the native tooltip handle it.
+    if (!input.checkValidity()) {
+      setError(input.validationMessage);
+      input.focus();
+      return;
+    }
+
     const originalText = submitBtn.textContent;
     submitBtn.textContent = submittingText;
     submitBtn.disabled = true;
 
-    const email = form.querySelector('.newsletter-signup__input').value;
-
     try {
       const result = await CORE_FETCH_GRAPHQL.fetchGraphQl(SUBSCRIBE_MUTATION, {
-        variables: { email },
+        variables: { email: input.value },
       });
 
       if (result.errors?.length) {
-        errorBanner.textContent = result.errors[0].message || errorMessage;
-        errorBanner.hidden = false;
-        submitBtn.textContent = originalText;
-        submitBtn.disabled = false;
+        setError(result.errors[0].message || errorMessage);
       } else {
         form.hidden = true;
+        heading.hidden = true;
         successBanner.hidden = false;
       }
-      submitBtn.textContent = originalText;
-      submitBtn.disabled = false;
     } catch {
-      errorBanner.textContent = errorMessage;
-      errorBanner.hidden = false;
+      setError(errorMessage);
+    } finally {
       submitBtn.textContent = originalText;
       submitBtn.disabled = false;
     }
   });
 
-  block.append(form, errorBanner, successBanner);
+  block.append(heading, form, errorBanner, successBanner);
 }

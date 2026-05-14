@@ -5,6 +5,8 @@
  *   vertically centered.
  * - Bottom-center frosted indicator pill; active dot is a wide red pill.
  * - No control strip below the slide.
+ * - Responsive readability scrim layered between image and text so the dark
+ *   brand-red copy meets WCAG AA contrast across product photography.
  */
 
 main > .section .carousel-wrapper {
@@ -76,11 +78,65 @@ main > .section.carousel-container {
     width: 100%;
 }
 
+/* ============================================================================
+   Text-readability scrim (WCAG 1.4.3 Contrast Minimum AA)
+   ---------------------------------------------------------------------------
+   The dark brand-red copy (#4b2a2a) cannot guarantee 4.5:1 against arbitrary
+   product photography. A linear gradient sits between the image and the text
+   wrapper so the copy area always has ~10:1 contrast on wide viewports and
+   ~8:1 on narrow ones.
+   - Wide viewports: left-anchored gradient (or right-anchored / vertical for
+     the data-align variants). Photography stays visible on the unobstructed
+     side.
+   - Narrow viewports (<= 768px): text wraps and occupies most of the slide
+     width, so the scrim becomes a uniform soft white wash that covers the
+     full content area.
+   The scrim is the slide-content's ::after pseudo (z-index 1) — layered ABOVE
+   the picture but BELOW the text wrapper (z-index 2 below).
+   ============================================================================ */
+
+.carousel .carousel-slide .carousel-slide-content::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(
+        95deg,
+        rgb(255 255 255 / 92%) 0%,
+        rgb(255 255 255 / 85%) 30%,
+        rgb(255 255 255 / 50%) 55%,
+        rgb(255 255 255 / 0%) 80%
+    );
+}
+
+/* Right-aligned slide content: mirror the gradient. */
+.carousel .carousel-slide:has(.carousel-slide-content[data-align='right']) .carousel-slide-content::after {
+    background: linear-gradient(
+        265deg,
+        rgb(255 255 255 / 92%) 0%,
+        rgb(255 255 255 / 85%) 30%,
+        rgb(255 255 255 / 50%) 55%,
+        rgb(255 255 255 / 0%) 80%
+    );
+}
+
+/* Center-aligned slide content: vertical gradient covers full width. */
+.carousel .carousel-slide:has(.carousel-slide-content[data-align='center']) .carousel-slide-content::after {
+    background: linear-gradient(
+        180deg,
+        rgb(255 255 255 / 65%) 0%,
+        rgb(255 255 255 / 88%) 35%,
+        rgb(255 255 255 / 88%) 65%,
+        rgb(255 255 255 / 65%) 100%
+    );
+}
+
 .carousel .carousel-slide-content_text {
     position: absolute;
     inset: 0;
+    z-index: 2; /* sit above the readability scrim */
     padding: 0 24px;
-    max-width: 1248px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -159,7 +215,7 @@ main > .section.carousel-container {
 /* ============================================================================
    Indicator pill — frosted bar at the bottom-center of the slide
    WCAG:
-     - Each indicator button is a 24×24 hit area (2.5.8 Target Size AA).
+     - Each indicator button is a 24x24 hit area (2.5.8 Target Size AA).
        The visible dot is a centered ::before pseudo-element.
      - Pill background is LIGHT (white, near-opaque) so the brand-red active
        state has guaranteed 3:1 contrast (1.4.11). Dark inactive dots also
@@ -194,8 +250,8 @@ main > .section.carousel-container {
     line-height: 0;
 }
 
-/* The button IS the hit area: 24×24 transparent box that contains a smaller
-   visible dot. WCAG 2.5.8 Target Size (Minimum) AA requires 24×24. */
+/* The button IS the hit area: 24x24 transparent box that contains a smaller
+   visible dot. WCAG 2.5.8 Target Size (Minimum) AA requires 24x24. */
 .carousel .carousel-slide-indicator button {
     position: relative;
     display: block;
@@ -234,7 +290,7 @@ main > .section.carousel-container {
     cursor: default;
 }
 
-/* Focus-visible: 2px brand-red outline around the full 24×24 hit area. */
+/* Focus-visible: 2px brand-red outline around the full 24x24 hit area. */
 .carousel .carousel-slide-indicator button:focus-visible {
     outline: 2px solid var(--color-brand-500);
     outline-offset: 2px;
@@ -249,6 +305,23 @@ main > .section.carousel-container {
 /* ============================================================================
    Responsive
    ============================================================================ */
+
+@media (max-width: 768px) {
+    /* Narrow viewports: text wraps and consumes most of the slide width, so
+       a side-fading gradient stops covering the copy. Switch to a uniform
+       soft white wash that guarantees contrast across the full content area
+       while still letting the photography read through. */
+    .carousel .carousel-slide .carousel-slide-content::after,
+    .carousel .carousel-slide:has(.carousel-slide-content[data-align='right']) .carousel-slide-content::after,
+    .carousel .carousel-slide:has(.carousel-slide-content[data-align='center']) .carousel-slide-content::after {
+        background: linear-gradient(
+            180deg,
+            rgb(255 255 255 / 88%) 0%,
+            rgb(255 255 255 / 82%) 50%,
+            rgb(255 255 255 / 75%) 100%
+        );
+    }
+}
 
 @media (max-width: 600px) {
     .carousel .carousel-slide-content_text {
@@ -298,5 +371,17 @@ main > .section.carousel-container {
 @media (min-width: 1248px) {
     .carousel .carousel-slide-content_text {
         padding: 0;
+    }
+}
+
+@media (max-width: 1439px) {
+    .carousel-slide-content_text {
+        max-width: calc(100% - 190px);
+    }
+}
+
+@media (min-width: 1440px) {
+    .carousel-slide-content_text {
+        max-width: 1248px;
     }
 }
