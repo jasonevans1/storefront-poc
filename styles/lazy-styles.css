@@ -4,16 +4,156 @@
     --spacing-xxbig:  0;
 }
 
-.dropin-pagination_list-item button,
-.dropin-pagination_list-item a {
-    font-size: 2rem;
-}
-
-.dropin-pagination_list-item--active {
-    width: 24px;
-    height: 24px;
-}
-
 .recommendations-product-list__content {
     overflow: auto;
+}
+
+/*
+ * Dropin Pagination — Compact B2B styling
+ * Target: .dropin-pagination (rendered by @dropins/storefront-product-discovery)
+ *
+ * Matches the product-list-page block's visual language: bordered, flat,
+ * brand-red active state. Standalone so it can ship with any block that
+ * renders <Pagination>.
+ *
+ * WCAG AA: 3.6rem (36px) hit targets, focus-visible outlines, 4.5:1+
+ * contrast in every state.
+ */
+
+.dropin-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  padding-block: var(--spacing-small);
+  gap: var(--spacing-xxsmall);
+}
+
+/* ──────────────── Page list ──────────────── */
+.dropin-pagination_list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  gap: var(--spacing-xxsmall);
+}
+
+.dropin-pagination_list-item {
+  margin: 0;
+  padding: 0;
+  width: auto;
+  height: auto;
+}
+
+/* Shared button styling for numbered pages and arrows */
+.dropin-pagination_list-item > button,
+.dropin-pagination-arrow {
+  align-items: center;
+  justify-content: center;
+  min-width: 3.6rem;
+  height: 3.6rem;
+  padding: 0 var(--spacing-xsmall);
+  background: var(--color-neutral-50);
+  border: 1px solid var(--color-neutral-400);
+  border-radius: var(--shape-border-radius-1);
+  color: var(--color-neutral-900);
+  font: var(--type-body-2-strong-font);
+  letter-spacing: var(--type-body-2-strong-letter-spacing);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.dropin-pagination_list-item > button {
+    display: block;
+}
+
+/* ──────────────── Arrows ──────────────── */
+.dropin-pagination-arrow {
+  padding: 0;
+}
+
+/* ──────────────── Ellipsis ──────────────── */
+.dropin-pagination_list-item--ellipsis > button {
+  background: transparent;
+  border-color: transparent;
+  color: var(--color-neutral-700);
+  cursor: default;
+  pointer-events: none;
+}
+
+.dropin-pagination_list-item > button:hover,
+.dropin-pagination-arrow:hover {
+  background: var(--color-neutral-100);
+  border-color: var(--color-neutral-600);
+}
+
+.dropin-pagination_list-item > button:focus-visible,
+.dropin-pagination-arrow:focus-visible {
+  outline: 2px solid var(--color-brand-700);
+  outline-offset: 2px;
+}
+
+/* ──────────────── Active page ──────────────── */
+.dropin-pagination_list-item--active > button:not(:disabled) {
+  background: var(--color-brand-700);
+  border-color: var(--color-brand-700);
+  color: var(--color-neutral-50);
+  cursor: default;
+}
+
+.dropin-pagination_list-item--active > button:hover {
+  background: var(--color-brand-700);
+  border-color: var(--color-brand-700);
+}
+
+.dropin-pagination_list-item--ellipsis > button:hover {
+  background: transparent;
+  border-color: transparent;
+}
+
+/* The dropin ships a single chevron-down icon for both arrows; rotate it. */
+.dropin-pagination-arrow--backward .dropin-icon {
+  transform: rotate(90deg);
+}
+
+.dropin-pagination-arrow--forward .dropin-icon {
+  transform: rotate(-90deg);
+}
+
+.dropin-pagination-arrow--disabled,
+.dropin-pagination-arrow[disabled] {
+  background: var(--color-neutral-100);
+  border-color: var(--color-neutral-300);
+  color: var(--color-neutral-500);
+  cursor: not-allowed;
+}
+
+.dropin-pagination-arrow--disabled:hover,
+.dropin-pagination-arrow[disabled]:hover {
+  background: var(--color-neutral-100);
+  border-color: var(--color-neutral-300);
+}
+
+/* ──────────────── Reduced motion ──────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .dropin-pagination_list-item > button,
+  .dropin-pagination-arrow {
+    transition: none;
+  }
+}
+
+/* ──────────────── Small screens — tighten gaps ──────────────── */
+@media only screen and (max-width: 480px) {
+  .dropin-pagination_list-item > button,
+  .dropin-pagination-arrow {
+    min-width: 3.2rem;
+    height: 3.2rem;
+    padding: 0 var(--spacing-xxsmall);
+  }
 }

@@ -1,93 +1,274 @@
+/*
+ * Product List Page — Compact B2B
+ * Mobile-first, WCAG AA, auto-fit responsive grid.
+ */
 
+/* ──────────────── Layout: mobile-first single column ──────────────── */
 .block.product-list-page .search__wrapper {
-    display: grid;
-    margin-block: var(--spacing-small);
-    grid-template-areas:
-        "result-info"
-        "view-facets"
-        "facets"
-        "product-sort"
-        "product-list"
-        "pagination";
+  display: grid;
+  margin-block: var(--spacing-small);
+  grid-template-areas:
+    "result-info"
+    "view-facets"
+    "facets"
+    "product-sort"
+    "product-list"
+    "pagination";
 }
 
+/* ──────────────── Result info ──────────────── */
 .block.product-list-page .search__result-info {
-    grid-area: result-info;
-    align-self: center;
-    margin-block-end: var(--spacing-small);
+  grid-area: result-info;
+  align-self: center;
+  margin-block-end: var(--spacing-small);
+  padding: var(--spacing-xsmall) var(--spacing-small);
+  background: var(--color-neutral-100);
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--shape-border-radius-1);
+  font: var(--type-body-2-default-font);
+  letter-spacing: var(--type-body-2-default-letter-spacing);
+  color: var(--color-neutral-700);
 }
 
 .block.product-list-page .search__result-info strong {
-    font-weight: 600;
+  font-weight: 700;
+  color: var(--color-brand-700);
 }
 
+/* ──────────────── View facets (mobile toggle) ──────────────── */
 .block.product-list-page .search__view-facets {
-    grid-area: view-facets;
-    margin-block-end: var(--spacing-small);
+  grid-area: view-facets;
+  margin-block-end: var(--spacing-small);
 }
 
 .block.product-list-page .search__view-facets button {
-    justify-content: start;
-    width: 100%;
-    position: relative;
+  justify-content: start;
+  width: 100%;
+  position: relative;
 }
 
 .block.product-list-page .search__view-facets button[data-count]::after {
-    align-items: center;
-    background-color: var(--color-brand-700);
-    border-radius: 50%;
-    color: var(--color-neutral-100);
-    content: attr(data-count);
-    display: flex;
-    font-size: 0.8em;
-    height: 1.75em;
-    justify-content: center;
-    line-height: 1;
-    position: absolute;
-    right: 0.5em;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 1.75em;
+  content: attr(data-count);
+  position: absolute;
+  top: 50%;
+  right: 0.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75em;
+  height: 1.75em;
+  background-color: var(--color-brand-700);
+  border-radius: 50%;
+  color: var(--color-neutral-50);
+  font-size: 0.8em;
+  line-height: 1;
+  transform: translateY(-50%);
 }
 
+/* ──────────────── Facets panel ──────────────── */
 .block.product-list-page .search__facets {
-    grid-area: facets;
-    margin-block-end: var(--spacing-small);
-    display: none;
+  grid-area: facets;
+  display: none;
+  margin-block-end: var(--spacing-small);
+  padding: var(--spacing-xxsmall) var(--spacing-small) var(--spacing-small);
+  background: var(--color-neutral-100);
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--shape-border-radius-1);
 }
 
 .block.product-list-page .search__facets--visible {
-    display: block;
+  display: block;
 }
 
+/* Individual facet group */
+.block.product-list-page .product-discovery-facet {
+  padding-block: var(--spacing-xsmall) var(--spacing-xsmall);
+  border-bottom: 1px solid var(--color-neutral-300);
+}
+
+.block.product-list-page .product-discovery-facet:last-of-type,
+.block.product-list-page .product-discovery-facet--last {
+  border-bottom: none;
+}
+
+.block.product-list-page .product-discovery-facet__header {
+  display: block;
+  margin-block-end: var(--spacing-xxsmall);
+  color: var(--color-neutral-900);
+  font-family: var(--type-base-font-family);
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.block.product-list-page .product-discovery-facet__bucket {
+  padding-block: 2px;
+}
+
+.block.product-list-page .product-discovery-facet .facet-bucket__count {
+  margin-left: var(--spacing-xxsmall);
+  color: var(--color-neutral-700);
+  font-size: 1.1rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Selected-filter chips */
+.block.product-list-page .product-discovery-facet-list__selected-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xxsmall);
+  margin: 0 calc(var(--spacing-xxsmall) * -1) var(--spacing-xxsmall);
+  padding: var(--spacing-xsmall) 0;
+  border-bottom: 1px solid var(--color-neutral-300);
+}
+
+.block.product-list-page .product-discovery-facet-list__selected-filters::before {
+  content: "Active filters";
+  flex-basis: 100%;
+  margin-block-end: var(--spacing-xxsmall);
+  color: var(--color-neutral-700);
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.block.product-list-page .product-discovery-facet-list__selected-filters button {
+  margin: 0;
+  padding: 3px var(--spacing-xsmall);
+  background: var(--color-brand-700);
+  border: 1px solid var(--color-brand-700);
+  border-radius: var(--shape-border-radius-1);
+  color: var(--color-neutral-50);
+  font: var(--type-details-caption-1-font);
+  letter-spacing: 0.02em;
+  cursor: pointer;
+}
+
+.block.product-list-page .product-discovery-facet-list__selected-filters button:hover {
+  background: var(--color-brand-500);
+  border-color: var(--color-brand-500);
+}
+
+.block.product-list-page .product-discovery-facet-list__selected-filters button:focus-visible {
+  outline: 2px solid var(--color-brand-300);
+  outline-offset: 2px;
+}
+
+/* ──────────────── Sort ──────────────── */
 .block.product-list-page .search__product-sort {
-    grid-area: product-sort;
-    margin-block-end: var(--spacing-small);
+  grid-area: product-sort;
+  display: flex;
+  align-items: center;
+  margin-block-end: var(--spacing-small);
 }
 
+/* ──────────────── Product grid ──────────────── */
 .block.product-list-page .search__product-list {
-    grid-area: product-list;
-    margin-block-end: var(--spacing-small);
+  grid-area: product-list;
+  margin-block-end: var(--spacing-small);
 }
 
-.block.product-list-page .search__pagination {
-    grid-area: pagination;
-    margin-block-end: var(--spacing-small);
+/* Override dropin container queries with an auto-fit grid */
+.block.product-list-page .product-discovery-product-list__grid {
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--spacing-xsmall);
 }
 
+/* Product card — bordered, flat, utility */
+.block.product-list-page .product-discovery-product-list__grid .dropin-product-item-card {
+  gap: var(--spacing-xsmall);
+  padding: var(--spacing-xsmall);
+  background: var(--color-neutral-50);
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--shape-border-radius-1);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
+}
+
+.block.product-list-page .product-discovery-product-list__grid .dropin-product-item-card:hover {
+  border-color: var(--color-neutral-600);
+  box-shadow: var(--shape-shadow-3);
+}
+
+.block.product-list-page .product-discovery-product-list__grid .dropin-product-item-card:focus-within {
+  border-color: var(--color-brand-700);
+  box-shadow: 0 0 0 2px var(--color-brand-300);
+}
+
+.block.product-list-page .product-discovery-product-list__grid .dropin-product-item-card img,
+.block.product-list-page .product-discovery-product-list__grid .dropin-product-item-card__skeleton__image {
+    aspect-ratio: auto;
+}
+
+/* ──────────────── Actions row ──────────────── */
 .block.product-list-page .product-discovery-product-actions {
-    display: flex;
-    flex-direction: row;
-    gap: var(--spacing-xxsmall);
-    position: relative;
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  gap: var(--spacing-xxsmall);
+  margin-block-start: var(--spacing-xxsmall);
 }
 
-/* Empty State */
+.block.product-list-page .product-discovery-product-actions__add-to-cart {
+  flex: 1;
+  min-width: 0;
+}
 
+.block.product-list-page .product-discovery-product-actions__add-to-cart .dropin-button {
+  width: 100%;
+  padding: var(--spacing-xsmall) var(--spacing-small);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+/* Tertiary actions (wishlist / requisition) — square, ≥32px hit area (WCAG 2.5.8) */
+.block.product-list-page .product-discovery-product-actions__wishlist-toggle .dropin-button,
+.block.product-list-page .product-discovery-product-actions .requisition-list-selector__picker {
+  width: 3.2rem;
+  height: 3.2rem;
+  min-width: 3.2rem;
+  padding: 0;
+  border: 1px solid var(--color-neutral-400);
+  border-radius: var(--shape-border-radius-1);
+}
+
+.block.product-list-page .product-discovery-product-actions__wishlist-toggle .dropin-button:hover,
+.block.product-list-page .product-discovery-product-actions .requisition-list-selector__picker:hover {
+  border-color: var(--color-neutral-600);
+}
+
+/* Requisition list dropdown — keep original behavior */
+.product-discovery-product-actions .requisition-list-names {
+  position: static;
+}
+
+.block.product-list-page .product-discovery-product-actions .requisition-list-names .requisition-list-selector__picker {
+  width: var(--spacing-xlarge);
+}
+
+.product-discovery-product-actions .requisition-list-names .dropin-card {
+  position: absolute;
+  left: 0;
+  z-index: 2;
+  width: 100%;
+}
+
+/* ──────────────── Pagination ──────────────── */
+.block.product-list-page .search__pagination {
+  grid-area: pagination;
+  display: flex;
+  justify-content: center;
+  margin-block-end: var(--spacing-small);
+}
+
+/* ──────────────── Empty state ──────────────── */
 .block.product-list-page.product-list-page--empty .search__wrapper {
-    grid-template-areas:
-        "product-list";
-    grid-template-columns: 1fr;
+  grid-template-areas: "product-list";
+  grid-template-columns: 1fr;
 }
 
 .block.product-list-page.product-list-page--empty .search__result-info,
@@ -95,45 +276,56 @@
 .block.product-list-page.product-list-page--empty .search__facets,
 .block.product-list-page.product-list-page--empty .search__product-sort,
 .block.product-list-page.product-list-page--empty .search__pagination {
-    display: none;
+  display: none;
 }
 
-.product-discovery-product-actions .requisition-list-names {
-    position: static;
+/* ──────────────── Reduced motion ──────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .block.product-list-page .product-discovery-product-list__grid .dropin-product-item-card {
+    transition: none;
+  }
 }
 
-.product-discovery-product-actions .requisition-list-names .requisition-list-selector__picker {
-    width: var(--spacing-xlarge);
-}
-
-.product-discovery-product-actions .requisition-list-names .dropin-card {
-    left: 0;
-    position: absolute;
-    width: 100%;
-    z-index: 2;
-}
-
-/* Media Queries */
+/* ──────────────── Tablet+ ──────────────── */
 @media only screen and (min-width: 768px) {
-    .block.product-list-page .search__wrapper {
-        grid-template-areas:
-            "result-info product-sort"
-            "facets product-list"
-            ". pagination";
-        grid-template-columns: 270px 1fr;
-    }
+  .block.product-list-page .search__wrapper {
+    grid-template-areas:
+      "result-info  product-sort"
+      "facets       product-list"
+      "facets       pagination";
+    grid-template-columns: 248px 1fr;
+    column-gap: var(--spacing-medium);
+    align-items: start;
+  }
 
-    .block.product-list-page .search__view-facets {
-        display: none;
-    }
+  .block.product-list-page .search__view-facets {
+    display: none;
+  }
 
-    .block.product-list-page .search__facets {
-        display: unset;
-        margin-right: var(--spacing-small);
-    }
+  .block.product-list-page .search__facets {
+    display: block;
+    margin-block-end: 0;
+  }
 
-    .block.product-list-page .search__product-sort {
-        display: flex;
-        justify-content: flex-end;
-    }
+  .block.product-list-page .search__product-sort {
+    justify-content: flex-end;
+    margin-block-end: var(--spacing-small);
+  }
+
+  .block.product-list-page .product-discovery-product-list__grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: var(--spacing-small);
+  }
+}
+
+/* ──────────────── Desktop: sticky facets + denser grid ──────────────── */
+@media only screen and (min-width: 1024px) {
+  .block.product-list-page .search__facets {
+    position: sticky;
+    top: var(--spacing-small);
+  }
+
+  .block.product-list-page .product-discovery-product-list__grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
 }
