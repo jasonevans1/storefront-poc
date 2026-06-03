@@ -19,6 +19,16 @@ const overlay = document.createElement('div');
 overlay.classList.add('overlay');
 document.querySelector('header').insertAdjacentElement('afterbegin', overlay);
 
+// Skip-to-main link — surfaces on first Tab. Inserted before the overlay so
+// it's the first focusable element in the document. WCAG 2.4.1 (Bypass Blocks).
+if (!document.querySelector('.skip-to-main')) {
+  const skipLink = document.createElement('a');
+  skipLink.className = 'skip-to-main';
+  skipLink.href = '#main';
+  skipLink.textContent = 'Skip to main content';
+  document.querySelector('header').insertAdjacentElement('afterbegin', skipLink);
+}
+
 function closeOnEscape(e) {
   if (e.code === 'Escape') {
     const nav = document.getElementById('nav');
@@ -189,10 +199,28 @@ export default async function decorate(block) {
   });
 
   const navBrand = nav.querySelector('.nav-brand');
-  const brandLink = navBrand.querySelector('.button');
+  // The original code only handled the case where the brand link was decorated
+  // as a `.button`. Falling back to any `<a>` inside .nav-brand makes the
+  // wordmark insertion robust against fragment markup variations.
+  const brandLink = navBrand?.querySelector('a, .button');
   if (brandLink) {
     brandLink.className = '';
-    brandLink.closest('.button-container').className = '';
+    const buttonContainer = brandLink.closest('.button-container');
+    if (buttonContainer) buttonContainer.className = '';
+  }
+
+  // Wordmark — adds visible brand text next to the gear logo so the homepage
+  // anchor is unambiguous (the existing img-only logo relied on a tooltip).
+  if (brandLink && !brandLink.querySelector('.nav-brand-wordmark')) {
+    const img = brandLink.querySelector('img');
+    const name = (img?.getAttribute('alt') || brandLink.getAttribute('title') || labels.Global?.BrandName || 'POC Auto Sales').trim();
+    const tagline = (labels.Global?.BrandTagline || 'Replacement Parts').trim();
+    const wm = document.createElement('span');
+    wm.className = 'nav-brand-wordmark';
+    wm.setAttribute('aria-hidden', 'true');
+    wm.innerHTML = `<span class="nav-brand-name">${name}</span><span class="nav-brand-tagline">${tagline}</span>`;
+    brandLink.append(wm);
+    if (!brandLink.getAttribute('aria-label')) brandLink.setAttribute('aria-label', `${name} \u2014 Home`);
   }
 
   const navSections = nav.querySelector('.nav-sections');
@@ -200,15 +228,32 @@ export default async function decorate(block) {
     if (!checkIsAuthenticated()) {
       const navSectionsList = navSections.querySelector('.default-content-wrapper > ul');
       if (navSectionsList) {
+        // Mark these as secondary actions so they don't compete visually with
+        // the primary product nav (Parts, etc). Styled smaller via CSS.
         const createAccountItem = document.createElement('li');
+        createAccountItem.classList.add('nav-secondary');
         createAccountItem.innerHTML = `<a href="${rootLink('/customer/create')}">${labels.Global?.CreateAccount ?? 'Create an Account'}</a>`;
 
         const registerCompanyItem = document.createElement('li');
+        registerCompanyItem.classList.add('nav-secondary');
         registerCompanyItem.innerHTML = `<a href="${rootLink('/customer/company/create')}">${labels.Global?.RegisterCompany ?? 'Register a Company'}</a>`;
 
         navSectionsList.append(createAccountItem, registerCompanyItem);
       }
     }
+
+    // Tag the link matching the current pathname with aria-current="page".
+    // WCAG 2.4.4 / 2.4.8 — visible active state is paired in CSS.
+    const here = (window.location.pathname || '/').replace(/\/+$/, '') || '/';
+    navSections.querySelectorAll('a[href]').forEach((a) => {
+      try {
+        const linkPath = (new URL(a.href, window.location).pathname || '/').replace(/\/+$/, '') || '/';
+        if (linkPath === here) {
+          a.setAttribute('aria-current', 'page');
+          a.closest('li')?.classList.add('nav-current');
+        }
+      } catch (e) { /* ignore malformed hrefs */ }
+    });
 
     navSections
       .querySelectorAll(':scope .default-content-wrapper > ul > li')
@@ -368,9 +413,16 @@ export default async function decorate(block) {
   }, { eager: true });
 
   /** Search */
+  // Search button — clearly a button (icon + visible "Search" label, pill shape).
+  // Clicking opens the existing lazy-loaded search panel below. The `/` shortcut
+  // is still wired up below for power users.
+  const searchLabel = labels.Global?.Search || 'Search';
   const searchFragment = document.createRange().createContextualFragment(`
   <div class="search-wrapper nav-tools-wrapper">
-    <button type="button" class="nav-search-button">Search</button>
+    <button type="button" class="nav-search-button" aria-haspopup="dialog" aria-expanded="false">
+      <span class="nav-search-button__icon" aria-hidden="true"></span>
+      <span class="nav-search-button__label sr-only">${searchLabel}</span>
+    </button>
     <div class="nav-search-input nav-search-panel nav-tools-panel">
       <form id="search-bar-form"></form>
       <div class="search-bar-result" style="display: none;"></div>
@@ -489,6 +541,21 @@ export default async function decorate(block) {
   }
 
   searchButton.addEventListener('click', () => toggleSearch(!searchPanel.classList.contains('nav-tools-panel--show')));
+
+  // Reflect open state on the search button for assistive tech + CSS.
+  const syncSearchExpanded = () => {
+    searchButton.setAttribute('aria-expanded', searchPanel.classList.contains('nav-tools-panel--show') ? 'true' : 'false');
+  };
+  new MutationObserver(syncSearchExpanded).observe(searchPanel, { attributes: true, attributeFilter: ['class'] });
+
+  // Keyboard shortcut: "/" focuses search (skip when typing in another field).
+  window.addEventListener('keydown', (e) => {
+    if (e.key !== '/' || e.metaKey || e.ctrlKey || e.altKey) return;
+    const t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+    e.preventDefault();
+    toggleSearch(true);
+  });
 
   navTools.querySelector('.nav-search-button').addEventListener('click', () => {
     if (isDesktop.matches) {

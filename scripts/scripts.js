@@ -95,6 +95,7 @@ function buildAutoBlocks(main) {
  * @param {Element} main The main element
  */
 export function decorateMain(main) {
+  main.id = 'main';
   decorateLinks(main);
   decorateButtons(main);
   decorateIcons(main);

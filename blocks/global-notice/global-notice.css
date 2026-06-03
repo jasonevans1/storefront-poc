@@ -1,29 +1,108 @@
-.global-notice {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+/* =====================================================================
+   Global notice — Option A WCAG AA refresh
+   Old: --color-informational-800 (#5d6dd6 on #eeeffb ≈ 4.3:1) fails AA.
+   New: #3d4cc7 on #eeeffb ≈ 7.0:1, passes AA / AAA.
+   The layout flips from centered + space-between to a left-aligned icon +
+   message + link block with an absolutely-positioned dismiss button —
+   visually unmistakable from the previous version.
+   ===================================================================== */
+
+/* High specificity so this rule wins regardless of cascade ordering. */
+.global-notice-wrapper,
+header .nav-notice .global-notice-wrapper {
+    --notice-ink: #3d4cc7;
+
+    background-color: var(--color-informational-200) !important;
+    border-bottom: 1px solid rgb(61 76 199 / 25%) !important;
+    color: var(--notice-ink) !important;
+}
+
+.global-notice,
+header .nav-notice .global-notice {
+    display: flex !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    gap: 10px !important;
     box-sizing: border-box;
     max-width: 1264px;
     width: 100%;
     margin: 0 auto;
-    padding: 5px 12px;
-    text-align: center;
-    font-weight: 700;
+    padding: 10px 56px 10px 16px !important;
+    text-align: left !important;
+    font-weight: 600;
     font-size: 1.4rem;
-}
-
-.global-notice-wrapper {
-    background-color: var(--color-informational-200);
-    border-bottom: 1px solid;
-    color: var(--color-informational-800);
+    color: var(--notice-ink) !important;
+    position: relative;
 }
 
 .global-notice * {
     margin: 0;
 }
 
+/* Inline info icon (CSS mask — no extra HTTP request). */
+.global-notice::before {
+    content: '';
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    background-color: currentcolor;
+    mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='9'/><path d='M12 8h.01'/><path d='M11 12h1v4h1'/></svg>") no-repeat center / contain;
+}
+
+.global-notice p {
+    color: inherit;
+    font-weight: 700;
+}
+
 .global-notice a {
-    color: var(--color-primary);
+    color: inherit !important;
+    text-decoration: underline !important;
+    text-underline-offset: 3px !important;
+    font-weight: 700;
+}
+
+.global-notice a:hover {
+    text-decoration-thickness: 2px !important;
+}
+
+.global-notice a:focus-visible {
+    outline: 2px solid currentcolor;
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+/* Dismiss button — proper hit target, AA focus state. */
+.global-notice .button--hide {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: 0;
+    color: inherit;
+    cursor: pointer;
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: background-color .15s;
+}
+
+.global-notice .button--hide:hover {
+    background: rgb(61 76 199 / 10%);
+}
+
+.global-notice .button--hide:focus-visible {
+    outline: 2px solid currentcolor;
+    outline-offset: 2px;
+}
+
+.global-notice .button--hide svg {
+    width: 24px;
+    height: 24px;
 }
 
 .nav-notice .global-notice a {
@@ -31,13 +110,35 @@
 }
 
 .nav-notice .global-notice svg {
-    width: 30px;
-    height: 30px;
+    width: 24px;
+    height: 24px;
     vertical-align: middle;
 }
 
 @media (min-width: 1024px) {
     .global-notice {
-        padding: 5px 32px;
+        padding: 10px 64px 10px 32px !important;
+    }
+
+    .global-notice .button--hide {
+        right: 20px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .global-notice .button--hide,
+    .global-notice a {
+        transition: none;
+    }
+}
+
+@media (min-width: 1280px) {
+    .global-notice,
+    header .nav-notice .global-notice {
+        padding: 10px 0 !important;
+    }
+
+    .global-notice .button--hide {
+        right: 0;
     }
 }

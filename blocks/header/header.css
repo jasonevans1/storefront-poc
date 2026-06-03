@@ -65,6 +65,12 @@ header nav[aria-expanded='true'] {
   }
 }
 
+@media (min-width: 1280px) {
+  header nav {
+    padding: 0;
+  }
+}
+
 header nav p {
   margin: 0;
   line-height: 1;
@@ -156,14 +162,27 @@ header .nav-wrapper.active .nav-notice {
   }
 }
 
+/* focus rings */
+header nav a:focus-visible,
+header nav button:focus-visible,
+header nav [tabindex]:focus-visible {
+  outline: 2px solid var(--color-brand-500);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
 /* brand */
 
 header nav .nav-brand a {
   grid-area: brand;
-  flex-basis: 128px;
-  font: var(--type-headline-1-font);
-  letter-spacing: var(--type-headline-1-letter-spacing);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-basis: auto;
+  font: inherit;
+  letter-spacing: normal;
   font-weight: bold;
+  color: var(--color-neutral-900);
 }
 
 li.nav-drop img {
@@ -357,35 +376,51 @@ header nav .nav-tools {
 }
 
 header nav .nav-tools-wrapper>button {
-  color: var(--color-brand-700);
+  color: var(--color-neutral-900);
   background: transparent;
   padding: 10px;
   border: unset;
   cursor: pointer;
-  height: 40px;
-  width: 40px;
+  height: 44px;
+  width: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 6px;
+  transition: background-color .15s;
 }
 
-header nav .nav-tools button.nav-cart-button {
+header nav .nav-tools-wrapper>button:hover {
+  background: var(--color-neutral-200);
+}
+
+header nav .nav-tools button.nav-cart-button,
+header nav .nav-tools button.nav-cart-button:hover {
   background-image: url('../../icons/cart.svg');
   background-repeat: no-repeat;
   background-position: center;
   position: relative;
 }
 
+header nav .nav-tools button.nav-cart-button:hover {
+  background-color: var(--color-neutral-200);
+}
+
 header nav .nav-tools button.nav-cart-button[data-count]::after {
   content: attr(data-count);
   position: absolute;
-  top: 0;
-  right: -2px;
-  background-color: var(--color-brand-500);
-  color: var(--color-neutral-100);
+  top: -4px;
+  right: -4px;
+  background-color: var(--color-brand-700);
+  color: var(--color-neutral-50);
   border-radius: 50%;
-  width: 1.75em;
-  height: 1.75em;
+  width: 1.9em;
+  height: 1.9em;
   display: flex;
   align-items: center;
-  font-size: 0.8em;
+  font-size: 0.75em;
+  font-weight: 700;
+  border: 2px solid var(--color-neutral-50);
+  box-sizing: border-box;
   justify-content: center;
 }
 
@@ -415,6 +450,12 @@ header .nav-search-panel input {
   letter-spacing: var(--type-headline-2-default-letter-spacing);
   border: 1px solid currentcolor;
   appearance: none;
+}
+
+header nav input:focus-visible {
+  outline: 2px solid var(--color-brand-500);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 header .nav-search-panel .dropin-input-container {
@@ -795,4 +836,234 @@ header .nav-search-input .search_autocomplete .popover-container {
 .minimal-header-footer header .nav-wrapper .search-wrapper,
 .minimal-header-footer header .nav-wrapper .dropdown-wrapper {
   display: none;
+}
+
+/* =====================================================================
+   OPTION A — "Refined Classic" refresh
+   WCAG AA throughout. CSS-only changes paired with header.js additions
+   for the skip-link, wordmark, aria-current, and the search placeholder.
+   ===================================================================== */
+
+/* --- 1. Skip-to-main link (WCAG 2.4.1 Bypass Blocks) ----------------- */
+.skip-to-main {
+  position: absolute;
+  top: -100px;
+  left: 8px;
+  z-index: 1000;
+  padding: 10px 16px;
+  background: var(--color-neutral-900);
+  color: var(--color-neutral-50);
+  font: var(--type-body-1-strong-font);
+  letter-spacing: var(--type-body-1-strong-letter-spacing);
+  text-decoration: none;
+  border-radius: 4px;
+  transition: top 0.15s ease-out;
+}
+
+.skip-to-main:focus,
+.skip-to-main:focus-visible {
+  top: 8px;
+  outline: 2px solid var(--color-brand-500);
+  outline-offset: 2px;
+}
+
+/* --- 3. Brand wordmark ----------------------------------------------- */
+.nav-brand-wordmark {
+  display: none;
+  flex-direction: column;
+  line-height: 1;
+  text-align: left;
+}
+
+.nav-brand-name {
+  font: 800 1.7rem/1 var(--type-base-font-family);
+  letter-spacing: -0.01em;
+  color: var(--color-neutral-900);
+}
+
+.nav-brand-tagline {
+  font: 600 1.1rem/1 var(--type-base-font-family);
+  color: var(--color-neutral-700);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 3px;
+}
+
+@media (min-width: 700px) {
+  .nav-brand-wordmark { display: inline-flex; }
+}
+
+/* --- 4. Override nav link colours -----------------------------------
+   Today the placeholder bolding on "Create Account" / "Register Company"
+   inherits brand red and out-shouts the primary nav. Normalise to ink. */
+@media (min-width: 900px) {
+  header nav .nav-sections .default-content-wrapper > ul > li > a,
+  header nav .nav-sections .default-content-wrapper > ul > li strong > a,
+  header nav .nav-sections .default-content-wrapper > ul > li em > a {
+    color: var(--color-neutral-900);
+    font-weight: 600;
+    font-size: 1.5rem;
+    letter-spacing: 0;
+    position: relative; /* anchor for the active-page underline (kept off the <li>) */
+  }
+
+  /* Don't set position: relative on the <li> — the existing CSS positions the
+     mega-menu submenu-wrapper absolutely against the .nav-wrapper, and adding
+     a relative ancestor on the <li> shrinks it to the link's width. */
+  header nav .nav-sections .default-content-wrapper > ul > li {
+    background: transparent !important;
+    border-radius: 6px;
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li:hover {
+    background: var(--color-neutral-200) !important;
+  }
+
+  /* Secondary actions (Create Account / Register Company) sit to the right,
+     separated, smaller, lower-emphasis. They follow the primary nav items in
+     DOM order, so we target "the first .nav-secondary that follows a non-
+     secondary sibling" to drop a divider + push-right on it. */
+  header nav .nav-sections .default-content-wrapper > ul {
+    align-items: center;
+  }
+
+  header nav .nav-sections li:not(.nav-secondary) + .nav-secondary {
+    margin-left: auto;
+    padding-left: 16px;
+    border-left: 1px solid var(--color-neutral-300);
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li.nav-secondary > a {
+    font-size: 1.3rem !important;
+    font-weight: 600 !important;
+    color: var(--color-neutral-800) !important;
+    text-transform: none;
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li.nav-secondary > a:hover {
+    color: var(--color-brand-700) !important;
+    text-decoration: underline;
+  }
+}
+
+/* --- 5. Active page indicator (aria-current="page") ------------------
+   Pinned to the <a>, not the <li>, so the absolutely-positioned mega-menu
+   submenu (which targets the .nav-wrapper as its containing block) is
+   unaffected. */
+@media (min-width: 900px) {
+  header nav .nav-sections a[aria-current="page"] {
+    color: var(--color-neutral-900) !important;
+    font-weight: 700;
+  }
+
+  header nav .nav-sections a[aria-current="page"]::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -10px;
+    height: 3px;
+    background: var(--color-brand-500);
+    border-radius: 2px;
+  }
+}
+
+/* --- 6. Search button — clear pill button (icon + label) ------------- */
+
+/* It's a BUTTON that opens the search panel, not a field. Visually labelled
+   so it can't be mistaken for an input. */
+header nav .nav-tools .nav-search-button {
+  height: 44px;
+  min-width: 44px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  color: var(--color-neutral-900);
+  font: var(--type-body-2-strong-font);
+  letter-spacing: var(--type-body-2-strong-letter-spacing);
+  cursor: pointer;
+
+  /* Override the original `font-size: 0` rule. */
+  font-size: 1.4rem !important;
+
+  /* Strip the original button-as-icon background-image. */
+  background-image: none !important;
+}
+
+header nav .nav-tools .nav-search-button:hover {
+  background: var(--color-neutral-200);
+}
+
+header nav .nav-tools .nav-search-button[aria-expanded="true"] {
+  background: var(--color-neutral-200);
+  border-color: var(--color-neutral-400);
+}
+
+.nav-search-button__icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  background: url('../../icons/search.svg') no-repeat center / contain;
+  filter: brightness(0) saturate(100%); /* solid ink for AA non-text contrast */
+}
+
+.nav-search-button__label {
+  white-space: nowrap;
+}
+
+/* Hide the visible label on mobile — icon-only at <900px to save space. */
+@media (max-width: 899px) {
+  .nav-search-button__label { display: none; }
+
+  header nav .nav-tools .nav-search-button {
+    padding: 0;
+    width: 44px;
+    justify-content: center;
+  }
+}
+
+/* --- 7. Cart badge — AA non-text contrast --------------------------- */
+
+/* --- 8. Tools utility buttons: 44x44 hit target, ink color ---------- */
+
+/* --- 9. Mobile drawer refinements ------------------------------------ */
+@media (max-width: 899px) {
+  /* Highlight the current section with a brand-red left rail. */
+  header nav .nav-sections ul > li.nav-current {
+    background: var(--color-neutral-200);
+    border-left: 3px solid var(--color-brand-500);
+    padding-left: var(--spacing-small);
+    margin-left: calc(-1 * var(--spacing-small));
+  }
+
+  /* Secondary actions get their own block at the bottom of the drawer. */
+  header nav .nav-sections .nav-secondary {
+    border-top: 1px solid var(--color-neutral-300);
+    margin-top: var(--spacing-small);
+    padding-top: var(--spacing-small);
+  }
+
+  header nav .nav-sections .nav-secondary + .nav-secondary {
+    border-top: 0;
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  header nav .nav-sections .nav-secondary > a {
+    color: var(--color-brand-700);
+    font-weight: 700;
+  }
+}
+
+/* --- 10. Reduced motion ---------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .skip-to-main,
+  header nav .nav-tools-wrapper > button,
+  header nav .nav-tools .nav-search-button {
+    transition: none;
+  }
 }
