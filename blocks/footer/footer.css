@@ -1,109 +1,278 @@
 footer {
-    background-color: var(--color-neutral-100);
-    font: var(--type-body-2-default-font);
-    letter-spacing: var(--type-body-2-default-letter-spacing);
+  background-color: var(--color-neutral-100);
+  font: var(--type-body-2-default-font);
+  letter-spacing: var(--type-body-2-default-letter-spacing);
 }
 
 footer .footer p {
-    margin: 0;
+  margin: 0;
 }
 
 footer .footer > div {
-    margin: auto;
-    max-width: 1200px;
-    padding: 40px 24px 24px;
+  margin: auto;
+  max-width: 1200px;
+  padding: 40px 24px 24px;
 }
 
 .storeview-switcher-button {
-    background: transparent;
-    padding-left: 0;
+  background: transparent;
+  padding-left: 0;
 }
 
 .storeview-modal-storeview-title {
-    margin-bottom: var(--spacing-xxbig);
-    padding-inline-start: var(--spacing-xbig);
+  margin-bottom: var(--spacing-xxbig);
+  padding-inline-start: var(--spacing-xbig);
 }
 
 .modal .close-button {
-    top: 40px !important;
-    right: 40px !important;
+  top: 40px !important;
+  right: 40px !important;
 }
 
 .storeview-single-store {
-    list-style-type: none;
+  list-style-type: none;
 }
 
 .storeview-selection .storeview-multiple-stores {
-    list-style-image: url("../../icons/chevron-right.svg");
-    list-style-position: inside;
+  list-style-image: url("../../icons/chevron-right.svg");
+  list-style-position: inside;
 }
 
 .storeview-selection > li {
-    margin-bottom: var(--spacing-small);
+  margin-bottom: var(--spacing-small);
 }
 
 .storeview-multiple-stores > ul {
-    position: relative;
-    width: 100%;
+  position: relative;
+  width: 100%;
 }
 
 .storeview-multiple-stores > ul > li {
-    list-style: none;
-    display: none;
+  list-style: none;
+  display: none;
 }
 
-
-footer .columns ul {
-    list-style-position: inside;
-    padding: 0;
+.storeview-multiple-stores[aria-expanded="true"] {
+  list-style-image: url("../../icons/chevron-down.svg");
 }
 
+.storeview-multiple-stores[aria-expanded="true"] > ul {
+  padding-left: 0;
+}
+
+.storeview-multiple-stores[aria-expanded="true"] > ul > li {
+  display: block;
+  list-style-type: none;
+  margin-bottom: var(--spacing-small);
+}
+
+.minimal-header-footer footer .footer .columns-container .columns-wrapper:first-child {
+  display: none;
+}
+
+/* ==========================================================================
+   Content columns — editorial layout
+   Top-aligned columns with a clear type hierarchy. Scoped to the 3-column
+   content block so the legal row keeps its own inline layout.
+   ========================================================================== */
+footer .columns-3-cols > div {
+  align-items: start;
+  gap: 48px;
+}
+
+footer .columns-3-cols :is(h2, h3, h4, h5, h6) {
+  margin: 0 0 12px;
+  font-family: var(--type-base-font-family);
+  font-size: 1.8rem;
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--color-neutral-900);
+}
+
+footer .columns-3-cols p {
+  max-width: 42ch;
+  font-size: 1.4rem;
+  line-height: 1.6;
+  color: var(--color-neutral-700);
+}
+
+footer .columns-3-cols ul {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+footer .columns-3-cols li {
+  font-size: 1.4rem;
+  line-height: 1.5;
+  color: var(--color-neutral-700);
+}
+
+/* Links: calm animated underline + visible focus ring (WCAG 2.4.7) */
+footer .footer a {
+  background-image: linear-gradient(var(--color-brand-500), var(--color-brand-500));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1.5px;
+  text-decoration: none;
+  transition: background-size 0.25s cubic-bezier(0.2, 0, 0, 1), color 0.2s;
+}
+
+footer .footer a:hover {
+  color: var(--color-brand-600);
+  background-size: 100% 1.5px;
+}
+
+footer .footer a:focus-visible {
+  outline: 2px solid var(--color-brand-500);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ==========================================================================
+   Legal row
+   ========================================================================== */
 footer .footer-legal {
-    padding-top: var(--spacing-xsmall);
-    border-top: 1px solid var(--color-neutral-300);
+  margin-top: 32px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-neutral-300);
+}
+
+footer .footer-legal > div {
+  align-items: center;
+  gap: 16px;
 }
 
 footer .footer-legal ul {
-    list-style-type: none;
-    display: inline-flex;
-    gap: 1rem;
-    margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
 }
 
 footer .footer-legal ul a,
 footer .footer-legal p {
-    font-size: 1.2rem;
+  font-size: 1.3rem;
 }
 
-.storeview-multiple-stores[aria-expanded="true"] {
-    list-style-image: url("../../icons/chevron-down.svg");
+footer .footer-legal p {
+  color: var(--color-neutral-600);
 }
 
-.storeview-multiple-stores[aria-expanded="true"] > ul {
-    padding-left: 0;
+/* ==========================================================================
+   Accordion — progressive enhancement
+   Triggers and panels are injected by footer.js. The trigger is always a
+   button but renders as a plain heading until JS adds .footer-accordion on
+   small viewports (it is disabled on desktop, so it is non-interactive and
+   removed from the tab order there). Panels animate with grid-template-rows
+   for cheap, layout-thrash-free open/close, and collapsed content is removed
+   from the accessibility tree and tab order via visibility: hidden.
+   ========================================================================== */
+footer .footer-acc-trigger {
+  all: unset;
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  font: inherit;
+  color: inherit;
 }
 
-.storeview-multiple-stores[aria-expanded="true"] > ul > li {
-    display: block;
-    list-style-type: none;
-    margin-bottom: var(--spacing-small);
+footer .footer-acc-trigger:focus-visible {
+  outline: 2px solid var(--color-brand-500);
+  outline-offset: 4px;
+  border-radius: 2px;
 }
 
-.minimal-header-footer footer .footer .columns-container .columns-wrapper:first-child {
-    display: none;
+footer .footer-acc-chevron {
+  display: none;
+}
+
+footer .footer-acc-panel {
+  display: grid;
+  grid-template-rows: 1fr;
+}
+
+footer .footer-acc-panel > .footer-acc-panel-inner {
+  overflow: hidden;
+}
+
+/* Accordion mode (small viewports) */
+.footer-accordion .columns-3-cols > div {
+  display: block;
+}
+
+.footer-accordion .columns-3-cols > div > div {
+  padding: 18px 0;
+  border-top: 1px solid var(--color-neutral-300);
+}
+
+.footer-accordion .columns-3-cols > div > div:first-child {
+  border-top: 0;
+}
+
+.footer-accordion .footer-acc-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0;
+  cursor: pointer;
+}
+
+.footer-accordion .footer-acc-chevron {
+  display: block;
+  flex: none;
+  width: 11px;
+  height: 11px;
+  margin-left: 16px;
+  border-right: 2px solid var(--color-brand-500);
+  border-bottom: 2px solid var(--color-brand-500);
+  transform: translateY(-25%) rotate(45deg);
+  transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.footer-accordion .footer-acc-trigger[aria-expanded="true"] .footer-acc-chevron {
+  transform: translateY(25%) rotate(-135deg);
+}
+
+.footer-accordion .footer-acc-panel {
+  transition: grid-template-rows 0.3s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.footer-accordion .footer-acc-panel.is-closed {
+  grid-template-rows: 0fr;
+}
+
+.footer-accordion .footer-acc-panel.is-closed > .footer-acc-panel-inner {
+  visibility: hidden;
+  transition: visibility 0s linear 0.3s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  footer .footer a,
+  .footer-accordion .footer-acc-chevron,
+  .footer-accordion .footer-acc-panel,
+  .footer-accordion .footer-acc-panel.is-closed > .footer-acc-panel-inner {
+    transition: none;
+  }
 }
 
 @media (min-width: 900px) {
-    footer .footer > div {
-        padding: 40px 32px 24px;
-    }
+  footer .footer > div {
+    padding: 40px 32px 24px;
+  }
 
-    .footer .default-content-wrapper a {
-        margin-right: var(--spacing-small);
-        font-size: 1.1rem;
-    }
+  .footer .default-content-wrapper a {
+    margin-right: var(--spacing-small);
+    font-size: 1.1rem;
+  }
 
-    .footer-legal p {
-        text-align: right;
-    }
+  .footer-legal p {
+    text-align: right;
+  }
 }

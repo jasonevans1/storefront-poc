@@ -24,6 +24,103 @@ function toggleStoreDropdown(sections, expanded = false) {
 }
 
 /**
+ * Progressively enhances the footer content columns into an accessible
+ * accordion on small viewports. The authored fragment markup is never
+ * changed: trigger buttons and panel wrappers are created at runtime.
+ *
+ * - Each column heading becomes a real <button> (aria-expanded / aria-controls).
+ * - Panels animate via grid-template-rows (no height measurement, no reflow loop).
+ * - Collapsed content is removed from the a11y tree and tab order (visibility).
+ * - Above the breakpoint the columns render normally and the triggers are
+ *   disabled, so they are inert and skipped by keyboard and screen readers.
+ * - prefers-reduced-motion is honoured (handled in CSS).
+ *
+ * @param {Element} block The footer block element
+ */
+function enhanceFooterAccordion(block) {
+  const $columns = block.querySelector('.columns-3-cols');
+  if (!$columns) return;
+
+  const $row = $columns.querySelector(':scope > div');
+  if (!$row) return;
+
+  const items = [...$row.children].map(($col, index) => {
+    const $heading = $col.querySelector('h2, h3, h4, h5, h6');
+    if (!$heading) return null;
+
+    // Move everything after the heading into an animatable panel.
+    const $panel = document.createElement('div');
+    $panel.className = 'footer-acc-panel is-closed';
+    $panel.id = `footer-acc-panel-${index}`;
+    const $inner = document.createElement('div');
+    $inner.className = 'footer-acc-panel-inner';
+    while ($heading.nextSibling) $inner.append($heading.nextSibling);
+    $panel.append($inner);
+    $col.append($panel);
+
+    // Replace the heading text with a real button trigger.
+    const $button = document.createElement('button');
+    $button.type = 'button';
+    $button.className = 'footer-acc-trigger';
+    $button.setAttribute('aria-controls', $panel.id);
+    const $label = document.createElement('span');
+    $label.className = 'footer-acc-label';
+    $label.textContent = $heading.textContent.trim();
+    const $chevron = document.createElement('span');
+    $chevron.className = 'footer-acc-chevron';
+    $chevron.setAttribute('aria-hidden', 'true');
+    $button.append($label, $chevron);
+    $heading.textContent = '';
+    $heading.append($button);
+
+    return { $button, $panel };
+  }).filter(Boolean);
+
+  if (!items.length) return;
+
+  const openItem = ($item) => {
+    $item.$button.setAttribute('aria-expanded', 'true');
+    $item.$panel.classList.remove('is-closed');
+  };
+
+  const closeItem = ($item) => {
+    $item.$button.setAttribute('aria-expanded', 'false');
+    $item.$panel.classList.add('is-closed');
+  };
+
+  items.forEach(($item) => {
+    $item.$button.addEventListener('click', () => {
+      const expanded = $item.$button.getAttribute('aria-expanded') === 'true';
+      if (expanded) closeItem($item); else openItem($item);
+    });
+  });
+
+  const desktop = window.matchMedia('(min-width: 900px)');
+
+  const applyMode = () => {
+    if (desktop.matches) {
+      // Desktop: static columns, triggers inert (non-interactive, untabbable).
+      block.classList.remove('footer-accordion');
+      items.forEach(($item) => {
+        $item.$button.disabled = true;
+        $item.$button.removeAttribute('aria-expanded');
+        $item.$panel.classList.remove('is-closed');
+      });
+    } else {
+      // Small viewports: collapse into an accordion with the first item open.
+      block.classList.add('footer-accordion');
+      items.forEach(($item, index) => {
+        $item.$button.disabled = false;
+        if (index === 0) openItem($item); else closeItem($item);
+      });
+    }
+  };
+
+  applyMode();
+  desktop.addEventListener('change', applyMode);
+}
+
+/**
  * loads and decorates the footer
  * @param {Element} block The footer block element
  */
@@ -169,4 +266,8 @@ export default async function decorate(block) {
   while (fragment.firstElementChild) footer.append(fragment.firstElementChild);
 
   block.append(footer);
+
+  // Progressive enhancement: collapse content columns into an accordion on
+  // small viewports. Safe no-op if the expected column block is absent.
+  enhanceFooterAccordion(block);
 }

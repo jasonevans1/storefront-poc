@@ -54,7 +54,6 @@ main > .newsletter-signup-container {
 
 .newsletter-signup__input {
   box-sizing: border-box;
-  flex: 1 1 280px;
   min-width: 0;
   height: 52px;
   padding: 0 var(--spacing-small);
@@ -150,6 +149,12 @@ main > .newsletter-signup-container {
 
 .newsletter-signup__success::before {
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231f6b35' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>");
+}
+
+@media (min-width: 600px) {
+  .newsletter-signup__input {
+    flex: 1 1 auto;
+  }
 }
 
 @media (max-width: 600px) {
