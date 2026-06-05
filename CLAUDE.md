@@ -15,6 +15,9 @@ npm run lint    # Lint JS + CSS
 npm run lint:fix  # Auto-fix lint issues
 ```
 
+## Browser Testing
+Use `npx @playwright/cli` for all browser automation. Example: `npx @playwright/cli open http://localhost:3000/`
+
 ## Detailed Configuration
 - `.claude/project-overview.md` — project identity and tech stack
 - `.claude/architecture.md` — directory structure and patterns
